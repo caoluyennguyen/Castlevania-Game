@@ -4,9 +4,7 @@
 
 void CBrick::LoadResource()
 {
-	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_TEX_MISC, L"textures\\misc.png", D3DCOLOR_XRGB(176, 224, 248));
-	LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
+	LPDIRECT3DTEXTURE9 texMisc = CTextures::GetInstance()->Get(ID_TEX_MISC);
 
 	CSprites* sprites = CSprites::GetInstance();
 	sprites->Add(20001, 408, 225, 424, 241, texMisc);

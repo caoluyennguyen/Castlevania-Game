@@ -94,9 +94,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Simon::LoadResource()
 {
-	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_TEX_SIMON, L"textures\\Simon.png", D3DCOLOR_XRGB(255, 255, 255));
-	LPDIRECT3DTEXTURE9 texSimon = textures->Get(ID_TEX_SIMON);
+
+	LPDIRECT3DTEXTURE9 texSimon = CTextures::GetInstance()->Get(ID_TEX_SIMON);
 
 	CSprites* sprites = CSprites::GetInstance();
 	sprites->Add(10001, 0, 0, 60, 64, texSimon); // stand
