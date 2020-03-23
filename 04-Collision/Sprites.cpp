@@ -12,18 +12,18 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEX
 	this->texture = tex;
 }
 
+void CSprite::Draw(float x, float y, int alpha)
+{
+	CGame* game = CGame::GetInstance();
+	game->Draw(x, y, texture, left, top, right, bottom, alpha);
+}
+
 CSprites * CSprites::__instance = NULL;
 
 CSprites *CSprites::GetInstance()
 {
 	if (__instance == NULL) __instance = new CSprites();
 	return __instance;
-}
-
-void CSprite::Draw(float x, float y, int alpha)
-{
-	CGame * game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom, alpha);
 }
 
 void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
@@ -36,8 +36,6 @@ LPSPRITE CSprites::Get(int id)
 {
 	return sprites[id];
 }
-
-
 
 void CAnimation::Add(int spriteId, DWORD time)
 {
@@ -65,10 +63,8 @@ void CAnimation::Render(float x, float y, int alpha)
 			currentFrame++;
 			lastFrameTime = now;
 			if (currentFrame == frames.size()) currentFrame = 0;
-		}
-		
+		}		
 	}
-
 	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 }
 

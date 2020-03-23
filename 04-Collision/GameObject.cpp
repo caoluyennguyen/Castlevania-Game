@@ -112,7 +112,6 @@ void CGameObject::FilterCollision(
 	if (min_iy>=0) coEventsResult.push_back(coEvents[min_iy]);
 }
 
-
 void CGameObject::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
@@ -136,7 +135,6 @@ void CGameObject::AddAnimation(int aniId)
 	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
 	animations.push_back(ani);
 }
-
 
 CGameObject::~CGameObject()
 {
