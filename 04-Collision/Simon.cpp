@@ -51,7 +51,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (ny != 0) vy = 0;
 
 		// Collision logic with Goombas
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		/*for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
@@ -85,7 +85,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	// clean up collision events
@@ -142,29 +142,16 @@ void Simon::Render()
 	int ani;
 	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
-	else
-		if (level == SIMON_LEVEL_BIG)
+	else {
+		if (vx == 0)
 		{
-			if (vx == 0)
-			{
-				if (nx > 0) ani = SIMON_ANI_BIG_IDLE_RIGHT;
-				else ani = SIMON_ANI_BIG_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = SIMON_ANI_BIG_WALKING_RIGHT;
-			else ani = SIMON_ANI_BIG_WALKING_LEFT;
+			if (nx > 0) ani = SIMON_ANI_IDLE_RIGHT;
+			else ani = SIMON_ANI_IDLE_LEFT;
 		}
-		else if (level == SIMON_LEVEL_SMALL)
-		{
-			if (vx == 0)
-			{
-				if (nx > 0) ani = SIMON_ANI_SMALL_IDLE_RIGHT;
-				else ani = SIMON_ANI_SMALL_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = SIMON_ANI_SMALL_WALKING_RIGHT;
-			else ani = SIMON_ANI_SMALL_WALKING_LEFT;
-		}
+		else if (vx > 0)
+			ani = SIMON_ANI_WALKING_RIGHT;
+		else ani = SIMON_ANI_WALKING_LEFT;
+	}
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -203,15 +190,7 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	left = x;
 	top = y;
 
-	if (level == SIMON_LEVEL_BIG)
-	{
-		right = x + SIMON_BIG_BBOX_WIDTH;
-		bottom = y + SIMON_BIG_BBOX_HEIGHT;
-	}
-	else
-	{
-		right = x + SIMON_SMALL_BBOX_WIDTH;
-		bottom = y + SIMON_SMALL_BBOX_HEIGHT;
-	}
+	right = x + SIMON_BBOX_WIDTH;
+	bottom = y + SIMON_BBOX_HEIGHT;
 }
 

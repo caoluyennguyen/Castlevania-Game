@@ -7,7 +7,7 @@ void CBrick::LoadResource()
 	LPDIRECT3DTEXTURE9 texMisc = CTextures::GetInstance()->Get(ID_TEX_MISC);
 
 	CSprites* sprites = CSprites::GetInstance();
-	sprites->Add(20001, 408, 225, 424, 241, texMisc);
+	sprites->Add(20001, 512, 96, 544, 128, texMisc);
 
 	LPANIMATION ani;
 	ani = new CAnimation(100);		// brick

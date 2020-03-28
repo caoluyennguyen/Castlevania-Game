@@ -27,11 +27,13 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
+#include "Input.h"
 
 #include "Brick.h"
 #include "Simon.h"
 
 CGame *game;
+Input * input;
 
 Simon* simon;
 
@@ -46,6 +48,17 @@ class CSampleKeyHander: public CKeyEventHandler
 
 CSampleKeyHander * keyHandler; 
 
+void CSampleKeyHander::KeyState(BYTE* states)
+{
+	if (simon->GetState() == SIMON_STATE_DIE) return;
+	if (input->IsKeyDown(DIK_RIGHT))
+		simon->SetState(SIMON_STATE_WALKING_RIGHT);
+	else if (input->IsKeyDown(DIK_LEFT))
+		simon->SetState(SIMON_STATE_WALKING_LEFT);
+	else
+		simon->SetState(SIMON_STATE_IDLE);
+}
+
 void CSampleKeyHander::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -56,7 +69,6 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_A: // reset
 		simon->SetState(SIMON_STATE_IDLE);
-		simon->SetLevel(SIMON_LEVEL_BIG);
 		simon->SetPosition(50.0f,0.0f);
 		simon->SetSpeed(0, 0);
 		break;
@@ -66,25 +78,6 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-}
-
-void CSampleKeyHander::KeyState(BYTE *states)
-{
-	// disable control key when Mario die 
-	/*if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
-	else
-		mario->SetState(MARIO_STATE_IDLE);*/
-	if (simon->GetState() == SIMON_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		simon->SetState(SIMON_STATE_WALKING_LEFT);
-	else
-		simon->SetState(SIMON_STATE_IDLE);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -111,7 +104,7 @@ void LoadResources()
 	CTextures* textures = CTextures::GetInstance();
 	textures->Add(ID_TEX_SIMON, L"textures\\Simon.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_MISC, L"textures\\misc.png", D3DCOLOR_XRGB(176, 224, 248));
+	textures->Add(ID_TEX_MISC, L"textures\\Scene1.png", D3DCOLOR_XRGB(176, 224, 248));
 
 	simon = new Simon();
 	simon->LoadResource();
@@ -154,7 +147,7 @@ void Update(DWORD dt)
 	cx -= SCREEN_WIDTH / 2;
 	cy -= SCREEN_HEIGHT / 2;
 
-	CGame::GetInstance()->CGame::SetCamPos(cx, 0.0f /*cy*/);
+	//CGame::GetInstance()->CGame::SetCamPos(cx, 0.0f /*cy*/);
 }
 
 /*
@@ -258,7 +251,7 @@ int Run()
 		{
 			frameStart = now;
 
-			game->ProcessKeyboard();
+			input->ProcessKeyboard();
 			
 			Update(dt);
 			Render();
@@ -277,8 +270,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 
+	input = Input::GetInstance();
 	keyHandler = new CSampleKeyHander();
-	game->InitKeyboard(keyHandler);
+	input->InitKeyboard(keyHandler, hWnd);
 
 	LoadResources();
 
