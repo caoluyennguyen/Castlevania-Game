@@ -40,8 +40,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
 
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block 
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
@@ -92,50 +94,50 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void Simon::LoadResource()
-{
-
-	LPDIRECT3DTEXTURE9 texSimon = CTextures::GetInstance()->Get(ID_TEX_SIMON);
-
-	CSprites* sprites = CSprites::GetInstance();
-	sprites->Add(10001, 0, 0, 60, 64, texSimon); // stand
-
-	sprites->Add(10011, 0, 0, 60, 64, texSimon); // walk
-	sprites->Add(10012, 60, 0, 120, 64, texSimon);
-	sprites->Add(10013, 120, 0, 180, 64, texSimon);
-	sprites->Add(10014, 180, 0, 240, 64, texSimon);
-
-	sprites->Add(10021, 300, 198, 360, 262, texSimon); // sit
-
-	sprites->Add(10031, 240, 0, 300, 64, texSimon); // jump
-
-	CAnimations* animations = CAnimations::GetInstance();
-
-	LPANIMATION ani;
-	ani = new CAnimation(); // Simon idle
-	ani->Add(10001);
-	animations->Add(401, ani);
-
-	ani = new CAnimation(); // Simon walk
-	ani->Add(10011);
-	ani->Add(10012);
-	ani->Add(10013);
-	ani->Add(10014);
-	animations->Add(402, ani);
-
-	ani = new CAnimation(); // Simon sit
-	ani->Add(10021);
-	animations->Add(403, ani);
-
-	ani = new CAnimation(); // Simon jump
-	ani->Add(10031);
-	animations->Add(404, ani);
-
-	AddAnimation(401);
-	AddAnimation(402);
-	AddAnimation(403);
-	AddAnimation(404);
-}
+//void Simon::LoadResource()
+//{
+//
+//	LPDIRECT3DTEXTURE9 texSimon = CTextures::GetInstance()->Get(ID_TEX_SIMON);
+//
+//	CSprites* sprites = CSprites::GetInstance();
+//	sprites->Add(10001, 0, 0, 60, 64, texSimon); // stand
+//
+//	sprites->Add(10011, 0, 0, 60, 64, texSimon); // walk
+//	sprites->Add(10012, 60, 0, 120, 64, texSimon);
+//	sprites->Add(10013, 120, 0, 180, 64, texSimon);
+//	sprites->Add(10014, 180, 0, 240, 64, texSimon);
+//
+//	sprites->Add(10021, 300, 198, 360, 262, texSimon); // sit
+//
+//	sprites->Add(10031, 240, 0, 300, 64, texSimon); // jump
+//
+//	CAnimations* animations = CAnimations::GetInstance();
+//
+//	LPANIMATION ani;
+//	ani = new CAnimation(); // Simon idle
+//	ani->Add(10001);
+//	animations->Add(401, ani);
+//
+//	ani = new CAnimation(); // Simon walk
+//	ani->Add(10011);
+//	ani->Add(10012);
+//	ani->Add(10013);
+//	ani->Add(10014);
+//	animations->Add(402, ani);
+//
+//	ani = new CAnimation(); // Simon sit
+//	ani->Add(10021);
+//	animations->Add(403, ani);
+//
+//	ani = new CAnimation(); // Simon jump
+//	ani->Add(10031);
+//	animations->Add(404, ani);
+//
+//	AddAnimation(401);
+//	AddAnimation(402);
+//	AddAnimation(403);
+//	AddAnimation(404);
+//}
 
 void Simon::Render()
 {
@@ -155,7 +157,8 @@ void Simon::Render()
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	animations[ani]->Render(x, y, alpha);
+	//animations[ani]->Render(x, y, alpha);
+	animation_set->at(ani)->Render(x, y, alpha);
 
 	RenderBoundingBox();
 }

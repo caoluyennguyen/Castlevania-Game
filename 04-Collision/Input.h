@@ -5,29 +5,6 @@
 
 #define KEYBOARD_BUFFER_SIZE 1024
 
-//class CSampleKeyHander : public CKeyEventHandler
-//{
-//	virtual void KeyState(BYTE* states);
-//	virtual void OnKeyDown(int KeyCode);
-//	virtual void OnKeyUp(int KeyCode);
-//};
-//
-//CSampleKeyHander* keyHandler;
-//
-
-/*
-Abstract class to define keyboard event handlers
-*/
-class CKeyEventHandler
-{
-public:
-	virtual void KeyState(BYTE *state) = 0;
-	virtual void OnKeyDown(int KeyCode) = 0;
-	virtual void OnKeyUp(int KeyCode) = 0;
-};
-
-typedef CKeyEventHandler * LPKEYEVENTHANDLER;
-
 class Input
 {
 	static Input* __instance;

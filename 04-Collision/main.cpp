@@ -33,52 +33,52 @@
 #include "Simon.h"
 
 CGame *game;
-Input * input;
+//Input * input;
+//
+//Simon* simon;
+//
+//vector<LPGAMEOBJECT> objects;
 
-Simon* simon;
-
-vector<LPGAMEOBJECT> objects;
-
-class CSampleKeyHander: public CKeyEventHandler
-{
-	virtual void KeyState(BYTE *states);
-	virtual void OnKeyDown(int KeyCode);
-	virtual void OnKeyUp(int KeyCode);
-};
-
-CSampleKeyHander * keyHandler; 
-
-void CSampleKeyHander::KeyState(BYTE* states)
-{
-	if (simon->GetState() == SIMON_STATE_DIE) return;
-	if (input->IsKeyDown(DIK_RIGHT))
-		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	else if (input->IsKeyDown(DIK_LEFT))
-		simon->SetState(SIMON_STATE_WALKING_LEFT);
-	else
-		simon->SetState(SIMON_STATE_IDLE);
-}
-
-void CSampleKeyHander::OnKeyDown(int KeyCode)
-{
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-	switch (KeyCode)
-	{
-	case DIK_SPACE:
-		simon->SetState(SIMON_STATE_JUMP);
-		break;
-	case DIK_A: // reset
-		simon->SetState(SIMON_STATE_IDLE);
-		simon->SetPosition(50.0f,0.0f);
-		simon->SetSpeed(0, 0);
-		break;
-	}
-}
-
-void CSampleKeyHander::OnKeyUp(int KeyCode)
-{
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-}
+//class CSampleKeyHander: public CKeyEventHandler
+//{
+//	virtual void KeyState(BYTE *states);
+//	virtual void OnKeyDown(int KeyCode);
+//	virtual void OnKeyUp(int KeyCode);
+//};
+//
+//CSampleKeyHander * keyHandler; 
+//
+//void CSampleKeyHander::KeyState(BYTE* states)
+//{
+//	if (simon->GetState() == SIMON_STATE_DIE) return;
+//	if (input->IsKeyDown(DIK_RIGHT))
+//		simon->SetState(SIMON_STATE_WALKING_RIGHT);
+//	else if (input->IsKeyDown(DIK_LEFT))
+//		simon->SetState(SIMON_STATE_WALKING_LEFT);
+//	else
+//		simon->SetState(SIMON_STATE_IDLE);
+//}
+//
+//void CSampleKeyHander::OnKeyDown(int KeyCode)
+//{
+//	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+//	switch (KeyCode)
+//	{
+//	case DIK_SPACE:
+//		simon->SetState(SIMON_STATE_JUMP);
+//		break;
+//	case DIK_A: // reset
+//		simon->SetState(SIMON_STATE_IDLE);
+//		simon->SetPosition(50.0f,0.0f);
+//		simon->SetSpeed(0, 0);
+//		break;
+//	}
+//}
+//
+//void CSampleKeyHander::OnKeyUp(int KeyCode)
+//{
+//	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+//}
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -99,26 +99,26 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	TO-DO: Improve this function by loading texture,sprite,animation,object from file
 */
-void LoadResources()
-{	
-	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_TEX_SIMON, L"textures\\Simon.png", D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_MISC, L"textures\\Scene1.png", D3DCOLOR_XRGB(176, 224, 248));
-
-	simon = new Simon();
-	simon->LoadResource();
-	simon->SetPosition(50.0f, 0);
-	objects.push_back(simon);
-
-	for (int i = 0; i < 30; i++)
-	{
-		CBrick *brick = new CBrick();
-		brick->LoadResource();
-		brick->SetPosition(0 + i*16.0f, 150);
-		objects.push_back(brick);
-	}
-}
+//void LoadResources()
+//{	
+//	CTextures* textures = CTextures::GetInstance();
+//	textures->Add(ID_TEX_SIMON, L"textures\\Simon.png", D3DCOLOR_XRGB(255, 255, 255));
+//	textures->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+//	textures->Add(ID_TEX_MISC, L"textures\\Scene1.png", D3DCOLOR_XRGB(176, 224, 248));
+//
+//	simon = new Simon();
+//	simon->LoadResource();
+//	simon->SetPosition(50.0f, 0);
+//	objects.push_back(simon);
+//
+//	for (int i = 0; i < 30; i++)
+//	{
+//		CBrick *brick = new CBrick();
+//		brick->LoadResource();
+//		brick->SetPosition(0 + i*16.0f, 250);
+//		objects.push_back(brick);
+//	}
+//}
 
 /*
 	Update world status for this frame
@@ -129,30 +129,32 @@ void Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (int i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
+	//vector<LPGAMEOBJECT> coObjects;
+	//for (int i = 1; i < objects.size(); i++)
+	//{
+	//	coObjects.push_back(objects[i]);
+	//}
 
-	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt,&coObjects);
-	}
+	//for (int i = 0; i < objects.size(); i++)
+	//{
+	//	objects[i]->Update(dt,&coObjects);
+	//}
 
-	// Update camera to follow mario
-	float cx, cy;
-	simon->GetPosition(cx, cy);
+	//// Update camera to follow mario
+	//float cx, cy;
+	//simon->GetPosition(cx, cy);
 
-	cx -= SCREEN_WIDTH / 2;
-	cy -= SCREEN_HEIGHT / 2;
+	//cx -= SCREEN_WIDTH / 2;
+	//cy -= SCREEN_HEIGHT / 2;
 
 	//CGame::GetInstance()->CGame::SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
 /*
 	Render a frame 
 */
+
 void Render()
 {
 	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
@@ -166,8 +168,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		for (int i = 0; i < objects.size(); i++)
-			objects[i]->Render();
+		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -251,21 +252,20 @@ int Run()
 		{
 			frameStart = now;
 
-			input->ProcessKeyboard();
-			
+			game->ProcessKeyboard();
+
 			Update(dt);
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
-
 	return 1;
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+	/*HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	game = CGame::GetInstance();
 	game->Init(hWnd);
@@ -276,7 +276,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	LoadResources();
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+
+	Run();
+
+	return 0;*/
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	game = CGame::GetInstance();
+	game->Init(hWnd);
+	game->InitKeyboard();
+
+	game->Load(L"mario-sample.txt");
+
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

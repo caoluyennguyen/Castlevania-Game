@@ -1,0 +1,62 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\Simon.png	255	255	255
+20	textures\misc.png	176	224	248
+
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# SIMON 
+10001	0	0	60	64	0
+10011	0	0	60	64	0
+10012	60	0	120	64	0
+10013	120	0	180	64	0
+10014	180	0	240	64	0
+10021	300	198	360	262	0
+10031	240	0	300	64	0
+
+#QUESTION BRICK
+40001	300	117	316	133	20
+40002	318	117	334	133	20
+40003	336	117	352	133	20
+40004	355	117	370	133	20
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# ==== SIMON =========
+401	10001	100
+402	10011	100	10012	100	10013	100	10014	100
+403	10021	100
+404	10031	100
+
+# ==== QUESTION BRICK =========
+602	40001	1000	40001	100	40002	100	40003	100	40004	100
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# SIMON
+1	401	402	403	404
+# QUESTION BRICK 
+22	602
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Simon , 1 = Brick
+# SIMON
+0	17	115	1
+
+# BRICK 
+1	0	135	22
+1	0	150	22
+1	16	150	22
+1	32	150	22
+1	100	150	22
+1	115	150	22
+1	130	150	22
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	115	98	0	148	150	1
+

@@ -12,7 +12,7 @@ public:
 		untouchable = 0;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
-	virtual void LoadResource();
+	//virtual void LoadResource();
 	virtual void Render();
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
