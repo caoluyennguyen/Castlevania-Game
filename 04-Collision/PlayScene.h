@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "Simon.h"
+#include "Ground.h"
+#include "Candle.h"
 
 class CPlayScene : public CScene
 {

@@ -28,9 +28,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_OBJECTS	6
 
 #define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
-#define OBJECT_TYPE_KOOPAS	3
+#define OBJECT_TYPE_GROUND	1
+#define OBJECT_TYPE_CANDLE	2
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -208,7 +207,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Simon();
 			player = (Simon*)obj;
 			break;
-		case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
+		case OBJECT_TYPE_GROUND: 
+		{
+			float r = atof(tokens[4].c_str());
+			float b = atof(tokens[5].c_str());
+			int scene_id = atoi(tokens[6].c_str());
+			obj = new Ground(x, y, r, b, scene_id);
+		}
+		break;
 		case OBJECT_TYPE_PORTAL:
 		{
 			float r = atof(tokens[4].c_str());
@@ -349,13 +356,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		simon->SetState(SIMON_STATE_JUMP);
+		if (simon->GetState() == SIMON_STATE_JUMP)
+		{
+			return;
+		}
+		else simon->SetState(SIMON_STATE_JUMP);
 		break;
 	case DIK_A: // reset
 		simon->SetState(SIMON_STATE_IDLE);
 		//simon->SetLevel(SIMON_LEVEL_BIG);
 		simon->SetPosition(50.0f, 0.0f);
 		simon->SetSpeed(0, 0);
+		break;
+	case DIK_Z:
+		if (simon->GetState() == SIMON_STATE_SIT)
+		{
+			simon->SetState(SIMON_STATE_HIT_SIT);
+		}
+		else simon->SetState(SIMON_STATE_HIT_STAND);
 		break;
 	}
 }
@@ -368,12 +386,29 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	Simon* simon = ((CPlayScene*)scence)->player;
 
-	// disable control key when Mario die 
+	if (simon->GetState() == SIMON_STATE_JUMP && !simon->CheckStandGround())
+	{
+		return;
+	}
+	if (simon->GetState() == SIMON_STATE_HIT_STAND && simon->animation_set->at(SIMON_STATE_HIT_STAND)->isOver(300) == false)
+	{
+		return;
+	}
+	if (simon->GetState() == SIMON_STATE_HIT_SIT && simon->animation_set->at(SIMON_STATE_HIT_SIT)->isOver(300) == false)
+	{
+		return;
+	}
+
+	//else simon->animation_set->at(simon->GetState())->setStartFrameTime(0);
+
+	// disable control key when Simon die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
 		simon->SetState(SIMON_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		simon->SetState(SIMON_STATE_WALKING_LEFT);
+	else if (game->IsKeyDown(DIK_DOWN))
+		simon->SetState(SIMON_STATE_SIT);
 	else
 		simon->SetState(SIMON_STATE_IDLE);
 }

@@ -5,7 +5,9 @@
 #include "Game.h"
 #include "Textures.h"
 
-#include "Goomba.h"
+#include "Portal.h"
+#include "Ground.h"
+#include "Brick.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -53,41 +55,58 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (ny != 0) vy = 0;
 
 		// Collision logic with Goombas
-		/*for (UINT i = 0; i < coEventsResult.size(); i++)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-			{
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			//if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
+			//{
+			//	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
+			//	// jump on top >> kill Goomba and deflect a bit 
+			//	if (e->ny < 0)
+			//	{
+			//		if (goomba->GetState() != GOOMBA_STATE_DIE)
+			//		{
+			//			goomba->SetState(GOOMBA_STATE_DIE);
+			//			vy = -SIMON_JUMP_DEFLECT_SPEED;
+			//		}
+			//	}
+			//	else if (e->nx != 0)
+			//	{
+			//		if (untouchable == 0)
+			//		{
+			//			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			//			{
+			//				if (level > SIMON_LEVEL_SMALL)
+			//				{
+			//					level = SIMON_LEVEL_SMALL;
+			//					StartUntouchable();
+			//				}
+			//				else
+			//					SetState(SIMON_STATE_DIE);
+			//			}
+			//		}
+			//	}
+			//}
+
+			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
+			{
+				if (ny != 0)
 				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					if (ny == -1)
 					{
-						goomba->SetState(GOOMBA_STATE_DIE);
-						vy = -SIMON_JUMP_DEFLECT_SPEED;
+						vy = 0;
+						isTouchGround = true;
 					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable == 0)
+					else
 					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-						{
-							if (level > SIMON_LEVEL_SMALL)
-							{
-								level = SIMON_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else
-								SetState(SIMON_STATE_DIE);
-						}
+						y += dy;
+						isTouchGround = false;
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	// clean up collision events
@@ -141,7 +160,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Simon::Render()
 {
-	int ani;
+	/*int ani;
 	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
 	else {
@@ -153,12 +172,12 @@ void Simon::Render()
 		else if (vx > 0)
 			ani = SIMON_ANI_WALKING_RIGHT;
 		else ani = SIMON_ANI_WALKING_LEFT;
-	}
+	}*/
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 	//animations[ani]->Render(x, y, alpha);
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->at(state)->Render(x, y, alpha);
 
 	RenderBoundingBox();
 }
@@ -169,6 +188,9 @@ void Simon::SetState(int state)
 
 	switch (state)
 	{
+	case SIMON_STATE_IDLE:
+		vx = 0;
+		break;
 	case SIMON_STATE_WALKING_RIGHT:
 		vx = SIMON_WALKING_SPEED;
 		nx = 1;
@@ -177,13 +199,23 @@ void Simon::SetState(int state)
 		vx = -SIMON_WALKING_SPEED;
 		nx = -1;
 		break;
+	case SIMON_STATE_SIT:
+		vx = vy = 0;
+		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED_Y;
-	case SIMON_STATE_IDLE:
-		vx = 0;
-		break;
+		isTouchGround = false;
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
+		break;
+	case SIMON_STATE_HIT_STAND:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_STATE_HIT_SIT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	}
 }
