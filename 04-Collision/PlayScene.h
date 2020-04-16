@@ -7,11 +7,13 @@
 #include "Simon.h"
 #include "Ground.h"
 #include "Candle.h"
+#include "Whip.h"
 
 class CPlayScene : public CScene
 {
 protected:
 	Simon* player;					// A play scene has to have player, right? 
+	Whip* whip;
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -27,6 +29,8 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+
+	void WhipUpdate(DWORD dt, int x, int y);
 
 	friend class CPlayScenceKeyHandler;
 };

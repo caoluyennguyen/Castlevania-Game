@@ -211,7 +211,6 @@ void CGame::SweptAABB(
 	float sl, float st, float sr, float sb,
 	float& t, float& nx, float& ny)
 {
-
 	float dx_entry, dx_exit, tx_entry, tx_exit;
 	float dy_entry, dy_exit, ty_entry, ty_exit;
 

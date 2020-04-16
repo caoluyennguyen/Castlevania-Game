@@ -36,6 +36,7 @@ public:
 	void setStartFrameTime(DWORD t) { startFrameTime = t; }
 	void resetAnimation() { currentFrame = -1; }
 	bool isOver(DWORD t) { return GetTickCount() - startFrameTime >= t; }
+	bool isLastFrame() { currentFrame = frames.size() - 1; }
 };
 
 typedef CAnimation* LPANIMATION;

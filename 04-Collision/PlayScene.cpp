@@ -27,9 +27,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
-#define OBJECT_TYPE_MARIO	0
+#define OBJECT_TYPE_SIMON	0
 #define OBJECT_TYPE_GROUND	1
 #define OBJECT_TYPE_CANDLE	2
+#define OBJECT_TYPE_WHIP	3
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -198,7 +199,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-		case OBJECT_TYPE_MARIO:
+		case OBJECT_TYPE_SIMON:
 			if (player != NULL)
 			{
 				DebugOut(L"[ERROR] MARIO object was created before! ");
@@ -206,6 +207,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = new Simon();
 			player = (Simon*)obj;
+			whip = new Whip();
 			break;
 		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
 		case OBJECT_TYPE_GROUND: 
@@ -246,6 +248,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
+
+	whip->SetAnimationSet(animation_sets->Get(3));
 }
 
 void CPlayScene::Load()
@@ -322,6 +326,8 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	whip->SetWhipPosition(cx, cy, true);
+	//whip->Update(dt);
 
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
@@ -334,6 +340,10 @@ void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	if ((player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND))
+	{
+		whip->Render();
+	}
 }
 
 /*
@@ -356,24 +366,45 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		if (simon->GetState() == SIMON_STATE_JUMP)
+		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_HIT_STAND || simon->GetState() == SIMON_STATE_HIT_SIT
+			|| simon->GetState() == SIMON_STATE_JUMP_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT)
 		{
 			return;
 		}
-		else simon->SetState(SIMON_STATE_JUMP);
+		else {
+			if (simon->nx == -1)
+			{
+				simon->SetState(SIMON_STATE_JUMP);
+			}
+			else simon->SetState(SIMON_STATE_JUMP_RIGHT);
+		}
 		break;
 	case DIK_A: // reset
-		simon->SetState(SIMON_STATE_IDLE);
-		//simon->SetLevel(SIMON_LEVEL_BIG);
+		simon->SetState(SIMON_STATE_IDLE_RIGHT);
 		simon->SetPosition(50.0f, 0.0f);
 		simon->SetSpeed(0, 0);
 		break;
 	case DIK_Z:
-		if (simon->GetState() == SIMON_STATE_SIT)
+		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() ==  SIMON_STATE_HIT_STAND
+			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 		{
-			simon->SetState(SIMON_STATE_HIT_SIT);
+			return;
 		}
-		else simon->SetState(SIMON_STATE_HIT_STAND);
+		if (simon->nx == 1)
+		{
+			if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
+			{
+				simon->SetState(SIMON_STATE_HIT_SIT_RIGHT);
+			}
+			else simon->SetState(SIMON_STATE_HIT_STAND_RIGHT);
+		}
+		else {
+			if (simon->GetState() == SIMON_STATE_SIT)
+			{
+				simon->SetState(SIMON_STATE_HIT_SIT);
+			}
+			else simon->SetState(SIMON_STATE_HIT_STAND);
+		}
 		break;
 	}
 }
@@ -386,7 +417,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	Simon* simon = ((CPlayScene*)scence)->player;
 
-	if (simon->GetState() == SIMON_STATE_JUMP && !simon->CheckStandGround())
+	if ((simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_JUMP_RIGHT) && !simon->CheckStandGround())
 	{
 		return;
 	}
@@ -398,17 +429,43 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	{
 		return;
 	}
+	if (simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT && simon->animation_set->at(SIMON_STATE_HIT_STAND_RIGHT)->isOver(300) == false)
+	{
+		return;
+	}
+	if (simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT && simon->animation_set->at(SIMON_STATE_HIT_SIT_RIGHT)->isOver(300) == false)
+	{
+		return;
+	}
 
 	//else simon->animation_set->at(simon->GetState())->setStartFrameTime(0);
 
 	// disable control key when Simon die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_RIGHT)) {
+		simon->nx = 1;
 		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
+	}
+	else if (game->IsKeyDown(DIK_LEFT)) {
+		simon->nx = -1;
 		simon->SetState(SIMON_STATE_WALKING_LEFT);
-	else if (game->IsKeyDown(DIK_DOWN))
-		simon->SetState(SIMON_STATE_SIT);
-	else
-		simon->SetState(SIMON_STATE_IDLE);
+	}
+	else if (game->IsKeyDown(DIK_DOWN)) {
+		if (simon->nx == 1)
+		{
+			simon->SetState(SIMON_STATE_SIT_RIGHT);
+		}
+		else simon->SetState(SIMON_STATE_SIT);
+	}
+	else {
+		if (simon->nx == 1)
+		{
+			simon->SetState(SIMON_STATE_IDLE_RIGHT);
+		}
+		else simon->SetState(SIMON_STATE_IDLE_LEFT);
+	}
+		
 }
+
+void CPlayScene::WhipUpdate(DWORD dt, int cx, int cy)
+{}

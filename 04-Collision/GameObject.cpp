@@ -25,17 +25,17 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 /*
 	Extension of original SweptAABB to deal with two moving objects
 */
-LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
+LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coObject)
 {
 	float sl, st, sr, sb;		// static object bbox
 	float ml, mt, mr, mb;		// moving object bbox
 	float t, nx, ny;
 
-	coO->GetBoundingBox(sl, st, sr, sb);
+	coObject->GetBoundingBox(sl, st, sr, sb);
 
 	// deal with moving object: m speed = original m speed - collide object speed
 	float svx, svy;
-	coO->GetSpeed(svx, svy);
+	coObject->GetSpeed(svx, svy);
 
 	float sdx = svx * dt;
 	float sdy = svy * dt;
@@ -53,7 +53,7 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		t, nx, ny
 	);
 
-	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, rdx, rdy, coO);
+	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, rdx, rdy, coObject);
 	return e;
 }
 
@@ -116,7 +116,7 @@ void CGameObject::FilterCollision(
 
 void CGameObject::RenderBoundingBox()
 {
-	D3DXVECTOR3 p(x, y, 0);
+	//D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
 
 	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
@@ -131,7 +131,6 @@ void CGameObject::RenderBoundingBox()
 
 	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
 }
-
 
 CGameObject::~CGameObject()
 {

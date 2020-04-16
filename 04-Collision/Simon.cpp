@@ -54,14 +54,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
 
-		// Collision logic with Goombas
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-
-			//if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-			//{
-			//	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
 			//	// jump on top >> kill Goomba and deflect a bit 
 			//	if (e->ny < 0)
@@ -97,12 +92,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (ny == -1)
 					{
 						vy = 0;
-						isTouchGround = true;
+						isOnGround = true;
 					}
 					else
 					{
 						y += dy;
-						isTouchGround = false;
+						isOnGround = false;
 					}
 				}
 			}
@@ -176,7 +171,6 @@ void Simon::Render()
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	//animations[ani]->Render(x, y, alpha);
 	animation_set->at(state)->Render(x, y, alpha);
 
 	RenderBoundingBox();
@@ -188,8 +182,15 @@ void Simon::SetState(int state)
 
 	switch (state)
 	{
-	case SIMON_STATE_IDLE:
+	case SIMON_STATE_IDLE_LEFT:
 		vx = 0;
+		nx = -1;
+		isStand = true;
+		break;
+	case SIMON_STATE_IDLE_RIGHT:
+		vx = 0;
+		nx = 1;
+		isStand = true;
 		break;
 	case SIMON_STATE_WALKING_RIGHT:
 		vx = SIMON_WALKING_SPEED;
@@ -201,21 +202,51 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_SIT:
 		vx = vy = 0;
+		isStand = false;
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED_Y;
-		isTouchGround = false;
+		isOnGround = false;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_HIT_STAND:
+		if (this->isOnGround)
+		{
+			vx = 0;
+		}
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_STATE_HIT_SIT:
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		isStand = false;
+		break;
+	case SIMON_STATE_SIT_RIGHT:
+		vx = vy = 0;
+		isStand = false;
+		break;
+	case SIMON_STATE_JUMP_RIGHT:
+		vy = -SIMON_JUMP_SPEED_Y;
+		isOnGround = false;
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+	case SIMON_STATE_DIE_RIGHT:
+		vy = -SIMON_DIE_DEFLECT_SPEED;
+		break;
+	case SIMON_STATE_HIT_STAND_RIGHT:
+		if (this->isOnGround)
+		{
+			vx = 0;
+		}
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_STATE_HIT_SIT_RIGHT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		isStand = false;
 		break;
 	}
 }
@@ -228,4 +259,3 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	right = x + SIMON_BBOX_WIDTH;
 	bottom = y + SIMON_BBOX_HEIGHT;
 }
-

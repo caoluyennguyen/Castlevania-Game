@@ -33,52 +33,6 @@
 #include "Simon.h"
 
 CGame *game;
-//Input * input;
-//
-//Simon* simon;
-//
-//vector<LPGAMEOBJECT> objects;
-
-//class CSampleKeyHander: public CKeyEventHandler
-//{
-//	virtual void KeyState(BYTE *states);
-//	virtual void OnKeyDown(int KeyCode);
-//	virtual void OnKeyUp(int KeyCode);
-//};
-//
-//CSampleKeyHander * keyHandler; 
-//
-//void CSampleKeyHander::KeyState(BYTE* states)
-//{
-//	if (simon->GetState() == SIMON_STATE_DIE) return;
-//	if (input->IsKeyDown(DIK_RIGHT))
-//		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-//	else if (input->IsKeyDown(DIK_LEFT))
-//		simon->SetState(SIMON_STATE_WALKING_LEFT);
-//	else
-//		simon->SetState(SIMON_STATE_IDLE);
-//}
-//
-//void CSampleKeyHander::OnKeyDown(int KeyCode)
-//{
-//	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-//	switch (KeyCode)
-//	{
-//	case DIK_SPACE:
-//		simon->SetState(SIMON_STATE_JUMP);
-//		break;
-//	case DIK_A: // reset
-//		simon->SetState(SIMON_STATE_IDLE);
-//		simon->SetPosition(50.0f,0.0f);
-//		simon->SetSpeed(0, 0);
-//		break;
-//	}
-//}
-//
-//void CSampleKeyHander::OnKeyUp(int KeyCode)
-//{
-//	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-//}
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

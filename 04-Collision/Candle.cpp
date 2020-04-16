@@ -15,12 +15,16 @@ void Candle::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+
+	/*if (this->GetState() == CANDLE_STATE_DESTROYED)
+	{
+
+	}*/
 }
 
 void Candle::Render()
 {
-	animation_set->at(0)->Render(x, y);
+	animation_set->at(this->GetState())->Render(x, y);
 
 	RenderBoundingBox();
 }

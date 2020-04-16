@@ -5,13 +5,14 @@
 class Simon : public CGameObject
 {
 	int untouchable;
-	bool isTouchGround = false;
+	bool isOnGround = false;
+	bool isStand = true;
 	DWORD untouchable_start;
 public:
 	Simon() : CGameObject()
 	{
 		untouchable = 0;
-		SetState(SIMON_STATE_IDLE);
+		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	//virtual void LoadResource();
@@ -19,7 +20,7 @@ public:
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
-	bool CheckStandGround() { return isTouchGround; }
+	bool CheckStandGround() { return isOnGround; }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
