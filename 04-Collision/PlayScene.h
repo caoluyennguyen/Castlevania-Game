@@ -8,6 +8,7 @@
 #include "Ground.h"
 #include "Candle.h"
 #include "Whip.h"
+#include "Item.h"
 
 class CPlayScene : public CScene
 {

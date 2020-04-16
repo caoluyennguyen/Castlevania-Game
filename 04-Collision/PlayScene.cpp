@@ -31,6 +31,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GROUND	1
 #define OBJECT_TYPE_CANDLE	2
 #define OBJECT_TYPE_WHIP	3
+#define OBJECT_TYPE_ITEM	4
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -218,6 +219,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Ground(x, y, r, b, scene_id);
 		}
 		break;
+		case OBJECT_TYPE_ITEM: obj = new Item(); break;
 		case OBJECT_TYPE_PORTAL:
 		{
 			float r = atof(tokens[4].c_str());

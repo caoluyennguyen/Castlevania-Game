@@ -6,6 +6,7 @@
 30	textures\Effect.png	255	0	255
 40	textures\Simon-2.png	255	0	255
 50	textures\WHIP-2.png	255	0	255
+60	textures\item\Dagger.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -63,6 +64,9 @@
 40002	32	0	64	60	30
 40003	64	0	96	60	30
 
+#DAGGER
+50001	0	0	32	18	60
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -88,6 +92,9 @@
 #EFFECT
 400	40001	100	40002	100	40003	100
 
+#DAGGER
+500	50001	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -98,6 +105,8 @@
 2	200	400
 # WHIP
 3	300
+#DAGGER
+4	500
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -112,6 +121,10 @@
 # CANDLE
 # type	x	y	ani_set_id
 2	10	0	2
+
+# DAGGER
+# type	x	y	ani_set_id
+4	10	100	4
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

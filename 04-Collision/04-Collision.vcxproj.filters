@@ -78,6 +78,9 @@
     <ClInclude Include="Goomba.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -135,6 +138,9 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Goomba.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
