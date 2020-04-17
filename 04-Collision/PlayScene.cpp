@@ -209,6 +209,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Simon();
 			player = (Simon*)obj;
 			whip = new Whip();
+			weapon = new Weapon();
 			break;
 		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
 		case OBJECT_TYPE_GROUND: 
@@ -252,6 +253,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 
 	whip->SetAnimationSet(animation_sets->Get(3));
+	weapon->SetAnimationSet(animation_sets->Get(4));
 }
 
 void CPlayScene::Load()
@@ -307,6 +309,9 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+
+	tilemap = new Tilemap();
+	//tilemap->LoadMap();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -325,11 +330,13 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
+	weapon->Update(dt);
+
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	whip->SetWhipPosition(cx, cy, true);
 	//whip->Update(dt);
+	whip->SetWhipPosition(cx, cy, player->isStand);
 
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
@@ -340,15 +347,21 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	tilemap->Render();
 	//tilemap = new Tilemap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 	if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
 		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 	{
-		whip->nx = player->nx;
-		whip->Render();
+		if (player->isThrowWeapon == false)
+		{
+			whip->nx = player->nx;
+			whip->Render();
+		}
 	}
+	weapon->Render();
+	weapon->RenderBoundingBox();
 }
 
 /*
@@ -368,6 +381,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	Simon* simon = ((CPlayScene*)scence)->player;
+	Whip* whip = ((CPlayScene*)scence)->whip;
+	Weapon* weapon = ((CPlayScene*)scence)->weapon;
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -395,6 +410,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			return;
 		}
+		simon->isThrowWeapon = false;
 		if (simon->nx == 1)
 		{
 			if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
@@ -410,6 +426,32 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND);
 		}
+		break;
+	case DIK_X:
+		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() == SIMON_STATE_HIT_STAND
+			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
+		{
+			return;
+		}
+		simon->isThrowWeapon = true;
+		if (simon->nx == 1)
+		{
+			if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
+			{
+				simon->SetState(SIMON_STATE_HIT_SIT_RIGHT);
+			}
+			else simon->SetState(SIMON_STATE_HIT_STAND_RIGHT);
+		}
+		else {
+			if (simon->GetState() == SIMON_STATE_SIT)
+			{
+				simon->SetState(SIMON_STATE_HIT_SIT);
+			}
+			else simon->SetState(SIMON_STATE_HIT_STAND);
+		}
+		weapon->nx = simon->nx;
+		weapon->SetWeaponPosition(simon->x, simon->y, simon->isStand);
+		weapon->SetState(0);
 		break;
 	}
 }

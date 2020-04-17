@@ -10,12 +10,14 @@
 #include "Whip.h"
 #include "Item.h"
 #include "Tilemap.h"
+#include "Weapon.h"
 
 class CPlayScene : public CScene
 {
 protected:
 	Simon* player;					// A play scene has to have player, right? 
 	Whip* whip;
+	Weapon* weapon;
 	Tilemap* tilemap;
 
 	vector<LPGAMEOBJECT> objects;

@@ -18,6 +18,8 @@ class Tilemap
 	int cellWidth = 32;		// chieu rong cua mot o
 	int cellHeight = 32;	// chieu cao cua mot o
 
+	int** spriteId;
+
 	CSprites* sprites;
 public:
 	Tilemap();

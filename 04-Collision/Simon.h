@@ -4,11 +4,14 @@
 
 class Simon : public CGameObject
 {
+	int weapon = 0;
+
 	int untouchable;
 	bool isOnGround = false;
-	bool isStand = true;
 	DWORD untouchable_start;
 public:
+	bool isStand = true;
+	bool isThrowWeapon = false;
 	Simon() : CGameObject()
 	{
 		untouchable = 0;

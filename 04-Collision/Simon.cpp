@@ -10,6 +10,7 @@
 #include "Brick.h"
 #include "Candle.h"
 #include "Item.h"
+#include "Weapon.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -103,7 +104,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Ground
+			if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<Weapon*>(e->obj)) // if e->obj is Ground
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
@@ -119,51 +120,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
-
-//void Simon::LoadResource()
-//{
-//
-//	LPDIRECT3DTEXTURE9 texSimon = CTextures::GetInstance()->Get(ID_TEX_SIMON);
-//
-//	CSprites* sprites = CSprites::GetInstance();
-//	sprites->Add(10001, 0, 0, 60, 64, texSimon); // stand
-//
-//	sprites->Add(10011, 0, 0, 60, 64, texSimon); // walk
-//	sprites->Add(10012, 60, 0, 120, 64, texSimon);
-//	sprites->Add(10013, 120, 0, 180, 64, texSimon);
-//	sprites->Add(10014, 180, 0, 240, 64, texSimon);
-//
-//	sprites->Add(10021, 300, 198, 360, 262, texSimon); // sit
-//
-//	sprites->Add(10031, 240, 0, 300, 64, texSimon); // jump
-//
-//	CAnimations* animations = CAnimations::GetInstance();
-//
-//	LPANIMATION ani;
-//	ani = new CAnimation(); // Simon idle
-//	ani->Add(10001);
-//	animations->Add(401, ani);
-//
-//	ani = new CAnimation(); // Simon walk
-//	ani->Add(10011);
-//	ani->Add(10012);
-//	ani->Add(10013);
-//	ani->Add(10014);
-//	animations->Add(402, ani);
-//
-//	ani = new CAnimation(); // Simon sit
-//	ani->Add(10021);
-//	animations->Add(403, ani);
-//
-//	ani = new CAnimation(); // Simon jump
-//	ani->Add(10031);
-//	animations->Add(404, ani);
-//
-//	AddAnimation(401);
-//	AddAnimation(402);
-//	AddAnimation(403);
-//	AddAnimation(404);
-//}
 
 void Simon::Render()
 {
@@ -197,12 +153,12 @@ void Simon::SetState(int state)
 	case SIMON_STATE_IDLE_LEFT:
 		vx = 0;
 		nx = -1;
-		isStand = true;
+		//isStand = true;
 		break;
 	case SIMON_STATE_IDLE_RIGHT:
 		vx = 0;
 		nx = 1;
-		isStand = true;
+		//isStand = true;
 		break;
 	case SIMON_STATE_WALKING_RIGHT:
 		vx = SIMON_WALKING_SPEED;
@@ -214,7 +170,7 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_SIT:
 		vx = vy = 0;
-		isStand = false;
+		//isStand = false;
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED_Y;
@@ -224,6 +180,7 @@ void Simon::SetState(int state)
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_HIT_STAND:
+		isStand = true;
 		if (this->isOnGround)
 		{
 			vx = 0;
@@ -232,13 +189,13 @@ void Simon::SetState(int state)
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_STATE_HIT_SIT:
+		isStand = false;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
-		isStand = false;
 		break;
 	case SIMON_STATE_SIT_RIGHT:
 		vx = vy = 0;
-		isStand = false;
+		//isStand = false;
 		break;
 	case SIMON_STATE_JUMP_RIGHT:
 		vy = -SIMON_JUMP_SPEED_Y;
@@ -248,6 +205,7 @@ void Simon::SetState(int state)
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
 	case SIMON_STATE_HIT_STAND_RIGHT:
+		isStand = true;
 		if (this->isOnGround)
 		{
 			vx = 0;
@@ -256,17 +214,14 @@ void Simon::SetState(int state)
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_STATE_HIT_SIT_RIGHT:
+		isStand = false;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		isStand = false;
 		break;
 	case SIMON_STATE_GET_ITEM_RIGHT:
-		//animation_set->at(state)->resetAnimation();
-		//animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break; 
 	case SIMON_STATE_GET_ITEM_LEFT:
-		//animation_set->at(state)->resetAnimation();
-		//animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	}
 }

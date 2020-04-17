@@ -33,16 +33,13 @@ void Tilemap::LoadMap()
 	int tileId = 8;
 	sprites->Add(tileId, 0, 0, 32, 32, texTileMap);
 
-	sprites->Get(8)->Draw(10, 10);
-}
 
-void Tilemap::Render()
-{
 	ifstream f;
 	f.open("textures\\map\\test.txt");
 
 	// current resource section flag
-
+	int i = 0;
+	int value;
 	char str[1024];
 	while (f.getline(str, 1024))
 	{
@@ -55,14 +52,35 @@ void Tilemap::Render()
 
 		DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 
-		//for (int i = 0; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
-		//{
-		//	int sprite_id = atoi(tokens[i].c_str());
-		//	int frame_time = atoi(tokens[i + 1].c_str());
-		//}
+		spriteId = new int* [2];
+		spriteId[i] = new int[8];
+		for (int j = 0; j < tokens.size(); j++)	// why i+=2 ?  sprite_id | frame_time  
+		{
+			value = atoi(tokens[i].c_str());
+			spriteId[i][j] = value;
+		}
+		i++;
 	}
 
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			DebugOut(L"--> %s\n", spriteId[i][j]);
+		}
+	}
 	f.close();
+}
+
+void Tilemap::Render()
+{
+	for (int i = 0; i < numCol; i++)
+	{
+		for (int j = 0; j < numRow; j++)
+		{
+			sprites->Get(8)->Draw(i*32, j*32);
+		}
+	}
 }
 
 Tilemap* Tilemap::GetInstance()

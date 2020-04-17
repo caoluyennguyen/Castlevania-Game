@@ -16,8 +16,8 @@ void Whip::Render()
 
 void Whip::SetWhipPosition(int simonX, int simonY, bool isStand)
 {
-	x = simonX - 90.0f;
-	y = simonY;
+	this->x = simonX - 90.0f;
+	this->y = simonY;
 	if (!isStand)
 	{
 		this->y = simonY + 15.0f;
