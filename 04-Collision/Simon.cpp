@@ -8,6 +8,8 @@
 #include "Portal.h"
 #include "Ground.h"
 #include "Brick.h"
+#include "Candle.h"
+#include "Item.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -51,8 +53,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+		//if (nx != 0) vx = 0;
+		//if (ny != 0) vy = 0;
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -100,6 +102,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						isOnGround = false;
 					}
 				}
+			}
+			if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Ground
+			{
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+			}
+			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
+			{
+				if (this->nx == -1) this->SetState(SIMON_STATE_GET_ITEM_LEFT);
+				else this->SetState(SIMON_STATE_GET_ITEM_RIGHT);
 			}
 		}
 	}
@@ -247,6 +259,14 @@ void Simon::SetState(int state)
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		isStand = false;
+		break;
+	case SIMON_STATE_GET_ITEM_RIGHT:
+		//animation_set->at(state)->resetAnimation();
+		//animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break; 
+	case SIMON_STATE_GET_ITEM_LEFT:
+		//animation_set->at(state)->resetAnimation();
+		//animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	}
 }

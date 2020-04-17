@@ -340,10 +340,13 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	//tilemap = new Tilemap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	if ((player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND))
+	if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
+		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 	{
+		whip->nx = player->nx;
 		whip->Render();
 	}
 }
@@ -468,6 +471,3 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 		
 }
-
-void CPlayScene::WhipUpdate(DWORD dt, int cx, int cy)
-{}
