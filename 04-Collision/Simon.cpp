@@ -111,8 +111,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
-				if (this->nx == -1) this->SetState(SIMON_STATE_GET_ITEM_LEFT);
-				else this->SetState(SIMON_STATE_GET_ITEM_RIGHT);
+				StartUntouchable();
+
+				e->obj->enable = false;
 			}
 		}
 	}
@@ -138,7 +139,13 @@ void Simon::Render()
 	}*/
 
 	int alpha = 255;
-	if (untouchable) alpha = 128;
+	/*if (untouchable) {
+		if (nx == 1)
+		{
+			SetState(SIMON_STATE_GET_ITEM_RIGHT);
+		}
+		else SetState(SIMON_STATE_GET_ITEM_LEFT);
+	}*/
 	animation_set->at(state)->Render(x, y, alpha);
 
 	RenderBoundingBox();
@@ -220,8 +227,12 @@ void Simon::SetState(int state)
 		isStand = false;
 		break;
 	case SIMON_STATE_GET_ITEM_RIGHT:
+		vx = 0;
+		//animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break; 
 	case SIMON_STATE_GET_ITEM_LEFT:
+		vx = 0;
+		//animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	}
 }
@@ -233,4 +244,15 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 	right = x + SIMON_BBOX_WIDTH;
 	bottom = y + SIMON_BBOX_HEIGHT;
+}
+
+void Simon::StartUntouchable()
+{
+	untouchable = 1;
+	untouchable_start = GetTickCount(); 
+	if (nx == 1)
+	{
+		SetState(SIMON_STATE_GET_ITEM_RIGHT);
+	}
+	else SetState(SIMON_STATE_GET_ITEM_LEFT);
 }

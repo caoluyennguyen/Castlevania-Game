@@ -21,7 +21,7 @@ public:
 	//virtual void LoadResource();
 	virtual void Render();
 	void SetState(int state);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUntouchable();
 
 	bool CheckStandGround() { return isOnGround; }
 

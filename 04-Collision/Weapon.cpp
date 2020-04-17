@@ -9,11 +9,17 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
 	CGameObject::Update(dt);
 	x += dx;
+
+
 }
 
 void Weapon::Render()
 {
-	animation_set->at(0)->Render(x, y);
+	if (nx == -1)
+	{
+		animation_set->at(0)->Render(x, y);
+	}
+	else animation_set->at(1)->Render(x, y);
 	RenderBoundingBox();
 }
 

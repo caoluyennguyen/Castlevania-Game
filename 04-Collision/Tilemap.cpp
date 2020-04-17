@@ -13,16 +13,6 @@ Tilemap::Tilemap()
 	Render();
 }
 
-Tilemap::Tilemap(int mapWidth, int mapHeight)
-{ 
-	this->mapWidth = mapWidth; 
-	this->mapHeight = mapHeight; 
-	sprites = CSprites::GetInstance();
-
-	LoadMap();
-	Render();
-}
-
 void Tilemap::LoadMap()
 {
 	// Luu tung tile theo id tu 1, 2, ...
@@ -30,15 +20,22 @@ void Tilemap::LoadMap()
 	textures->Add(70, L"textures\\map\\Scene1.png", D3DCOLOR_XRGB(255, 0, 255));
 	LPDIRECT3DTEXTURE9 texTileMap = textures->Get(70);
 
-	int tileId = 8;
-	sprites->Add(tileId, 0, 0, 32, 32, texTileMap);
-
+	//sprites->Add(8, 0, 0, 32, 32, texTileMap);
+	//sprites->Add(0, 32, 32, 64, 64, texTileMap);
+	int idCell = 1;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 17; j++)
+		{
+			sprites->Add(idCell, 32 * j, 32 * i, 32 + 32 * j, 32 + 32 * i, texTileMap);
+			idCell++;
+		}
+	}
 
 	ifstream f;
-	f.open("textures\\map\\test.txt");
+	f.open("textures\\map\\Scene1.txt");
 
 	// current resource section flag
-	int i = 0;
 	int value;
 	char str[1024];
 	while (f.getline(str, 1024))
@@ -46,39 +43,58 @@ void Tilemap::LoadMap()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
-		vector<string> tokens = split(line);
+		vector<string> tokens = split(line, " ");
 
 		//if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
-
+		//spriteId = new int* [2];
+		//spriteId[i] = new int[8];
+		//for (int j = 0; j < tokens.size(); j++)	// why i+=2 ?  sprite_id | frame_time  
+		//{
+		//	value = atoi(tokens[i].c_str());
+		//	spriteId[i][j] = value;
+		//}
+		//i++;
+		vector<int> lineOfCell;
 		DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 
-		spriteId = new int* [2];
-		spriteId[i] = new int[8];
-		for (int j = 0; j < tokens.size(); j++)	// why i+=2 ?  sprite_id | frame_time  
+		for (int i = 0; i < tokens.size(); i++)	// why i+=2 ?  sprite_id | frame_time  
 		{
-			value = atoi(tokens[i].c_str());
-			spriteId[i][j] = value;
+			lineOfCell.push_back(atoi(tokens[i].c_str()));
 		}
-		i++;
+		cellId.push_back(lineOfCell);
 	}
 
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			DebugOut(L"--> %s\n", spriteId[i][j]);
-		}
-	}
 	f.close();
 }
 
 void Tilemap::Render()
 {
-	for (int i = 0; i < numCol; i++)
+	for (int i = 0; i < numRow; i++)
 	{
-		for (int j = 0; j < numRow; j++)
+		for (int j = 0; j < numCol; j++)
 		{
-			sprites->Get(8)->Draw(i*32, j*32);
+			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
+		}
+	}
+}
+
+void Tilemap::Render(int x)
+{
+	int start = x / 32 - 8;
+	int finish = start + 20;
+	if (start < 0)
+	{
+		start = 0;
+	}
+	if (finish > 48)
+	{
+		finish = 48;
+	}
+	for (int i = 0; i < numRow; i++)
+	{
+		for (int j = start; j < finish; j++)
+		{
+			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
 		}
 	}
 }

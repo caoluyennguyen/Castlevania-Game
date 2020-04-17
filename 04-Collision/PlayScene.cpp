@@ -322,7 +322,10 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if (objects[i]->enable)
+		{
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -342,15 +345,23 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
+	if (cx < 0)
+	{
+		cx = 0;
+	}
 	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 }
 
 void CPlayScene::Render()
 {
-	tilemap->Render();
-	//tilemap = new Tilemap();
+	tilemap->Render(player->x);
 	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	{
+		if (objects[i]->enable)
+		{
+			objects[i]->Render();
+		}
+	}
 	if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
 		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 	{
@@ -360,8 +371,11 @@ void CPlayScene::Render()
 			whip->Render();
 		}
 	}
-	weapon->Render();
-	weapon->RenderBoundingBox();
+	if (weapon->enable)
+	{
+		weapon->Render();
+		weapon->RenderBoundingBox();
+	}
 }
 
 /*
@@ -449,6 +463,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND);
 		}
+		weapon->enable = true;
 		weapon->nx = simon->nx;
 		weapon->SetWeaponPosition(simon->x, simon->y, simon->isStand);
 		weapon->SetState(0);
@@ -484,6 +499,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	{
 		return;
 	}
+	if (simon->GetState() == SIMON_STATE_GET_ITEM_LEFT || simon->GetState() == SIMON_STATE_GET_ITEM_RIGHT)
+	{
+		return;
+	}
+	/*if ((simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() == SIMON_STATE_HIT_STAND
+		|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
+		&& simon->animation_set->at(simon->state)->isOver(300))
+	{
+		return;
+	}*/
 
 	//else simon->animation_set->at(simon->GetState())->setStartFrameTime(0);
 
