@@ -29,7 +29,6 @@
 #include "Textures.h"
 #include "Input.h"
 
-#include "Brick.h"
 #include "Simon.h"
 
 CGame *game;

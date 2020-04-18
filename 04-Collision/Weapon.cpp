@@ -1,16 +1,39 @@
 #include "Weapon.h"
+#include "Candle.h"
 
 Weapon::Weapon() : CGameObject()
 {
 	this->enable = false;
 }
 
-void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
+void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	x += dx;
 
+	CGameObject::Update(dt, coObjects);
 
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (dynamic_cast<Candle*>(obj))
+		{
+			Candle* e = dynamic_cast<Candle*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					e->SetState(CANDLE_STATE_DESTROYED);
+				}
+			}
+		}
+	}
 }
 
 void Weapon::Render()
@@ -52,4 +75,16 @@ void Weapon::SetWeaponPosition(int simonX, int simonY, bool isStand)
 	{
 		this->y = simonY + 30.0f;
 	}
+}
+
+bool Weapon::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
+{
+	float whip_left,
+		whip_top,
+		whip_right,
+		whip_bottom;
+
+	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
+
+	return CGameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
 }

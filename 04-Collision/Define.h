@@ -39,7 +39,7 @@
 #define SIMON_BBOX_WIDTH  64
 #define SIMON_BBOX_HEIGHT 60
 
-#define SIMON_UNTOUCHABLE_TIME 2000
+#define SIMON_UNTOUCHABLE_TIME 1000
 #pragma endregion
 
 #define WINDOW_CLASS_NAME L"SampleWindow"

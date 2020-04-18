@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "Brick.h"
 #include "Simon.h"
 #include "Ground.h"
 #include "Candle.h"

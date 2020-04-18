@@ -220,7 +220,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Ground(x, y, r, b, scene_id);
 		}
 		break;
-		case OBJECT_TYPE_ITEM: obj = new Item(); break;
+		case OBJECT_TYPE_ITEM: 
+			obj = new Item();
+			obj->enable = false;
+			break;
 		case OBJECT_TYPE_PORTAL:
 		{
 			float r = atof(tokens[4].c_str());
@@ -333,14 +336,16 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
-	weapon->Update(dt);
+	weapon->Update(dt, &coObjects);
 
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	//whip->Update(dt);
-	whip->SetWhipPosition(cx, cy, player->isStand);
-
+	if (whip->enable)
+	{
+		whip->Update(dt, &coObjects);
+		whip->SetWhipPosition(cx, cy, player->isStand);
+	}
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -370,7 +375,9 @@ void CPlayScene::Render()
 			whip->nx = player->nx;
 			whip->Render();
 		}
+		
 	}
+	else whip->enable = false;
 	if (weapon->enable)
 	{
 		weapon->Render();
@@ -419,6 +426,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		simon->SetSpeed(0, 0);
 		break;
 	case DIK_Z:
+		whip->enable = true;
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() ==  SIMON_STATE_HIT_STAND
 			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 		{
@@ -432,6 +440,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_HIT_SIT_RIGHT);
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND_RIGHT);
+			whip->animation_set->at(1)->resetAnimation();
 		}
 		else {
 			if (simon->GetState() == SIMON_STATE_SIT)
@@ -439,6 +448,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_HIT_SIT);
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND);
+			whip->animation_set->at(0)->resetAnimation();
 		}
 		break;
 	case DIK_X:
@@ -499,16 +509,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	{
 		return;
 	}
-	if (simon->GetState() == SIMON_STATE_GET_ITEM_LEFT || simon->GetState() == SIMON_STATE_GET_ITEM_RIGHT)
+	if ((simon->GetState() == SIMON_STATE_GET_ITEM_RIGHT || simon->GetState() == SIMON_STATE_GET_ITEM_LEFT)
+		&& simon->animation_set->at(simon->state)->isOver(1000) == false)
 	{
 		return;
 	}
-	/*if ((simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() == SIMON_STATE_HIT_STAND
-		|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
-		&& simon->animation_set->at(simon->state)->isOver(300))
-	{
-		return;
-	}*/
 
 	//else simon->animation_set->at(simon->GetState())->setStartFrameTime(0);
 

@@ -7,7 +7,6 @@
 
 #include "Portal.h"
 #include "Ground.h"
-#include "Brick.h"
 #include "Candle.h"
 #include "Item.h"
 #include "Weapon.h"
@@ -111,8 +110,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
-				StartUntouchable();
-
+				//StartUntouchable();
+				if (nx == 1)
+				{
+					SetState(SIMON_STATE_GET_ITEM_LEFT);
+				}
+				else SetState(SIMON_STATE_GET_ITEM_RIGHT);
 				e->obj->enable = false;
 			}
 		}
@@ -137,7 +140,11 @@ void Simon::Render()
 			ani = SIMON_ANI_WALKING_RIGHT;
 		else ani = SIMON_ANI_WALKING_LEFT;
 	}*/
-
+	/*if ((this->GetState() == SIMON_STATE_GET_ITEM_RIGHT || this->GetState() == SIMON_STATE_GET_ITEM_LEFT)
+		&& this->animation_set->at(this->state)->isOver(1000))
+	{
+		return;
+	}*/
 	int alpha = 255;
 	/*if (untouchable) {
 		if (nx == 1)
@@ -228,11 +235,11 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_GET_ITEM_RIGHT:
 		vx = 0;
-		//animation_set->at(state)->setStartFrameTime(GetTickCount());
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break; 
 	case SIMON_STATE_GET_ITEM_LEFT:
 		vx = 0;
-		//animation_set->at(state)->setStartFrameTime(GetTickCount());
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
 	}
 }
@@ -249,10 +256,5 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Simon::StartUntouchable()
 {
 	untouchable = 1;
-	untouchable_start = GetTickCount(); 
-	if (nx == 1)
-	{
-		SetState(SIMON_STATE_GET_ITEM_RIGHT);
-	}
-	else SetState(SIMON_STATE_GET_ITEM_LEFT);
+	untouchable_start = GetTickCount();
 }

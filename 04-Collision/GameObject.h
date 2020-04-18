@@ -96,5 +96,7 @@ public:
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
 
+	bool AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b);
+
 	~CGameObject();
 };

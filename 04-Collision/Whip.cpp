@@ -4,6 +4,28 @@
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
+
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (dynamic_cast<Candle*>(obj))
+		{
+			Candle* e = dynamic_cast<Candle*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					e->SetState(CANDLE_STATE_DESTROYED);
+				}
+			}
+		}
+	}
 }
 
 void Whip::Render()
@@ -39,4 +61,16 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = x + 190;
 		left = right - WHIP_BBOX_WIDTH;
 	}
+}
+
+bool Whip::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
+{
+	float whip_left,
+		whip_top,
+		whip_right,
+		whip_bottom;
+
+	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
+
+	return CGameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
 }

@@ -54,9 +54,6 @@
     <ClInclude Include="Animations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Brick.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Candle.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -118,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Candle.cpp">
       <Filter>Objects</Filter>
