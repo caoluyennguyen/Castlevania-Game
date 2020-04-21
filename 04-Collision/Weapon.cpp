@@ -8,7 +8,6 @@ Weapon::Weapon() : CGameObject()
 
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt);
 	x += dx;
 
 	CGameObject::Update(dt, coObjects);
@@ -30,6 +29,7 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->enable)
 				{
 					e->SetState(CANDLE_STATE_DESTROYED);
+					this->enable = false;
 				}
 			}
 		}

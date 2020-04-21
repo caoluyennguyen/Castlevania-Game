@@ -146,7 +146,7 @@
 
 # DAGGER
 # type	x	y	ani_set_id
-4	160	240	4
+4	160	275	4
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

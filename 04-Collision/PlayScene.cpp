@@ -336,8 +336,6 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
-	weapon->Update(dt, &coObjects);
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -355,6 +353,12 @@ void CPlayScene::Update(DWORD dt)
 		cx = 0;
 	}
 	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+
+	if (weapon->x < cx + SCREEN_WIDTH)
+	{
+		weapon->Update(dt, &coObjects);
+	}
+	else weapon->enable = false;
 }
 
 void CPlayScene::Render()
