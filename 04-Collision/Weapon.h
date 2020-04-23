@@ -4,6 +4,8 @@
 class Weapon : public CGameObject
 {
 public:
+	int TypeOfWeapon;
+
 	Weapon();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);

@@ -8,6 +8,11 @@
 50	textures\WHIP-2.png	255	0	255
 60	textures\item\Dagger.png	255	0	255
 80	textures\weapon\Dagger.png	255	0	255
+90	textures\weapon\Axe.png	255	0	255
+100	textures\item\LargeHeart.png	255	0	255
+101	textures\item\Chain.png	255	0	255
+102	textures\weapon\Boomerang.png	255	0	255
+103	textures\weapon\HolyWater.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -82,6 +87,28 @@
 50001	0	0	32	18	60
 50002	0	0	32	18	80
 
+#AXE
+60001	0	0	30	28	90
+60002	30	0	60	28	90
+60003	60	0	90	28	90
+60004	90	0	120	28	90
+
+#HEART
+70001	0	0	24	20	100
+
+#CHAIN
+80001	0	0	32	32	101
+
+#BOOMERANG
+90001	0	0	28	28	102
+90002	28	0	56	28	102
+90003	56	0	84	28	102
+
+#HOLYWATER
+1001	0	0	32	26	103
+1002	32	0	64	26	103
+1003	64	0	96	26	103
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -114,6 +141,22 @@
 500	50001	100
 501	50002	100
 
+#ITEM
+#AXE
+600	60001	100
+#HEART
+601	70001	100
+#CHAIN
+602	80001	100
+
+#WEAPON
+#AXE
+700	60001	100	60002	100	60003	100	60004	100
+#BOOMERANG
+800	90001	100	90002	100	90003	100
+#HOLYWATER
+900	1001	100	1002	100	1003	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -124,12 +167,14 @@
 2	200	400
 # WHIP
 3	300	301
-#DAGGER
-4	500	501
+# ITEM
+4	500	600	601	602
+# WEAPON : 1 = DAGGER LEFT , 2 = DAGGER RIGHT , 3 = AXE , 4 = BOOMERANG , 5 = HOLYWATER
+5	500	501	700	800	900
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip
+# type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item
 # SIMON
 0	50	0	1
 
@@ -141,12 +186,15 @@
 # type	x	y	ani_set_id
 2	160	240	2
 2	448	240	2
+2	480	240	2
 2	672	240	2
 2	960	240	2
 
-# DAGGER
-# type	x	y	ani_set_id
-4	160	275	4
+# ITEM
+# item_type: 0 = DAGGER , 2 = AXE , 3 = HEART , 4 = CHAIN
+# type	x	y	ani_set_id	type_of_item
+4	160	260	4	3
+4	448	270	4	2
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

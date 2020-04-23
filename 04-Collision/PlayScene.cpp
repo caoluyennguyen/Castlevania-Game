@@ -221,7 +221,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 		case OBJECT_TYPE_ITEM: 
-			obj = new Item();
+			obj = new Item(atof(tokens[4].c_str()));
 			obj->enable = false;
 			break;
 		case OBJECT_TYPE_PORTAL:
@@ -256,7 +256,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 
 	whip->SetAnimationSet(animation_sets->Get(3));
-	weapon->SetAnimationSet(animation_sets->Get(4));
+	weapon->SetAnimationSet(animation_sets->Get(5));
 }
 
 void CPlayScene::Load()
@@ -344,6 +344,7 @@ void CPlayScene::Update(DWORD dt)
 		whip->Update(dt, &coObjects);
 		whip->SetWhipPosition(cx, cy, player->isStand);
 	}
+	weapon->Update(dt, &coObjects);
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -354,11 +355,11 @@ void CPlayScene::Update(DWORD dt)
 	}
 	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 
-	if (weapon->x < cx + SCREEN_WIDTH)
+	/*if (weapon->x < cx + SCREEN_WIDTH)
 	{
 		weapon->Update(dt, &coObjects);
 	}
-	else weapon->enable = false;
+	else weapon->enable = false;*/
 }
 
 void CPlayScene::Render()

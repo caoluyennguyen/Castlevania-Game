@@ -2,8 +2,9 @@
 #include "GameObject.h"
 class Item : public CGameObject
 {
+	int typeOfItem;
 public:
-	Item() {};
+	Item(int type);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

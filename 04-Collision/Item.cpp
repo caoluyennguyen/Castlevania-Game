@@ -1,12 +1,39 @@
 #include "Item.h"
 #include "Candle.h"
 
+Item::Item(int type) : CGameObject()
+{
+	this->typeOfItem = type;
+}
+
 void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + 10;
-	bottom = y + 10;
+	switch (typeOfItem)
+	{
+	case 0:
+		left = x;
+		top = y;
+		right = x + 32;
+		bottom = y + 18;
+		break;
+	case 2:
+		left = x;
+		top = y;
+		right = x + 30;
+		bottom = y + 28;
+	case 3:
+		left = x;
+		top = y;
+		right = x + 30;
+		bottom = y + 28;
+	case 4:
+		left = x;
+		top = y;
+		right = x + 30;
+		bottom = y + 28;
+	default:
+		break;
+	}
 }
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -39,19 +66,19 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Item::Render()
 {
-	animation_set->at(0)->Render(x, y);
+	animation_set->at(typeOfItem)->Render(x, y);
 
 	RenderBoundingBox();
 }
 
 bool Item::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
 {
-	float whip_left,
-		whip_top,
-		whip_right,
-		whip_bottom;
+	float item_left,
+		item_top,
+		item_right,
+		item_bottom;
 
-	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
+	GetBoundingBox(item_left, item_top, item_right, item_bottom);
 
-	return CGameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
+	return CGameObject::AABB(item_left, item_top, item_right, item_bottom, obj_left, obj_top, obj_right, obj_bottom);
 }

@@ -1,6 +1,6 @@
 #include "Candle.h"
 
-Candle::Candle()
+Candle::Candle() : CGameObject()
 {
 	SetState(CANDLE_STATE_NORMAL);
 }
