@@ -89,5 +89,5 @@ bool Weapon::CheckCollision(float obj_left, float obj_top, float obj_right, floa
 
 	GetBoundingBox(weapon_left, weapon_top, weapon_right, weapon_bottom);
 
-	return CGameObject::AABB(weapon_left, weapon_left, weapon_right, weapon_bottom, obj_left, obj_top, obj_right, obj_bottom);
+	return CGameObject::AABB(weapon_left, weapon_top, weapon_right, weapon_bottom, obj_left, obj_top, obj_right, obj_bottom);
 }
