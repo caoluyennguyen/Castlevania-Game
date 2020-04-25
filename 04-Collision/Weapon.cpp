@@ -4,6 +4,9 @@
 
 #define DAGGER_LEFT 0
 #define DAGGER_RIGHT 1
+#define AXE 2
+#define BOOMERANG 3
+#define HOLYWATER 4
 
 Weapon::Weapon() : CGameObject()
 {
@@ -43,9 +46,9 @@ void Weapon::Render()
 {
 	if (nx == -1)
 	{
-		animation_set->at(4)->Render(x, y);
+		animation_set->at(HOLYWATER)->Render(x, y);
 	}
-	else animation_set->at(3)->Render(x, y);
+	else animation_set->at(BOOMERANG)->Render(x, y);
 	RenderBoundingBox();
 }	
 
