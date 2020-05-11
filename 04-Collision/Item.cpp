@@ -3,12 +3,13 @@
 
 Item::Item(int type) : CGameObject()
 {
-	this->typeOfItem = type;
+	//this->typeOfItem = type;
+	this->state = type;
 }
 
 void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	switch (typeOfItem)
+	switch (this->state)
 	{
 	case 0:
 		left = x;
@@ -16,21 +17,21 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = x + 32;
 		bottom = y + 18;
 		break;
+	case 1:
+		left = x;
+		top = y;
+		right = x + 30;
+		bottom = y + 28;
 	case 2:
 		left = x;
 		top = y;
-		right = x + 30;
-		bottom = y + 28;
+		right = x + 24;
+		bottom = y + 20;
 	case 3:
 		left = x;
 		top = y;
-		right = x + 30;
-		bottom = y + 28;
-	case 4:
-		left = x;
-		top = y;
-		right = x + 30;
-		bottom = y + 28;
+		right = x + 32;
+		bottom = y + 32;
 	default:
 		break;
 	}
@@ -66,7 +67,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Item::Render()
 {
-	animation_set->at(typeOfItem)->Render(x, y);
+	animation_set->at(this->state)->Render(x, y);
 
 	RenderBoundingBox();
 }

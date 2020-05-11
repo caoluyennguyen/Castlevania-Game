@@ -15,6 +15,7 @@ void Candle::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void Candle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	
 	if (this->GetState() == CANDLE_STATE_DESTROYED && animation_set->at(CANDLE_STATE_DESTROYED)->isOver(600))
 	{
 		this->enable = false;

@@ -59,34 +59,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-
-			//	// jump on top >> kill Goomba and deflect a bit 
-			//	if (e->ny < 0)
-			//	{
-			//		if (goomba->GetState() != GOOMBA_STATE_DIE)
-			//		{
-			//			goomba->SetState(GOOMBA_STATE_DIE);
-			//			vy = -SIMON_JUMP_DEFLECT_SPEED;
-			//		}
-			//	}
-			//	else if (e->nx != 0)
-			//	{
-			//		if (untouchable == 0)
-			//		{
-			//			if (goomba->GetState() != GOOMBA_STATE_DIE)
-			//			{
-			//				if (level > SIMON_LEVEL_SMALL)
-			//				{
-			//					level = SIMON_LEVEL_SMALL;
-			//					StartUntouchable();
-			//				}
-			//				else
-			//					SetState(SIMON_STATE_DIE);
-			//			}
-			//		}
-			//	}
-			//}
-
+			
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
 				if (ny != 0)
@@ -111,11 +84,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
 				//StartUntouchable();
-				if (nx == 1)
+				if (e->obj->GetState() == 3)
 				{
-					SetState(SIMON_STATE_GET_ITEM_LEFT);
+					if (nx == 1)
+					{
+						SetState(SIMON_STATE_GET_ITEM_LEFT);
+					}
+					else SetState(SIMON_STATE_GET_ITEM_RIGHT);
 				}
-				else SetState(SIMON_STATE_GET_ITEM_RIGHT);
+				
 				e->obj->enable = false;
 			}
 		}

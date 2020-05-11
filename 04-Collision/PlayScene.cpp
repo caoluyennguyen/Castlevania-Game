@@ -32,6 +32,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CANDLE	2
 #define OBJECT_TYPE_WHIP	3
 #define OBJECT_TYPE_ITEM	4
+#define OBJECT_TYPE_WEAPON	5
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -51,9 +52,6 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 	int B = atoi(tokens[4].c_str());
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
-	//CTextures::GetInstance()->Add(ID_TEX_SIMON, L"textures\\Simon.png", D3DCOLOR_XRGB(255, 255, 255));
-	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-	//CTextures::GetInstance()->Add(ID_TEX_MISC, L"textures\\Scene1.png", D3DCOLOR_XRGB(176, 224, 248));
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -210,6 +208,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			player = (Simon*)obj;
 			whip = new Whip();
 			weapon = new Weapon();
+			weapon->SetState(0);
 			break;
 		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
 		case OBJECT_TYPE_GROUND: 
@@ -237,26 +236,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 	}
 
-	/*CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
-	CGameObject* obj = NULL;
-	obj = new Simon();
-	player = (Simon*)obj;
-
-	obj->SetPosition(50.0f, 0);
-
-	LPANIMATION_SET ani_set = animation_sets->Get(401);
-	ani_set = animation_sets->Get(402);
-	ani_set = animation_sets->Get(403);
-	ani_set = animation_sets->Get(404);*/
 	obj->SetPosition(x, y);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 
-	whip->SetAnimationSet(animation_sets->Get(3));
-	weapon->SetAnimationSet(animation_sets->Get(5));
+	whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
+	weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
 }
 
 void CPlayScene::Load()
@@ -344,7 +331,6 @@ void CPlayScene::Update(DWORD dt)
 		whip->Update(dt, &coObjects);
 		whip->SetWhipPosition(cx, cy, player->isStand);
 	}
-	weapon->Update(dt, &coObjects);
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -353,13 +339,14 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx = 0;
 	}
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, -70.0f /*cy*/);
 
-	/*if (weapon->x < cx + SCREEN_WIDTH)
+	if (weapon->x < cx + SCREEN_WIDTH && weapon->x > cx && weapon->isEnable())
 	{
+		coObjects.push_back(player);
 		weapon->Update(dt, &coObjects);
 	}
-	else weapon->enable = false;*/
+	else weapon->enable = false;
 }
 
 void CPlayScene::Render()
@@ -411,7 +398,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Weapon* weapon = ((CPlayScene*)scence)->weapon;
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_X:
 		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_HIT_STAND || simon->GetState() == SIMON_STATE_HIT_SIT
 			|| simon->GetState() == SIMON_STATE_JUMP_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT)
 		{
@@ -432,6 +419,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_Z:
 		whip->enable = true;
+		whip->StartHit();
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() ==  SIMON_STATE_HIT_STAND
 			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
 		{
@@ -456,9 +444,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			whip->animation_set->at(0)->resetAnimation();
 		}
 		break;
-	case DIK_X:
+	case DIK_C:
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() == SIMON_STATE_HIT_STAND
-			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT)
+			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || weapon->enable == true)
 		{
 			return;
 		}
@@ -481,7 +469,26 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		weapon->enable = true;
 		weapon->nx = simon->nx;
 		weapon->SetWeaponPosition(simon->x, simon->y, simon->isStand);
-		weapon->SetState(0);
+		if (weapon->state == 3)
+		{
+			weapon->StartBoomerangBack();
+		}
+		break;
+	case DIK_1:
+		if (simon->nx == 1)
+		{
+			weapon->SetState(1);
+		}
+		else weapon->SetState(0);
+		break;
+	case DIK_2:
+		weapon->SetState(2);
+		break;
+	case DIK_3:
+		weapon->SetState(3);
+		break;
+	case DIK_4:
+		weapon->SetState(4);
 		break;
 	}
 }

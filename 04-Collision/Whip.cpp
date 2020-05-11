@@ -17,7 +17,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true)
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
 			{
 				if (this->enable)
 				{
@@ -73,4 +73,9 @@ bool Whip::CheckCollision(float obj_left, float obj_top, float obj_right, float 
 	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
 
 	return CGameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
+}
+
+void Whip::StartHit()
+{
+	isRender = GetTickCount();
 }

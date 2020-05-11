@@ -1,54 +1,121 @@
 #include "Weapon.h"
 #include "Candle.h"
 #include "Utils.h"
+#include "Ground.h"
+#include "Simon.h"
 
 #define DAGGER_LEFT 0
 #define DAGGER_RIGHT 1
 #define AXE 2
 #define BOOMERANG 3
 #define HOLYWATER 4
+#define FIRE 5
 
 Weapon::Weapon() : CGameObject()
 {
-	this->enable = true;
+	this->enable = false;
 }
 
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	x += dx;
+	CGameObject::Update(dt);
 
-	CGameObject::Update(dt, coObjects);
-	float left, top, right, bottom;
-
-	for (UINT i = 0; i < coObjects->size(); i++)
+	if (GetTickCount() - renderHolywater > 500 && this->state == FIRE)
 	{
-		LPGAMEOBJECT obj = coObjects->at(i);
+		this->enable = false;
+		this->SetState(HOLYWATER);
+	}
 
-		if (dynamic_cast<Candle*>(obj))
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+
+	CalcPotentialCollisions(coObjects, coEvents);
+
+	if (coEvents.size() == 0)
+	{
+		if (GetTickCount() - boomerangBack > 1000 && this->state == BOOMERANG)
 		{
-			Candle* e = dynamic_cast<Candle*> (obj);
+			x -= nx * dx;
+		}
+		else {
+			x += nx * dx;
+			y += dy;
+		}
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
 
-			e->GetBoundingBox(left, top, right, bottom);
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-			if (CheckCollision(left, top, right, bottom) == true)
+		// block 
+		//x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		//y += min_ty * dy + ny * 0.4f;
+
+		//if (nx != 0) vx = 0;
+		//if (ny != 0) vy = 0;
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (this->enable)
+				if (this->state = HOLYWATER)
 				{
-					e->SetState(CANDLE_STATE_DESTROYED);
+					this->SetState(FIRE);
+				}
+			}
+			else if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Candle
+			{
+				if (this->isEnable())
+				{
+					e->obj->SetState(CANDLE_STATE_DESTROYED);
 					this->enable = false;
+				}
+
+			}
+			else
+			{
+				if (GetTickCount() - boomerangBack > 1000 && this->state == BOOMERANG)
+				{
+					if (dynamic_cast<Simon*>(e->obj)) this->enable = false;
+					else x -= this->nx * dx;
+				}
+				else {
+					x += this->nx * dx;
+					y += dy;
 				}
 			}
 		}
 	}
+
+	// clean up collision events
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void Weapon::Render()
 {
-	if (nx == -1)
+	if (this->state == DAGGER_LEFT || this->state == DAGGER_RIGHT)
 	{
-		animation_set->at(HOLYWATER)->Render(x, y);
+		if (this->nx == 1) animation_set->at(DAGGER_RIGHT)->Render(x, y);
+		else animation_set->at(DAGGER_LEFT)->Render(x, y);
 	}
-	else animation_set->at(BOOMERANG)->Render(x, y);
+	else if (this->state == HOLYWATER)
+	{
+		this->StartRenderHolywater();
+		animation_set->at(state)->Render(x, y);
+	}
+	else if (this->state == BOOMERANG)
+	{
+		animation_set->at(state)->Render(x, y);
+	}
+	else animation_set->at(state)->Render(x, y);
+
 	RenderBoundingBox();
 }	
 
@@ -56,8 +123,8 @@ void Weapon::GetBoundingBox(float& left, float& top, float& right, float& bottom
 {
 	left = x;
 	top = y;
-	right = left + 20;
-	bottom = top + 10;
+	right = left + 32;
+	bottom = top + 18;
 }
 
 void Weapon::SetState(int state)
@@ -66,8 +133,30 @@ void Weapon::SetState(int state)
 
 	switch (state)
 	{
-	case 0:
-		vx = nx * 0.3f;
+	case DAGGER_LEFT:
+		vx = 0.2f;
+		vy = 0;
+		break;
+	case DAGGER_RIGHT:
+		vx = 0.2f;
+		vy = 0;
+		break;
+	case AXE:
+		vx = 0.2;
+		vy = 0;
+		break;
+	case BOOMERANG:
+		vx = 0.2f;
+		vy = 0;
+		break;
+	case HOLYWATER:
+		vx = 0.2f;
+		vy = 0.1f;
+		animation_set->at(state)->resetAnimation();
+		break;
+	case FIRE:
+		vx = vy = 0;
+		break;
 	default:
 		break;
 	}

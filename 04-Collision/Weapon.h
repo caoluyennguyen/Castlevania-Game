@@ -3,6 +3,8 @@
 
 class Weapon : public CGameObject
 {
+	DWORD boomerangBack;
+	DWORD renderHolywater;
 public:
 	int TypeOfWeapon;
 
@@ -15,5 +17,8 @@ public:
 
 	void SetWeaponPosition(int simonX, int simonY, bool isStand);
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
+
+	void StartRenderHolywater() { renderHolywater = GetTickCount(); };
+	void StartBoomerangBack() { boomerangBack = GetTickCount(); };
 };
 

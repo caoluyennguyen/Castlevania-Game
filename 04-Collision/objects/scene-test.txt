@@ -156,6 +156,7 @@
 800	90001	100	90002	100	90003	100
 #HOLYWATER
 900	1001	100	1002	100	1003	100
+901	1002	100	1003	100
 
 #
 # id	ani1	ani2	ani3
@@ -167,16 +168,16 @@
 2	200	400
 # WHIP
 3	300	301
-# ITEM
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 4	500	600	601	602
-# WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER
-5	500	501	700	800	900
+# WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
+5	500	501	700	800	900	901
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item
 # SIMON
-0	50	0	1
+0	84	160	1
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b	scene_id
@@ -184,17 +185,20 @@
 
 # CANDLE
 # type	x	y	ani_set_id
-2	160	240	2
-2	448	240	2
-2	480	240	2
-2	672	240	2
-2	960	240	2
+2	176	228	2
+2	432	228	2
+2	686	228	2
+2	942	228	2
+2	1198	228	2
 
 # ITEM
-# item_type: 0 = DAGGER , 2 = AXE , 3 = HEART , 4 = CHAIN
+# item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 # type	x	y	ani_set_id	type_of_item
-4	160	260	4	3
-4	448	270	4	2
+4	176	255	4	3
+4	432	270	4	2
+4	686	270	4	2
+4	942	255	4	3
+4	1198	275	4	0
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
