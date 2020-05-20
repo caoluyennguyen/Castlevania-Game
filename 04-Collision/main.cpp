@@ -28,10 +28,12 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "Input.h"
+#include "HeadUpDisplay.h"
 
 #include "Simon.h"
 
 CGame *game;
+HeadUpDisplay* headUpDisplay;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -54,6 +56,7 @@ void Update(DWORD dt)
 {
 	//CGame::GetInstance()->CGame::SetCamPos(cx, 0.0f /*cy*/);
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	headUpDisplay->Update(dt);
 }
 
 /*
@@ -74,6 +77,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
+		headUpDisplay->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -177,6 +181,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 
 	game->Load(L"mario-sample.txt");
+	headUpDisplay = new HeadUpDisplay(game);
+	headUpDisplay->LoadResource();
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 

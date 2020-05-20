@@ -352,6 +352,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	tilemap->Render(player->x);
+
 	for (int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->enable)
