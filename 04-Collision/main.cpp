@@ -77,7 +77,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
-		headUpDisplay->Render();
+		//headUpDisplay->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();

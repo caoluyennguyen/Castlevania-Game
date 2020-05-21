@@ -95,6 +95,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				
 				e->obj->enable = false;
 			}
+			if (dynamic_cast<CPortal*>(e->obj))
+			{
+				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+			}
 		}
 	}
 
