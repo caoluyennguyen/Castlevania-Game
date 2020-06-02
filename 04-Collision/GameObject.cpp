@@ -113,7 +113,6 @@ void CGameObject::FilterCollision(
 	if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
 }
 
-
 void CGameObject::RenderBoundingBox()
 {
 	//D3DXVECTOR3 p(x, y, 0);

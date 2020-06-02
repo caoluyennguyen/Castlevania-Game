@@ -12,6 +12,8 @@ public:
 	int untouchable;
 	bool isStand = true;
 	bool isThrowWeapon = false;
+	bool isAbleToStepOnStair = false;
+	bool isStepOnStair = false;
 	Simon() : CGameObject()
 	{
 		untouchable = 0;

@@ -10,7 +10,9 @@ class Tilemap
 	int y = 0;				// toa do y cua sprite dau tien tren cung
 
 	int numCol = 48;		// so cot can de ve
+	//int numCol = 16;		// so cot can de ve
 	int numRow = 10;		// so hang can de ve
+	//int numRow = 12;		// so hang can de ve
 
 	int mapWidth;			// chieu rong cua map
 	int mapHeight;			// chieu cao cua map

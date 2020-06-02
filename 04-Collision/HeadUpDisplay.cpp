@@ -55,7 +55,7 @@ void HeadUpDisplay::Render()
 	{
 		font->DrawTextA(NULL, headUpDetails.c_str(), -1, &rect, DT_LEFT, D3DCOLOR_XRGB(255, 255, 255));
 	}
-
+	
 	//Draw image
 	for (int i = 0; i < 8; i++)
 	{

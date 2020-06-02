@@ -35,14 +35,23 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (coEvents.size() == 0)
 	{
-		if (GetTickCount() - boomerangBack > 1000 && this->state == BOOMERANG)
+		if (GetTickCount() - boomerangBack > 800 && this->state == BOOMERANG)
 		{
-			x -= nx * dx;
+			nx = nxFlyBack;
+			vx = vxFlyBack;
 		}
-		else {
-			x += nx * dx;
-			y += dy;
+
+		if (this->state == AXE)
+		{
+			if (GetTickCount() - axeFalling > 400)
+			{
+				vy += 0.02f;
+			}
+			else vy = -0.2f;
 		}
+		
+		x += dx;
+		y += dy;
 	}
 	else
 	{
@@ -65,9 +74,13 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (this->state = HOLYWATER)
+				if (this->state == HOLYWATER)
 				{
 					this->SetState(FIRE);
+				}
+				else {
+					x += dx;
+					y += dy;
 				}
 			}
 			else if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Candle
@@ -77,19 +90,27 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->SetState(CANDLE_STATE_DESTROYED);
 					this->enable = false;
 				}
-
 			}
 			else
 			{
-				if (GetTickCount() - boomerangBack > 1000 && this->state == BOOMERANG)
+				if (GetTickCount() - boomerangBack > 800 && this->state == BOOMERANG)
 				{
 					if (dynamic_cast<Simon*>(e->obj)) this->enable = false;
-					else x -= this->nx * dx;
+					nx = nxFlyBack;
+					vx = vxFlyBack;
 				}
-				else {
-					x += this->nx * dx;
-					y += dy;
+
+				if (this->state == AXE)
+				{
+					if (GetTickCount() - axeFalling > 400)
+					{
+						vy += 0.02f;
+					}
+					else vy = -0.2f;
 				}
+
+				x += dx;
+				y += dy;
 			}
 		}
 	}
@@ -102,7 +123,7 @@ void Weapon::Render()
 {
 	if (this->state == DAGGER_LEFT || this->state == DAGGER_RIGHT)
 	{
-		if (this->nx == 1) animation_set->at(DAGGER_RIGHT)->Render(x, y);
+		if (this->vx > 0) animation_set->at(DAGGER_RIGHT)->Render(x, y);
 		else animation_set->at(DAGGER_LEFT)->Render(x, y);
 	}
 	else if (this->state == HOLYWATER)
@@ -134,7 +155,7 @@ void Weapon::SetState(int state)
 	switch (state)
 	{
 	case DAGGER_LEFT:
-		vx = 0.2f;
+		vx = -0.2f;
 		vy = 0;
 		break;
 	case DAGGER_RIGHT:
@@ -142,11 +163,10 @@ void Weapon::SetState(int state)
 		vy = 0;
 		break;
 	case AXE:
-		vx = 0.2;
-		vy = 0;
+		vx = 0.1;
+		vy = 0.2;
 		break;
 	case BOOMERANG:
-		vx = 0.2f;
 		vy = 0;
 		break;
 	case HOLYWATER:

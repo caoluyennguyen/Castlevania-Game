@@ -18,22 +18,28 @@ void Tilemap::LoadMap()
 	// Luu tung tile theo id tu 1, 2, ...
 	CTextures* textures = CTextures::GetInstance();
 	textures->Add(70, L"textures\\map\\Scene1.png", D3DCOLOR_XRGB(255, 0, 255));
+	//textures->Add(70, L"textures\\map\\Scene2.png", D3DCOLOR_XRGB(255, 0, 255));
 	LPDIRECT3DTEXTURE9 texTileMap = textures->Get(70);
 
 	//sprites->Add(8, 0, 0, 32, 32, texTileMap);
 	//sprites->Add(0, 32, 32, 64, 64, texTileMap);
 	int idCell = 1;
+	//int idCell = 0;
 	for (int i = 0; i < 4; i++)
+	//for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 17; j++)
+		//for (int j = 0; j < 7; j++)
 		{
 			sprites->Add(idCell, 32 * j, 32 * i, 32 + 32 * j, 32 + 32 * i, texTileMap);
+			//sprites->Add(idCell, 48 * j, 48 * i, 48 + 48 * j, 48 + 48 * i, texTileMap);
 			idCell++;
 		}
 	}
 
 	ifstream f;
 	f.open("textures\\map\\Scene1.txt");
+	//f.open("textures\\map\\Scene2.txt");
 
 	// current resource section flag
 	int value;
@@ -74,6 +80,7 @@ void Tilemap::Render()
 		for (int j = 0; j < numCol; j++)
 		{
 			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
+			//sprites->Get(cellId[i][j])->Draw(j*48, i*48);
 		}
 	}
 }
@@ -81,20 +88,22 @@ void Tilemap::Render()
 void Tilemap::Render(int x)
 {
 	int start = x / 32 - 8;
-	int finish = start + 20;
+	//int start = x / 48 - 8;
+	int finish = start + 25;
 	if (start < 0)
 	{
 		start = 0;
 	}
-	if (finish > 48)
+	if (finish > numCol)
 	{
-		finish = 48;
+		finish = numCol;
 	}
 	for (int i = 0; i < numRow; i++)
 	{
 		for (int j = start; j < finish; j++)
 		{
 			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
+			//sprites->Get(cellId[i][j])->Draw(j*48, i*48);
 		}
 	}
 }

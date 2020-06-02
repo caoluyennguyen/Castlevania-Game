@@ -10,6 +10,8 @@
 #include "Candle.h"
 #include "Item.h"
 #include "Weapon.h"
+#include "UpStair.h"
+#include "DownStair.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -17,7 +19,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += SIMON_GRAVITY * dt;
+	if (!this->isStepOnStair) vy += SIMON_GRAVITY * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -80,6 +82,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
+				/*if (e->nx != 0) x += 0;
+				if (e->ny != 0) y += 0;*/
 			}
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
@@ -99,6 +103,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+			}
+			if (dynamic_cast<UpStair*>(e->obj)) // if e->obj is Ground
+			{
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+				this->isAbleToStepOnStair = true;
+				/*if (e->nx != 0) x += 0;
+				if (e->ny != 0) y += 0;*/
+			}
+			if (dynamic_cast<DownStair*>(e->obj))
+			{
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+				this->isAbleToStepOnStair = false;
+				this->isStepOnStair = false;
+				if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+				else this->SetState(SIMON_STATE_IDLE_LEFT);
 			}
 		}
 	}
@@ -218,10 +239,56 @@ void Simon::SetState(int state)
 	case SIMON_STATE_GET_ITEM_RIGHT:
 		vx = 0;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
-		break; 
+		break;
 	case SIMON_STATE_GET_ITEM_LEFT:
 		vx = 0;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_HIT_DOWN_STAIR_RIGHT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_HIT_DOWN_STAIR_LEFT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_HIT_UP_STAIR_RIGHT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_HIT_UP_STAIR_LEFT:
+		animation_set->at(state)->resetAnimation();
+		animation_set->at(state)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_GO_UP_STAIR_RIGHT:
+		vx = SIMON_WALKING_SPEED;
+		vy = -SIMON_WALKING_SPEED;
+		nx = 1;
+		break;
+	case SIMON_GO_UP_STAIR_LEFT:
+		vx = -SIMON_WALKING_SPEED;
+		vy = -SIMON_WALKING_SPEED;
+		nx = -1;
+		break;
+	case SIMON_GO_DOWN_STAIR_RIGHT:
+		vx = SIMON_WALKING_SPEED;
+		vy = SIMON_WALKING_SPEED;
+		nx = 1;
+		break;
+	case SIMON_GO_DOWN_STAIR_LEFT:
+		vx = -SIMON_WALKING_SPEED;
+		vy = SIMON_WALKING_SPEED;
+		nx = -1;
+		break;
+	case SIMON_STAND_ON_STAIR_RIGHT:
+		vx = vy = 0;
+		nx = 1;
+		//isStand = true;
+		break;
+	case SIMON_STAND_ON_STAIR_LEFT:
+		vx = vy = 0;
+		nx = -1;
+		//isStand = true;
 		break;
 	}
 }

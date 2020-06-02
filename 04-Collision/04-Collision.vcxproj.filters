@@ -82,7 +82,13 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="HeadUpDisplay.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DownStair.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="UpStair.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +153,13 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="HeadUpDisplay.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DownStair.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="UpStair.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
