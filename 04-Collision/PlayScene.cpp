@@ -23,6 +23,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 */
 
 #define SCENE_SECTION_UNKNOWN -1
+#define SCENE_SECTION_TILEMAP 1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
 #define SCENE_SECTION_ANIMATIONS 4
@@ -42,6 +43,25 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define MAX_SCENE_LINE 1024
 
+
+void CPlayScene::_ParseSection_TILEMAP(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 5) return; // skip invalid lines
+
+	int pixel = atoi(tokens[0].c_str());
+	wstring img_path = ToWSTR(tokens[1]);
+	wstring file_path = ToWSTR(tokens[2]);
+	int numCol = atoi(tokens[3].c_str());
+	int numRow = atoi(tokens[4].c_str());
+	int numColToRead = atoi(tokens[5].c_str());
+	int numRowToRead = atoi(tokens[6].c_str());
+	int idCell = atoi(tokens[7].c_str());
+
+	//CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+	tilemap = new Tilemap(pixel, img_path.c_str(), file_path.c_str(), numCol, numRow, numColToRead, numRowToRead, idCell);
+}
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
@@ -219,8 +239,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			int scene_id = atoi(tokens[6].c_str());
-			obj = new Ground(x, y, r, b, scene_id);
+			obj = new Ground(x, y, r, b);
 		}
 		break;
 		case OBJECT_TYPE_ITEM: 
@@ -233,19 +252,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			break;
 		}
 		case OBJECT_TYPE_UPSTAIR:
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			obj = new UpStair(x, y, r, b);
+			float nx = atof(tokens[6].c_str());
+			obj = new UpStair(x, y, r, b, nx);
 			break;
 		}
 		case OBJECT_TYPE_DOWNSTAIR:
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			obj = new DownStair(x, y, r, b);
+			float nx = atof(tokens[6].c_str());
+			obj = new DownStair(x, y, r, b, nx);
 			break;
 		}
 		break;
@@ -281,6 +303,9 @@ void CPlayScene::Load()
 
 		if (line[0] == '#') continue;	// skip comment lines	
 
+		if (line == "[TILEMAP]") {
+			section = SCENE_SECTION_TILEMAP; continue;
+		}
 		if (line == "[TEXTURES]") {
 			section = SCENE_SECTION_TEXTURES; continue;
 		}
@@ -304,6 +329,7 @@ void CPlayScene::Load()
 		//
 		switch (section)
 		{
+			case SCENE_SECTION_TILEMAP: _ParseSection_TILEMAP(line); break;
 			case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
@@ -318,7 +344,7 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
-	tilemap = new Tilemap();
+	//tilemap = new Tilemap();
 	//tilemap->LoadMap();
 }
 
@@ -369,7 +395,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	tilemap->Render(player->x);
+	//tilemap->Render(player->x);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -380,8 +406,8 @@ void CPlayScene::Render()
 	}
 	if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
 		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT
-		|| player->GetState() == SIMON_HIT_DOWN_STAIR_RIGHT || player->GetState() == SIMON_HIT_DOWN_STAIR_LEFT
-		|| player->GetState() == SIMON_HIT_UP_STAIR_RIGHT || player->GetState() == SIMON_HIT_UP_STAIR_LEFT)
+		|| player->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || player->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
+		|| player->GetState() == SIMON_HIT_UPSTAIR_RIGHT || player->GetState() == SIMON_HIT_UPSTAIR_LEFT)
 	{
 		if (player->isThrowWeapon == false)
 		{
@@ -408,6 +434,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+	tilemap = NULL;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -421,7 +448,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_X:
 		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_HIT_STAND || simon->GetState() == SIMON_STATE_HIT_SIT
-			|| simon->GetState() == SIMON_STATE_JUMP_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT)
+			|| simon->GetState() == SIMON_STATE_JUMP_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT
+			|| simon->isStepOnStair)
 		{
 			return;
 		}
@@ -435,7 +463,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_A: // reset
 		simon->SetState(SIMON_STATE_IDLE_RIGHT);
-		simon->SetPosition(50.0f, 0.0f);
+		simon->SetPosition(100.0f, 0.0f);
 		simon->SetSpeed(0, 0);
 		break;
 	case DIK_Z:
@@ -443,14 +471,18 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		whip->StartHit();
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() ==  SIMON_STATE_HIT_STAND
 			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT
-			|| simon->GetState() == SIMON_HIT_DOWN_STAIR_RIGHT || simon->GetState() == SIMON_HIT_DOWN_STAIR_LEFT)
+			|| simon->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_HIT_DOWNSTAIR_LEFT)
 		{
 			return;
 		}
 		simon->isThrowWeapon = false;
 		if (simon->nx == 1)
 		{
-			if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
+			if (simon->isStepOnStair)
+			{
+				simon->SetState(SIMON_HIT_UPSTAIR_RIGHT);
+			}
+			else if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
 			{
 				simon->SetState(SIMON_STATE_HIT_SIT_RIGHT);
 			}
@@ -458,7 +490,19 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			whip->animation_set->at(1)->resetAnimation();
 		}
 		else {
-			if (simon->GetState() == SIMON_STATE_SIT)
+			if (simon->isStepOnStair)
+			{
+				if (simon->isStandDownStair)
+				{
+					if (simon->GetNxUpStair() == -1) simon->SetState(SIMON_HIT_DOWNSTAIR_LEFT);
+					else simon->SetState(SIMON_HIT_DOWNSTAIR_RIGHT);
+				}
+				else {
+					if (simon->GetNxUpStair() == -1) simon->SetState(SIMON_HIT_UPSTAIR_RIGHT);
+					else simon->SetState(SIMON_HIT_UPSTAIR_LEFT);
+				}
+			}
+			else if (simon->GetState() == SIMON_STATE_SIT)
 			{
 				simon->SetState(SIMON_STATE_HIT_SIT);
 			}
@@ -468,7 +512,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_C:
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() == SIMON_STATE_HIT_STAND
-			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || weapon->enable == true)
+			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT
+			|| simon->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
+			|| simon->GetState() == SIMON_HIT_UPSTAIR_RIGHT || simon->GetState() == SIMON_HIT_UPSTAIR_LEFT
+			|| weapon->enable == true)
 		{
 			return;
 		}
@@ -493,7 +540,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			weapon->vx = weapon->nx * 0.2f;
 		}
-		if (simon->nx == 1)
+		else weapon->vx = weapon->nx * 0.2f;
+		if (simon->isStepOnStair)
+		{
+			if (simon->isStandDownStair)
+			{
+				if (simon->GetNxUpStair() == -1) simon->SetState(SIMON_HIT_DOWNSTAIR_LEFT);
+				else simon->SetState(SIMON_HIT_DOWNSTAIR_RIGHT);
+			}
+			else {
+				if (simon->GetNxUpStair() == -1) simon->SetState(SIMON_HIT_UPSTAIR_RIGHT);
+				else simon->SetState(SIMON_HIT_UPSTAIR_LEFT);
+			}
+		}
+		else if (simon->nx == 1)
 		{
 			if (simon->GetState() == SIMON_STATE_SIT_RIGHT)
 			{
@@ -565,12 +625,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	{
 		return;
 	}
-	if ((simon->GetState() == SIMON_HIT_DOWN_STAIR_LEFT || simon->GetState() == SIMON_HIT_DOWN_STAIR_RIGHT)
+	if ((simon->GetState() == SIMON_HIT_DOWNSTAIR_LEFT || simon->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT)
 		&& simon->animation_set->at(simon->state)->isOver(300) == false)
 	{
 		return;
 	}
-	if ((simon->GetState() == SIMON_HIT_UP_STAIR_LEFT || simon->GetState() == SIMON_HIT_UP_STAIR_RIGHT)
+	if ((simon->GetState() == SIMON_HIT_UPSTAIR_LEFT || simon->GetState() == SIMON_HIT_UPSTAIR_RIGHT)
 		&& simon->animation_set->at(simon->state)->isOver(300) == false)
 	{
 		return;
@@ -581,47 +641,91 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	// disable control key when Simon die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT)) {
-		simon->nx = 1;
-		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	}
-	else if (game->IsKeyDown(DIK_LEFT)) {
-		simon->nx = -1;
-		simon->SetState(SIMON_STATE_WALKING_LEFT);
-	}
-	else if (game->IsKeyDown(DIK_DOWN)) {
-		if (simon->nx == 1)
-		{
-			simon->SetState(SIMON_STATE_SIT_RIGHT);
-		}
-		else simon->SetState(SIMON_STATE_SIT);
-	}
-	else if (game->IsKeyDown(DIK_UP)) {
-		if (simon->isAbleToStepOnStair)
-		{
-			simon->isStepOnStair = true;
-			if (simon->nx == 1)
-			{
-				simon->SetState(SIMON_GO_UP_STAIR_RIGHT);
-			}
-			else simon->SetState(SIMON_GO_UP_STAIR_LEFT);
-		}
-	}
-	else {
 		if (!simon->isStepOnStair)
 		{
-			if (simon->nx == 1)
+			simon->nx = 1;
+			simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		}
+	}
+	else if (game->IsKeyDown(DIK_LEFT)) {
+		if (!simon->isStepOnStair)
+		{
+			simon->nx = -1;
+			simon->SetState(SIMON_STATE_WALKING_LEFT);
+		}
+	}
+	else if (game->IsKeyDown(DIK_DOWN)) {
+		if (simon->isAbleToStepDownStair)
+		{
+			simon->nx = simon->GetNxUpStair();
+			simon->isStepOnStair = true;
+			simon->isStandDownStair = true;
+			simon->isStandUpStair = false;
+
+			if (simon->GetNxUpStair() == 1)
 			{
-				simon->SetState(SIMON_STATE_IDLE_RIGHT);
+				simon->SetState(SIMON_GO_DOWNSTAIR_RIGHT);
 			}
-			else simon->SetState(SIMON_STATE_IDLE_LEFT);
+			else simon->SetState(SIMON_GO_DOWNSTAIR_LEFT);
 		}
 		else {
 			if (simon->nx == 1)
 			{
-				simon->SetState(SIMON_STAND_ON_STAIR_RIGHT);
+				simon->SetState(SIMON_STATE_SIT_RIGHT);
 			}
-			else simon->SetState(SIMON_STAND_ON_STAIR_LEFT);
+			else simon->SetState(SIMON_STATE_SIT);
 		}
 	}
+	else if (game->IsKeyDown(DIK_UP)) {
+		if (simon->isAbleToMoveToStair) simon->isAutoMoveToStair = true;
+		else simon->isAutoMoveToStair = false;
+
+		if (!simon->isAutoMoveToStair)
+		{
+			if (simon->isAbleToStepUpStair)
+			{
+				simon->nx = simon->GetNxDownStair();
+				simon->isStepOnStair = true;
+				simon->isStandUpStair = true;
+				simon->isStandDownStair = false;
+
+				if (simon->GetNxDownStair() == 1)
+				{
+					simon->SetState(SIMON_GO_UPSTAIR_RIGHT);
+				}
+				else simon->SetState(SIMON_GO_UPSTAIR_LEFT);
+			}
+		}
 		
+	}
+	else {
+		if (!simon->isAutoMoveToStair)
+		{
+			if (!simon->isStepOnStair)
+			{
+				if (simon->nx == 1)
+				{
+					simon->SetState(SIMON_STATE_IDLE_RIGHT);
+				}
+				else simon->SetState(SIMON_STATE_IDLE_LEFT);
+			}
+			else {
+				if (simon->isStandUpStair)
+				{
+					if (simon->GetNxDownStair() == 1)
+					{
+						simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
+					}
+					else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
+				}
+				else {
+					if (simon->GetNxDownStair() == 1)
+					{
+						simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
+					}
+					else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
+				}
+			}
+		}
+	}
 }

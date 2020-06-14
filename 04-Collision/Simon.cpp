@@ -20,6 +20,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// Simple fall down
 	if (!this->isStepOnStair) vy += SIMON_GRAVITY * dt;
+	else this->isOnGround = false;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -35,6 +36,87 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+	}
+
+	for (int i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (dynamic_cast<UpStair*>(obj))
+		{
+			if (obj->nx != this->nx); // if simon is back to stair do something
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (this->CheckCollision(left, top, right, bottom))
+			{
+				if (!this->isOnGround) this->isAbleToStepUpStair = true;
+				else this->isAbleToStepUpStair = false;
+				this->isAbleToStepDownStair = true;
+				this->nxUpStair = obj->nx; // get orientation of moving on stair
+				this->nxDownStair = -obj->nx; // get orientation of moving on stair
+
+				if (y + SIMON_BBOX_HEIGHT < bottom) {
+					this->isAbleToStepUpStair = false;
+					this->isStepOnStair = false;
+					if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+					else this->SetState(SIMON_STATE_IDLE_LEFT);
+				}
+			}
+			/*else {
+				this->isAbleToStepDownStair = false;
+			}*/
+		}
+		if (dynamic_cast<DownStair*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (this->CheckCollision(left, top, right, bottom))
+			{
+				if (this->x < left) this->isAbleToMoveToStair = true;
+				else this->isAbleToMoveToStair = false;
+
+				if (this->isAutoMoveToStair) {
+					if (this->x < left) this->SetState(SIMON_STATE_WALKING_RIGHT);
+					else {
+						this->isAutoMoveToStair = false;
+						if (!this->isOnGround) this->isAbleToStepDownStair = true;
+						this->isAbleToStepUpStair = true;
+						/*this->nxDownStair = obj->nx;
+						this->nxUpStair = -obj->nx; */
+					}
+				}
+				else {
+					/*this->isStepOnStair = true;
+					if (!this->isOnGround) this->isAbleToStepDownStair = true;
+					this->isAbleToStepUpStair = true;*/
+					this->nxDownStair = obj->nx;
+					this->nxUpStair = -obj->nx;
+
+					// Xu ly khi di xuong thang va chan cham dat
+					if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair) {
+						this->isAbleToStepDownStair = false;
+						this->isStepOnStair = false;
+						if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+						else this->SetState(SIMON_STATE_IDLE_LEFT);
+					}
+				}
+				//this->nxDownStair = obj->nx;
+				//this->nxUpStair = -obj->nx;
+				//// Xu ly khi di xuong thang va chan cham dat
+				//if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair) {
+				//	this->isAbleToStepDownStair = false;
+				//	this->isStepOnStair = false;
+				//	if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+				//	else this->SetState(SIMON_STATE_IDLE_LEFT);
+				//}
+				break;
+			}
+			/*else {
+				this->isAbleToStepUpStair = false;
+			}*/
+		}
 	}
 
 	// No collision occured, proceed normally
@@ -64,7 +146,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (ny != 0)
+				if (this->isStepOnStair)
+				{
+					if (e->nx != 0) x += dx;
+					if (e->ny != 0) y += dy;
+				}
+				/*else if (ny != 0)
 				{
 					if (ny == -1)
 					{
@@ -76,6 +163,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y += dy;
 						isOnGround = false;
 					}
+				}*/
+				else if (ny == -1)
+				{
+					vy = 0;
+					isOnGround = true;
+					isStepOnStair = false;
+				}
+				else
+				{
+					y += dy;
+					isOnGround = false;
 				}
 			}
 			if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<Weapon*>(e->obj)) // if e->obj is Ground
@@ -104,22 +202,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
-			if (dynamic_cast<UpStair*>(e->obj)) // if e->obj is Ground
+			if (dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj))
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
-				this->isAbleToStepOnStair = true;
-				/*if (e->nx != 0) x += 0;
-				if (e->ny != 0) y += 0;*/
-			}
-			if (dynamic_cast<DownStair*>(e->obj))
-			{
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-				this->isAbleToStepOnStair = false;
-				this->isStepOnStair = false;
-				if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
-				else this->SetState(SIMON_STATE_IDLE_LEFT);
 			}
 		}
 	}
@@ -244,48 +330,62 @@ void Simon::SetState(int state)
 		vx = 0;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
-	case SIMON_HIT_DOWN_STAIR_RIGHT:
+	case SIMON_HIT_DOWNSTAIR_RIGHT:
+		vx = vy = 0;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
-	case SIMON_HIT_DOWN_STAIR_LEFT:
+	case SIMON_HIT_DOWNSTAIR_LEFT:
+		vx = vy = 0;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
-	case SIMON_HIT_UP_STAIR_RIGHT:
+	case SIMON_HIT_UPSTAIR_RIGHT:
+		vx = vy = 0;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
-	case SIMON_HIT_UP_STAIR_LEFT:
+	case SIMON_HIT_UPSTAIR_LEFT:
+		vx = vy = 0;
 		animation_set->at(state)->resetAnimation();
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 		break;
-	case SIMON_GO_UP_STAIR_RIGHT:
+	case SIMON_GO_UPSTAIR_RIGHT:
 		vx = SIMON_WALKING_SPEED;
 		vy = -SIMON_WALKING_SPEED;
 		nx = 1;
 		break;
-	case SIMON_GO_UP_STAIR_LEFT:
+	case SIMON_GO_UPSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		vy = -SIMON_WALKING_SPEED;
 		nx = -1;
 		break;
-	case SIMON_GO_DOWN_STAIR_RIGHT:
+	case SIMON_GO_DOWNSTAIR_RIGHT:
 		vx = SIMON_WALKING_SPEED;
 		vy = SIMON_WALKING_SPEED;
 		nx = 1;
 		break;
-	case SIMON_GO_DOWN_STAIR_LEFT:
+	case SIMON_GO_DOWNSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		vy = SIMON_WALKING_SPEED;
 		nx = -1;
 		break;
-	case SIMON_STAND_ON_STAIR_RIGHT:
+	case SIMON_STAND_ON_UPSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
 		//isStand = true;
 		break;
-	case SIMON_STAND_ON_STAIR_LEFT:
+	case SIMON_STAND_ON_UPSTAIR_LEFT:
+		vx = vy = 0;
+		nx = -1;
+		//isStand = true;
+		break;
+	case SIMON_STAND_ON_DOWNSTAIR_RIGHT:
+		vx = vy = 0;
+		nx = 1;
+		//isStand = true;
+		break;
+	case SIMON_STAND_ON_DOWNSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
 		//isStand = true;
@@ -295,7 +395,7 @@ void Simon::SetState(int state)
 
 void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
+	left = x + 12;
 	top = y;
 
 	right = x + SIMON_BBOX_WIDTH;
@@ -306,4 +406,21 @@ void Simon::StartUntouchable()
 {
 	untouchable = 1;
 	untouchable_start = GetTickCount();
+}
+
+bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
+{
+	float simon_left,
+		simon_top,
+		simon_right,
+		simon_bottom;
+
+	GetBoundingBox(simon_left, simon_top, simon_right, simon_bottom);
+
+	return CGameObject::AABB(simon_left, simon_top, simon_right, simon_bottom, obj_left, obj_top, obj_right, obj_bottom);
+}
+
+void Simon::AutoMoveToStair(LPGAMEOBJECT obj)
+{
+
 }

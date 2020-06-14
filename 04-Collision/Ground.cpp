@@ -1,6 +1,6 @@
 #include "Ground.h"
 
-Ground::Ground(float l, float t, float r, float b, int scene_id)
+Ground::Ground(float l, float t, float r, float b)
 {
 	x = l;
 	y = t;

@@ -5,27 +5,42 @@
 class Simon : public CGameObject
 {
 	int weapon = 0;
-
+	int nxUpStair;
+	int nxDownStair;
 	bool isOnGround = false;
 	DWORD untouchable_start;
 public:
 	int untouchable;
 	bool isStand = true;
 	bool isThrowWeapon = false;
-	bool isAbleToStepOnStair = false;
+	bool isAbleToStepUpStair = false;
+	bool isAbleToStepDownStair = false;
 	bool isStepOnStair = false;
+	bool isStandUpStair = false;
+	bool isStandDownStair = false;
+	bool isAbleToMoveToStair = false;
+	bool isAutoMoveToStair = false;
+
 	Simon() : CGameObject()
 	{
 		untouchable = 0;
 		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
+
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	//virtual void LoadResource();
 	virtual void Render();
+	
+	void SetNxUpStair(int nxUpStair) { this->nxUpStair = nxUpStair; }
+	int GetNxUpStair() { return this->nxUpStair; }
+	void SetNxDownStair(int nxDownStair) { this->nxDownStair = nxDownStair; }
+	int GetNxDownStair() { return this->nxDownStair; }
 	void SetState(int state);
 	void StartUntouchable();
 
 	bool CheckStandGround() { return isOnGround; }
+	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
+	void AutoMoveToStair(LPGAMEOBJECT obj);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

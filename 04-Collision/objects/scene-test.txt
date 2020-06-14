@@ -1,3 +1,7 @@
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+[TILEMAP]
+32	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	48	10	17	4	1
+
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\Simon.png	255	0	255
@@ -100,8 +104,7 @@
 #stand on downstair right
 10511	300	64	360	128	40
 #stand on downstair left
-10611	180	64	240	128	0
-
+10611	120	64	180	128	0
 #CANDLE
 20001	0	0	32	64	10
 20002	32	0	64	64	10
@@ -232,32 +235,36 @@
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b	scene_id
 1	0	288	0	1536	320	1
+1	276	178	0	326	210	1
+1	376	178	0	426	210	1
 
 # CANDLE
 # type	x	y	ani_set_id
 #2	50	228	2
-#2	176	228	2
-#2	432	228	2
-#2	686	228	2
-#2	942	228	2
-#2	1198	228	2
+2	176	228	2
+2	432	228	2
+2	686	228	2
+2	942	228	2
+2	1198	228	2
 
 # ITEM
 # item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 # type	x	y	ani_set_id	type_of_item
-#4	176	255	4	3
-#4	432	270	4	2
-#4	686	270	4	2
-#4	942	255	4	3
-#4	1198	275	4	0
+4	176	255	4	3
+4	432	270	4	2
+4	686	270	4	2
+4	942	255	4	3
+4	1198	275	4	0
 
 # UPSTAIR
-# type	l	t	ani_set_id	r	b
-6	176	228	0	226	278
+# type	l	t	ani_set_id	r	b	nx
+# 6	276	126	0	326	176	-1
+# 6	376	126	0	426	176	1
 
 # DOWNSTAIR
-# type	l	t	ani_set_id	r	b
-7	276	128	0	326	178
+# type	l	t	ani_set_id	r	b	nx
+# 7	176	226	0	226	286	1
+# 7	476	226	0	526	286	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

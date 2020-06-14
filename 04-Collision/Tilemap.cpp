@@ -5,40 +5,49 @@
 
 using namespace std;
 
-Tilemap::Tilemap()
+Tilemap::Tilemap(int pixel, LPCWSTR bgImagePath, LPCWSTR filePath, int numCol, int numRow, int numColToRead, int numRowToRead, int idCell)
 {
 	sprites = CSprites::GetInstance();
+	this->pixel = pixel;
+	this->bgImagePath = bgImagePath;
+	this->filePath = filePath;
+	this->numCol = numCol;
+	this->numRow = numRow;
+	this->numColToRead = numColToRead;
+	this->numRowToRead = numRowToRead;
+	this->idCell = idCell;
 
 	LoadMap();
-	Render();
+	//Render();
 }
 
 void Tilemap::LoadMap()
 {
 	// Luu tung tile theo id tu 1, 2, ...
 	CTextures* textures = CTextures::GetInstance();
-	textures->Add(70, L"textures\\map\\Scene1.png", D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(70, bgImagePath, D3DCOLOR_XRGB(255, 0, 255));
+	//textures->Add(70, L"textures\\map\\Scene1.png", D3DCOLOR_XRGB(255, 0, 255));
 	//textures->Add(70, L"textures\\map\\Scene2.png", D3DCOLOR_XRGB(255, 0, 255));
 	LPDIRECT3DTEXTURE9 texTileMap = textures->Get(70);
 
-	//sprites->Add(8, 0, 0, 32, 32, texTileMap);
-	//sprites->Add(0, 32, 32, 64, 64, texTileMap);
-	int idCell = 1;
-	//int idCell = 0;
-	for (int i = 0; i < 4; i++)
+	//idCell = 1;
+	//idCell = 0;
+	for (int i = 0; i < numRowToRead; i++)
 	//for (int i = 0; i < 8; i++)
 	{
-		for (int j = 0; j < 17; j++)
+		for (int j = 0; j < numColToRead; j++)
 		//for (int j = 0; j < 7; j++)
 		{
-			sprites->Add(idCell, 32 * j, 32 * i, 32 + 32 * j, 32 + 32 * i, texTileMap);
+			sprites->Add(idCell, pixel * j, pixel * i, pixel + pixel * j, pixel + pixel * i, texTileMap);
+			//sprites->Add(idCell, 32 * j, 32 * i, 32 + 32 * j, 32 + 32 * i, texTileMap);
 			//sprites->Add(idCell, 48 * j, 48 * i, 48 + 48 * j, 48 + 48 * i, texTileMap);
 			idCell++;
 		}
 	}
 
 	ifstream f;
-	f.open("textures\\map\\Scene1.txt");
+	f.open(filePath);
+	//f.open("textures\\map\\Scene1.txt");
 	//f.open("textures\\map\\Scene2.txt");
 
 	// current resource section flag
@@ -79,7 +88,8 @@ void Tilemap::Render()
 	{
 		for (int j = 0; j < numCol; j++)
 		{
-			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
+			sprites->Get(cellId[i][j])->Draw(j*pixel, i*pixel);
+			//sprites->Get(cellId[i][j])->Draw(j*32, i*32);
 			//sprites->Get(cellId[i][j])->Draw(j*48, i*48);
 		}
 	}
@@ -87,7 +97,8 @@ void Tilemap::Render()
 
 void Tilemap::Render(int x)
 {
-	int start = x / 32 - 8;
+	int start = x / pixel - 8;
+	//int start = x / 32 - 8;
 	//int start = x / 48 - 8;
 	int finish = start + 25;
 	if (start < 0)
@@ -102,7 +113,8 @@ void Tilemap::Render(int x)
 	{
 		for (int j = start; j < finish; j++)
 		{
-			sprites->Get(cellId[i][j])->Draw(j*32, i*32);
+			sprites->Get(cellId[i][j])->Draw(j*pixel, i*pixel);
+			//sprites->Get(cellId[i][j])->Draw(j*32, i*32);
 			//sprites->Get(cellId[i][j])->Draw(j*48, i*48);
 		}
 	}

@@ -1,3 +1,7 @@
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+[TILEMAP]
+64	textures\\map\\Scene3.png	textures\\map\\Scene3.txt	16	6	7	8	0
+
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\Simon.png	255	0	255

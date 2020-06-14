@@ -11,17 +11,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (dynamic_cast<Candle*>(obj))
 		{
-			Candle* e = dynamic_cast<Candle*> (obj);
-
 			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
+			obj->GetBoundingBox(left, top, right, bottom);
 
 			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
 			{
 				if (this->enable)
 				{
-					e->SetState(CANDLE_STATE_DESTROYED);
+					obj->SetState(CANDLE_STATE_DESTROYED);
 				}
 			}
 		}
