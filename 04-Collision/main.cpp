@@ -77,7 +77,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
-		//headUpDisplay->Render();
+		headUpDisplay->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -179,10 +179,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();
+	headUpDisplay = HeadUpDisplay::GetInstance(game);
 
 	game->Load(L"mario-sample.txt");
-	headUpDisplay = new HeadUpDisplay(game);
-	headUpDisplay->LoadResource();
 	
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 

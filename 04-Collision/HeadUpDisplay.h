@@ -11,6 +11,7 @@
 class HeadUpDisplay
 {
 private:
+	static HeadUpDisplay* __instance;
 	int x, y, score, time;
 
 	CSprite* current, * lose, * boss, * weapon;
@@ -20,9 +21,13 @@ private:
 	string headUpDetails;
 	ID3DXFont* font;
 public:
+	HeadUpDisplay() {};
 	HeadUpDisplay(CGame* game);
 	void LoadResource();
+	void UnLoadResource();
 	void Update(DWORD dt);
 	void Render();
+
+	static HeadUpDisplay* GetInstance(CGame* game);
 };
 

@@ -1,5 +1,13 @@
 #include "HeadUpDisplay.h"
 
+HeadUpDisplay* HeadUpDisplay::__instance = NULL;
+
+HeadUpDisplay* HeadUpDisplay::GetInstance(CGame* game)
+{
+	if (__instance == NULL) __instance = new HeadUpDisplay(game);
+	return __instance;
+}
+
 HeadUpDisplay::HeadUpDisplay(CGame *game)
 {
 	this->game = game;
@@ -45,6 +53,13 @@ void HeadUpDisplay::LoadResource()
 	weapon = new CSprite(103, 0, 0, 95, 40, CTextures::GetInstance()->Get(105));
 }
 
+void HeadUpDisplay::UnLoadResource()
+{
+	currentHP.clear();
+	loseHP.clear();
+	bossHP.clear();
+}
+
 void HeadUpDisplay::Render()
 {
 	// Draw text
@@ -76,3 +91,4 @@ void HeadUpDisplay::Update(DWORD dt)
 	headUpDetails += "PLAYER                  -00\n";
 	headUpDetails += "ENEMY                   -00\n";
 }
+

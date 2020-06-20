@@ -8,6 +8,7 @@
 #include "Portal.h"
 #include "UpStair.h"
 #include "DownStair.h"
+#include "BlackKnight.h"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_WEAPON	5
 #define OBJECT_TYPE_UPSTAIR	6
 #define OBJECT_TYPE_DOWNSTAIR	7
+#define OBJECT_TYPE_BLACKKNIGHT	8
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -271,6 +273,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		}
 		break;
+		case OBJECT_TYPE_BLACKKNIGHT:
+		{
+			obj = new BlackKnight();
+			break;
+		}
+		break;
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -346,6 +354,8 @@ void CPlayScene::Load()
 
 	//tilemap = new Tilemap();
 	//tilemap->LoadMap();
+
+	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -395,7 +405,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	//tilemap->Render(player->x);
+	tilemap->Render(player->x);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -427,6 +437,7 @@ void CPlayScene::Render()
 /*
 	Unload current scene
 */
+
 void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
@@ -435,6 +446,7 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 	tilemap = NULL;
+	flag = false;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -541,6 +553,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			weapon->vx = weapon->nx * 0.2f;
 		}
 		else weapon->vx = weapon->nx * 0.2f;
+
 		if (simon->isStepOnStair)
 		{
 			if (simon->isStandDownStair)
@@ -572,10 +585,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_1:
-		if (simon->nx == 1)
-		{
-			weapon->SetState(1);
-		}
+		if (simon->nx == 1) weapon->SetState(1);
 		else weapon->SetState(0);
 		break;
 	case DIK_2:
@@ -696,7 +706,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				else simon->SetState(SIMON_GO_UPSTAIR_LEFT);
 			}
 		}
-		
 	}
 	else {
 		if (!simon->isAutoMoveToStair)

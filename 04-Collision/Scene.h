@@ -9,6 +9,7 @@ protected:
 	int id;
 	LPCWSTR sceneFilePath;
 public:
+	bool flag = false;
 	CScene(int id, LPCWSTR filePath);
 
 	CKeyEventHandler* GetKeyEventHandler() { return key_handler; }

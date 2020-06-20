@@ -17,8 +17,8 @@
 101	textures\item\Chain.png	255	0	255
 102	textures\weapon\Boomerang.png	255	0	255
 103	textures\weapon\HolyWater.png	255	0	255
-104	textures\HP.png	255	0	255
-105	textures\Rect.png	255	0	255
+104	textures\item\HP.png	255	0	255
+105	textures\item\Rect.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -235,8 +235,6 @@
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b	scene_id
 1	0	288	0	1536	320	1
-1	276	178	0	326	210	1
-1	376	178	0	426	210	1
 
 # CANDLE
 # type	x	y	ani_set_id

@@ -16,6 +16,9 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{279e92d5-c0d9-47ba-8345-d4bb68378038}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Enemies">
+      <UniqueIdentifier>{cbce5d7f-0560-46e3-9ae9-bd630bd13bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -90,6 +93,9 @@
     <ClInclude Include="UpStair.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="BlackKnight.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="UpStair.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackKnight.cpp">
+      <Filter>Objects\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -93,7 +93,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->isAbleToStepUpStair = true;*/
 					this->nxDownStair = obj->nx;
 					this->nxUpStair = -obj->nx;
-
+					
 					// Xu ly khi di xuong thang va chan cham dat
 					if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair) {
 						this->isAbleToStepDownStair = false;
@@ -113,9 +113,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//}
 				break;
 			}
-			/*else {
-				this->isAbleToStepUpStair = false;
-			}*/
+			else {
+				this->isAbleToMoveToStair = false;
+				if (!this->isStepOnStair) this->isAbleToStepUpStair = false;
+			}
 		}
 	}
 
@@ -133,8 +134,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		// block
+		x += min_tx * dx + nx * 0.4f;	// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
 		//if (nx != 0) vx = 0;

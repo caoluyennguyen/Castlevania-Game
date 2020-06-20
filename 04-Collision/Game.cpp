@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include "PlayScene.h"
+#include "HeadUpDisplay.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -390,6 +391,7 @@ void CGame::SwitchScene(int scene_id)
 
 	LPSCENE s = scenes[current_scene];
 	s->Unload();
+	HeadUpDisplay::GetInstance(this)->UnLoadResource();
 
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
@@ -397,4 +399,5 @@ void CGame::SwitchScene(int scene_id)
 
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+	HeadUpDisplay::GetInstance(this)->LoadResource();
 }
