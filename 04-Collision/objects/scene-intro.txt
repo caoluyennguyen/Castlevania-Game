@@ -1,3 +1,7 @@
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+[TILEMAP]
+32	textures\\map\\SceneIntro.png	textures\\map\\SceneIntro.txt	48	10	17	4	1
+
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\Simon.png	255	0	255
@@ -13,8 +17,8 @@
 101	textures\item\Chain.png	255	0	255
 102	textures\weapon\Boomerang.png	255	0	255
 103	textures\weapon\HolyWater.png	255	0	255
-104	textures\HP.png	255	0	255
-105	textures\Rect.png	255	0	255
+104	textures\item\HP.png	255	0	255
+105	textures\item\Rect.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -93,7 +97,14 @@
 10211	120	132	180	196	0
 10212	180	132	240	196	0
 10213	240	132	300	196	0
-
+#stand on upstair right
+10311	180	64	240	128	40
+#stand on upstair left
+10411	240	64	300	128	0
+#stand on downstair right
+10511	300	64	360	128	40
+#stand on downstair left
+10611	120	64	180	128	0
 #CANDLE
 20001	0	0	32	64	10
 20002	32	0	64	64	10
@@ -164,6 +175,10 @@
 119	10191	100	10192	100
 120	10201	100	10202	100	10203	100
 121	10211	100	10212	100	10213	100
+122	10311	100
+123	10411	100
+124	10511	100
+125	10611	100
 
 #CANDLE
 200	20001	100	20002	100
@@ -201,7 +216,7 @@
 #
 [ANIMATION_SETS]
 # SIMON
-1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123
+1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125
 # CANDLE
 2	200	400
 # WHIP
@@ -218,25 +233,37 @@
 0	84	160	1
 
 # --- GROUND ----
-# type	l	t	ani_set_id	r	b
+# type	l	t	ani_set_id	r	b	scene_id
 1	0	288	0	1536	320	1
 
 # CANDLE
 # type	x	y	ani_set_id
-
+#2	50	228	2
+2	176	228	2
+2	432	228	2
+2	686	228	2
+2	942	228	2
+2	1198	228	2
 
 # ITEM
 # item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 # type	x	y	ani_set_id	type_of_item
+4	176	255	4	3
+4	432	270	4	2
+4	686	270	4	2
+4	942	255	4	3
+4	1198	275	4	0
 
 # UPSTAIR
-# type	l	t	ani_set_id	r	b
-6	176	228	0	226	278
+# type	l	t	ani_set_id	r	b	nx
+# 6	276	126	0	326	176	-1
+# 6	376	126	0	426	176	1
 
 # DOWNSTAIR
-# type	l	t	ani_set_id	r	b
-7	276	128	0	326	178
+# type	l	t	ani_set_id	r	b	nx
+# 7	176	226	0	226	286	1
+# 7	476	226	0	526	286	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	1354	100	0	1454	300	1
+50	1354	100	0	1454	300	2

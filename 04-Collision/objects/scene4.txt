@@ -1,6 +1,6 @@
 #pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
 [TILEMAP]
-32	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	48	10	17	4	1
+32	textures\\map\\Scene4.png	textures\\map\\Scene4.txt	48	11	17	6	1
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -19,6 +19,7 @@
 103	textures\weapon\HolyWater.png	255	0	255
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
+106	textures\blackknight64.png	255	0	128
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -105,6 +106,7 @@
 10511	300	64	360	128	40
 #stand on downstair left
 10611	120	64	180	128	0
+
 #CANDLE
 20001	0	0	32	64	10
 20002	32	0	64	64	10
@@ -150,6 +152,11 @@
 1002	32	0	64	26	103
 1003	64	0	96	26	103
 
+#BLACKKNIGHT
+2001	160	1	192	64	106
+2002	193	0	225	64	106
+2003	226	1	258	64	106
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -180,36 +187,40 @@
 124	10511	100
 125	10611	100
 
-#CANDLE
+# CANDLE
 200	20001	100	20002	100
 
-#WHIP
+# WHIP
 300	30001	100	30002	100	30003	100
 301	30004	100	30005	100	30006	100
 
-#EFFECT
+# EFFECT
 400	40001	100	40002	100	40003	100
 
-#DAGGER
+# DAGGER
 500	50001	100
 501	50002	100
 
-#ITEM
-#AXE
+# ITEM
+# AXE
 600	60001	100
-#HEART
+# HEART
 601	70001	100
-#CHAIN
+# CHAIN
 602	80001	100
 
-#WEAPON
-#AXE
+# WEAPON
+# AXE
 700	60001	100	60002	100	60003	100	60004	100
-#BOOMERANG
+# BOOMERANG
 800	90001	100	90002	100	90003	100
-#HOLYWATER
+# HOLYWATER
 900	1001	100	1002	100	1003	100
 901	1002	100	1003	100
+
+#BLACKKNIGHT
+1000	2001	100
+1001	2002	100	2003	100
 
 #
 # id	ani1	ani2	ani3
@@ -225,45 +236,23 @@
 4	500	600	601	602
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
+# BLACKKNIGHT
+6	1000	1001
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item
+# type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
 # SIMON
 0	84	160	1
 
-# --- GROUND ----
+# GROUND
 # type	l	t	ani_set_id	r	b	scene_id
-1	0	288	0	1536	320	1
+1	0	320	0	1536	352	1
 
 # CANDLE
 # type	x	y	ani_set_id
-#2	50	228	2
-2	176	228	2
-2	432	228	2
-2	686	228	2
-2	942	228	2
 2	1198	228	2
-
-# ITEM
-# item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
-# type	x	y	ani_set_id	type_of_item
-4	176	255	4	3
-4	432	270	4	2
-4	686	270	4	2
-4	942	255	4	3
-4	1198	275	4	0
-
-# UPSTAIR
-# type	l	t	ani_set_id	r	b	nx
-# 6	276	126	0	326	176	-1
-# 6	376	126	0	426	176	1
-
-# DOWNSTAIR
-# type	l	t	ani_set_id	r	b	nx
-# 7	176	226	0	226	286	1
-# 7	476	226	0	526	286	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	1354	100	0	1454	300	1
+50	400	200	0	500	500	1

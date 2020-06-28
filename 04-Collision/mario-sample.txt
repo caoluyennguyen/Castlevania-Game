@@ -1,7 +1,9 @@
 [SETTINGS]
-start	1
+start	2
 #scene list
 [SCENES]
-1	objects\scene1.txt
-2	objects\scene2.txt
-3	objects\scene-test.txt
+1	objects\scene-intro.txt
+2	objects\scene1.txt
+3	objects\scene2.txt
+4	objects\scene3.txt
+5	objects\scene4.txt

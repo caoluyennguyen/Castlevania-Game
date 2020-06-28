@@ -1,6 +1,6 @@
 #pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
 [TILEMAP]
-64	textures\\map\\Scene3.png	textures\\map\\Scene3.txt	16	6	7	8	0
+64	textures\\map\\Scene2.png	textures\\map\\Scene2.txt	16	6	7	8	0
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -204,4 +204,4 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	300	200	0	400	500	3
+50	300	200	0	400	500	4
