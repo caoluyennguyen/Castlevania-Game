@@ -5,12 +5,12 @@
 class Simon : public CGameObject
 {
 	int weapon = 0;
-	int nxUpStair;
-	int nxDownStair;
+	int nxUpStair, nxDownStair;
 	bool isOnGround = false;
 	DWORD untouchable_start;
 public:
 	int untouchable;
+	int distance = 0;
 	bool isStand = true;
 	bool isThrowWeapon = false;
 	bool isAbleToStepUpStair = false;
@@ -19,7 +19,8 @@ public:
 	bool isStandUpStair = false;
 	bool isStandDownStair = false;
 	bool isAbleToMoveToStair = false;
-	bool isAutoMoveToStair = false;
+	bool isMoveToStair = false;
+	DWORD auto_start;
 
 	Simon() : CGameObject()
 	{

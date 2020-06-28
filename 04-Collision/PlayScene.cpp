@@ -405,7 +405,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	tilemap->Render(player->x);
+	//tilemap->Render(player->x);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -665,10 +665,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else if (game->IsKeyDown(DIK_DOWN)) {
-		if (simon->isAbleToStepDownStair)
+		if (simon->isAbleToMoveToStair && simon->isAbleToStepDownStair) simon->isMoveToStair = true;
+		else simon->isMoveToStair = false;
+
+		if (simon->distance == 0) simon->auto_start = GetTickCount();
+
+		if (simon->isStepOnStair)
 		{
 			simon->nx = simon->GetNxUpStair();
-			simon->isStepOnStair = true;
 			simon->isStandDownStair = true;
 			simon->isStandUpStair = false;
 
@@ -687,28 +691,26 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else if (game->IsKeyDown(DIK_UP)) {
-		if (simon->isAbleToMoveToStair) simon->isAutoMoveToStair = true;
-		else simon->isAutoMoveToStair = false;
+		if (simon->isAbleToMoveToStair && simon->isAbleToStepUpStair) simon->isMoveToStair = true;
+		else simon->isMoveToStair = false;
 
-		if (!simon->isAutoMoveToStair)
+		if (simon->distance == 0) simon->auto_start = GetTickCount();
+
+		if (simon->isStepOnStair)
 		{
-			if (simon->isAbleToStepUpStair)
-			{
-				simon->nx = simon->GetNxDownStair();
-				simon->isStepOnStair = true;
-				simon->isStandUpStair = true;
-				simon->isStandDownStair = false;
+			simon->nx = simon->GetNxDownStair();
+			simon->isStandUpStair = true;
+			simon->isStandDownStair = false;
 
-				if (simon->GetNxDownStair() == 1)
-				{
-					simon->SetState(SIMON_GO_UPSTAIR_RIGHT);
-				}
-				else simon->SetState(SIMON_GO_UPSTAIR_LEFT);
+			if (simon->GetNxDownStair() == 1)
+			{
+				simon->SetState(SIMON_GO_UPSTAIR_RIGHT);
 			}
+			else simon->SetState(SIMON_GO_UPSTAIR_LEFT);
 		}
 	}
 	else {
-		if (!simon->isAutoMoveToStair)
+		if (!simon->isMoveToStair)
 		{
 			if (!simon->isStepOnStair)
 			{

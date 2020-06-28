@@ -38,88 +38,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	for (int i = 0; i < coObjects->size(); i++)
-	{
-		LPGAMEOBJECT obj = coObjects->at(i);
-
-		if (dynamic_cast<UpStair*>(obj))
-		{
-			if (obj->nx != this->nx); // if simon is back to stair do something
-			float left, top, right, bottom;
-			obj->GetBoundingBox(left, top, right, bottom);
-
-			if (this->CheckCollision(left, top, right, bottom))
-			{
-				if (!this->isOnGround) this->isAbleToStepUpStair = true;
-				else this->isAbleToStepUpStair = false;
-				this->isAbleToStepDownStair = true;
-				this->nxUpStair = obj->nx; // get orientation of moving on stair
-				this->nxDownStair = -obj->nx; // get orientation of moving on stair
-
-				if (y + SIMON_BBOX_HEIGHT < bottom) {
-					this->isAbleToStepUpStair = false;
-					this->isStepOnStair = false;
-					if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
-					else this->SetState(SIMON_STATE_IDLE_LEFT);
-				}
-			}
-			/*else {
-				this->isAbleToStepDownStair = false;
-			}*/
-		}
-		if (dynamic_cast<DownStair*>(obj))
-		{
-			float left, top, right, bottom;
-			obj->GetBoundingBox(left, top, right, bottom);
-
-			if (this->CheckCollision(left, top, right, bottom))
-			{
-				if (this->x < left) this->isAbleToMoveToStair = true;
-				else this->isAbleToMoveToStair = false;
-
-				if (this->isAutoMoveToStair) {
-					if (this->x < left) this->SetState(SIMON_STATE_WALKING_RIGHT);
-					else {
-						this->isAutoMoveToStair = false;
-						if (!this->isOnGround) this->isAbleToStepDownStair = true;
-						this->isAbleToStepUpStair = true;
-						/*this->nxDownStair = obj->nx;
-						this->nxUpStair = -obj->nx; */
-					}
-				}
-				else {
-					/*this->isStepOnStair = true;
-					if (!this->isOnGround) this->isAbleToStepDownStair = true;
-					this->isAbleToStepUpStair = true;*/
-					this->nxDownStair = obj->nx;
-					this->nxUpStair = -obj->nx;
-					
-					// Xu ly khi di xuong thang va chan cham dat
-					if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair) {
-						this->isAbleToStepDownStair = false;
-						this->isStepOnStair = false;
-						if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
-						else this->SetState(SIMON_STATE_IDLE_LEFT);
-					}
-				}
-				//this->nxDownStair = obj->nx;
-				//this->nxUpStair = -obj->nx;
-				//// Xu ly khi di xuong thang va chan cham dat
-				//if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair) {
-				//	this->isAbleToStepDownStair = false;
-				//	this->isStepOnStair = false;
-				//	if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
-				//	else this->SetState(SIMON_STATE_IDLE_LEFT);
-				//}
-				break;
-			}
-			else {
-				this->isAbleToMoveToStair = false;
-				if (!this->isStepOnStair) this->isAbleToStepUpStair = false;
-			}
-		}
-	}
-
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -211,6 +129,217 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	// Handle Simon step on stair
+	for (int i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (dynamic_cast<UpStair*>(obj))
+		{
+			if (obj->nx != this->nx); // if simon is back to stair do something
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (this->CheckCollision(left, top, right, bottom))
+			{
+				if (this->isOnGround) {
+					this->isAbleToStepDownStair = true;
+					this->nxUpStair = obj->nx;
+					this->nxDownStair = -obj->nx;
+				}
+
+				if (this->nxUpStair == 1) {
+					if (!(this->isStepOnStair))
+					{
+						distance = int(left - this->x);
+						if (isOnGround) this->isAbleToMoveToStair = true;
+						else this->isAbleToMoveToStair = false;
+					}
+					if (this->isMoveToStair) {
+						if (distance != 0) {
+							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+							else this->SetState(SIMON_STATE_WALKING_LEFT);
+							if (abs(distance) > dx) this->x += dx;
+							else this->x += distance;
+							auto_start = GetTickCount();
+							return;
+						}
+						else {
+							distance = 0;
+							if (GetTickCount() - auto_start < 200)
+							{
+								this->SetState(SIMON_GO_DOWNSTAIR_RIGHT);
+							}
+							else {
+								this->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
+								this->isMoveToStair = false;
+								this->isAbleToMoveToStair = false;
+							}
+						}
+					}
+					else {
+						// Xu ly khi di xuong thang va chan cham dat
+						if (y + SIMON_BBOX_HEIGHT < bottom) {
+							this->isAbleToStepUpStair = false;
+							this->isStepOnStair = false;
+							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+							else this->SetState(SIMON_STATE_IDLE_LEFT);
+						}
+					}
+				}
+				else {
+					if (!(this->isStepOnStair))
+					{
+						distance = int(right - this->x - SIMON_BBOX_WIDTH);
+						if (isOnGround) this->isAbleToMoveToStair = true;
+						else this->isAbleToMoveToStair = false;
+					}
+					if (this->isMoveToStair) {
+						if (distance != 0) {
+							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+							else this->SetState(SIMON_STATE_WALKING_LEFT);
+							if (abs(distance) > dx) this->x += dx;
+							else this->x += distance;
+							auto_start = GetTickCount();
+							return;
+						}
+						else {
+							distance = 0;
+							if (GetTickCount() - auto_start < 200)
+							{
+								this->SetState(SIMON_GO_DOWNSTAIR_LEFT);
+							}
+							else {
+								this->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
+								this->isMoveToStair = false;
+								this->isAbleToMoveToStair = false;
+							}
+						}
+					}
+					else {
+						// Xu ly khi di xuong thang va chan cham dat
+						if (y + SIMON_BBOX_HEIGHT < bottom) {
+							this->isAbleToStepUpStair = false;
+							this->isStepOnStair = false;
+							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+							else this->SetState(SIMON_STATE_IDLE_LEFT);
+						}
+					}
+				}
+				
+				break;
+			}
+			else {
+				this->isAbleToMoveToStair = false;
+				this->isAbleToStepDownStair = false;
+			}
+		}
+		if (dynamic_cast<DownStair*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (this->CheckCollision(left, top, right, bottom))
+			{
+				if (this->isOnGround) {
+					this->nxDownStair = obj->nx;
+					this->nxUpStair = -obj->nx;
+					this->isAbleToStepUpStair = true;
+				}
+				if (this->nxDownStair == 1)
+				{
+					if (!(this->isStepOnStair))
+					{
+						distance = int(left - this->x);
+						if (isOnGround) this->isAbleToMoveToStair = true;
+						else this->isAbleToMoveToStair = false;
+					}
+
+					if (this->isMoveToStair) {
+						if (distance != 0) {
+							if (abs(distance) > dx) this->x += dx;
+							else this->x += distance;
+							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+							else this->SetState(SIMON_STATE_WALKING_LEFT);
+							auto_start = GetTickCount();
+							return;
+						}
+						else {
+							distance = 0;
+							if (GetTickCount() - auto_start < 200)
+							{
+								this->SetState(SIMON_GO_UPSTAIR_RIGHT);
+							}
+							else {
+								this->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
+								this->isMoveToStair = false;
+								this->isAbleToMoveToStair = false;
+							}
+						}
+					}
+					else {
+						/*this->nxDownStair = obj->nx;
+						this->nxUpStair = -obj->nx;*/
+
+						// Xu ly khi di xuong thang va chan cham dat
+						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStair)) {
+							this->isStepOnStair = false;
+							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+							else this->SetState(SIMON_STATE_IDLE_LEFT);
+						}
+					}
+				}
+				else {
+					if (!(this->isStepOnStair))
+					{
+						distance = int(right - this->x - SIMON_BBOX_WIDTH);
+						if (isStand) this->isAbleToMoveToStair = true;
+						else this->isAbleToMoveToStair = false;
+					}
+					if (this->isMoveToStair) {
+						if (distance != 0) {
+							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+							else this->SetState(SIMON_STATE_WALKING_LEFT);
+							if (abs(distance) > dx) this->x += dx;
+							else this->x += distance;
+							auto_start = GetTickCount();
+							return;
+						}
+						else {
+							distance = 0;
+							if (GetTickCount() - auto_start < 200)
+							{
+								this->SetState(SIMON_GO_UPSTAIR_LEFT);
+							}
+							else {
+								this->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
+								this->isMoveToStair = false;
+								this->isAbleToMoveToStair = false;
+							}
+						}
+					}
+					else {
+						this->nxDownStair = obj->nx;
+						this->nxUpStair = -obj->nx;
+
+						// Xu ly khi di xuong thang va chan cham dat
+						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStair)) {
+							this->isStepOnStair = false;
+							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
+							else this->SetState(SIMON_STATE_IDLE_LEFT);
+						}
+					}
+				}
+
+				break;
+			}
+			else {
+				this->isAbleToMoveToStair = false;
+				this->isAbleToStepUpStair = false;
+			}
+		}
+	}
+
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
@@ -265,11 +394,13 @@ void Simon::SetState(int state)
 		//isStand = true;
 		break;
 	case SIMON_STATE_WALKING_RIGHT:
-		vx = SIMON_WALKING_SPEED;
+		if (!this->isMoveToStair) vx = SIMON_WALKING_SPEED;
+		else vx = 0.05f;
 		nx = 1;
 		break;
 	case SIMON_STATE_WALKING_LEFT:
-		vx = -SIMON_WALKING_SPEED;
+		if (!this->isMoveToStair) vx = -SIMON_WALKING_SPEED;
+		else vx = -0.05f;
 		nx = -1;
 		break;
 	case SIMON_STATE_SIT:
@@ -355,48 +486,60 @@ void Simon::SetState(int state)
 		vx = SIMON_WALKING_SPEED;
 		vy = -SIMON_WALKING_SPEED;
 		nx = 1;
+		isStepOnStair = true;
+		isStandUpStair = true;
+		isStandDownStair = false;
 		break;
 	case SIMON_GO_UPSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		vy = -SIMON_WALKING_SPEED;
 		nx = -1;
+		isStepOnStair = true;
+		isStandUpStair = true;
+		isStandDownStair = false;
 		break;
 	case SIMON_GO_DOWNSTAIR_RIGHT:
 		vx = SIMON_WALKING_SPEED;
 		vy = SIMON_WALKING_SPEED;
 		nx = 1;
+		isStepOnStair = true;
+		isStandUpStair = false;
+		isStandDownStair = true;
 		break;
 	case SIMON_GO_DOWNSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		vy = SIMON_WALKING_SPEED;
 		nx = -1;
+		isStepOnStair = true;
+		isStandUpStair = false;
+		isStandDownStair = true;
 		break;
 	case SIMON_STAND_ON_UPSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
-		//isStand = true;
+		isStepOnStair = true;
 		break;
 	case SIMON_STAND_ON_UPSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
-		//isStand = true;
+		isStepOnStair = true;
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
-		//isStand = true;
+		isStepOnStair = true;
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
-		//isStand = true;
+		isStepOnStair = true;
 		break;
 	}
 }
 
 void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 12;
+	left = x;
 	top = y;
 
 	right = x + SIMON_BBOX_WIDTH;
