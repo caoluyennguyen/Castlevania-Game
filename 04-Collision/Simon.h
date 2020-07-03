@@ -12,6 +12,7 @@ public:
 	int untouchable;
 	int distance = 0;
 	bool isStand = true;
+	bool isStandOnElevator = false;
 	bool isThrowWeapon = false;
 	bool isAbleToStepUpStair = false;
 	bool isAbleToStepDownStair = false;
@@ -41,7 +42,7 @@ public:
 
 	bool CheckStandGround() { return isOnGround; }
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
-	void AutoMoveToStair(LPGAMEOBJECT obj);
-
+	
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 };

@@ -9,6 +9,9 @@
 #include "UpStair.h"
 #include "DownStair.h"
 #include "BlackKnight.h"
+#include "VampireBat.h"
+#include "SmallCandle.h"
+#include "Elevator.h"
 
 using namespace std;
 
@@ -40,6 +43,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_UPSTAIR	6
 #define OBJECT_TYPE_DOWNSTAIR	7
 #define OBJECT_TYPE_BLACKKNIGHT	8
+#define OBJECT_TYPE_VAMPIREBAT	9
+#define OBJECT_TYPE_SMALLCANDLE	10
+#define OBJECT_TYPE_ELEVATOR	11
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -272,13 +278,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new DownStair(x, y, r, b, nx);
 			break;
 		}
-		break;
 		case OBJECT_TYPE_BLACKKNIGHT:
 		{
-			obj = new BlackKnight();
+			float minX = atof(tokens[4].c_str());
+			float maxX = atof(tokens[5].c_str());
+			obj = new BlackKnight(minX, maxX);
 			break;
 		}
-		break;
+		case OBJECT_TYPE_VAMPIREBAT:
+			obj = new VampireBat();
+			break;
+		case OBJECT_TYPE_SMALLCANDLE:
+		{
+			float typeOfItem = atof(tokens[4].c_str());
+			obj = new SmallCandle(typeOfItem);
+			break;
+		}
+		case OBJECT_TYPE_ELEVATOR:
+		{
+			float minX = atof(tokens[4].c_str());
+			float maxX = atof(tokens[5].c_str());
+			obj = new Elevator(minX, maxX);
+			break;
+		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -290,8 +312,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 
-	whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
-	weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
+	if (object_type == OBJECT_TYPE_SIMON)
+	{
+		whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
+		weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
+	}
 }
 
 void CPlayScene::Load()

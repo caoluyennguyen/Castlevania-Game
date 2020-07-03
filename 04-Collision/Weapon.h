@@ -16,6 +16,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	virtual void SetState(int state);
 
 	void SetNxFlyBack(int nx) { this->nxFlyBack = -nx; }

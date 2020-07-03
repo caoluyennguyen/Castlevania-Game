@@ -1,5 +1,8 @@
 #include "Whip.h"
 #include "Candle.h"
+#include "SmallCandle.h"
+#include "BlackKnight.h"
+#include "VampireBat.h"
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -9,7 +12,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
 
-		if (dynamic_cast<Candle*>(obj))
+		if (dynamic_cast<Candle*>(obj) || dynamic_cast<SmallCandle*>(obj))
 		{
 			float left, top, right, bottom;
 			obj->GetBoundingBox(left, top, right, bottom);
@@ -19,6 +22,32 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->enable)
 				{
 					obj->SetState(CANDLE_STATE_DESTROYED);
+				}
+			}
+		}
+		if (dynamic_cast<BlackKnight*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(BLACKKNIGHT_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<VampireBat*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(VAMPIREBAT_STATE_DIE);
 				}
 			}
 		}

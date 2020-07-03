@@ -59,6 +59,7 @@ public:
 	int state;
 
 	bool enable = true;
+	bool isEnemy = false;
 
 	DWORD dt;
 
@@ -74,6 +75,7 @@ public:
 	int GetState() { return this->state; }
 
 	void RenderBoundingBox();
+	void RenderActiveBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
@@ -92,6 +94,7 @@ public:
 	CGameObject();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
+	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }

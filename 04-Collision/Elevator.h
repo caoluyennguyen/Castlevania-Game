@@ -1,16 +1,16 @@
 #pragma once
 #include "GameObject.h"
 
-#define CANDLE_BBOX_WIDTH 32
-#define CANDLE_BBOX_HEIGHT 64
+#define ELEVATOR_BBOX_WIDTH 64
+#define ELEVATOR_BBOX_HEIGHT 16
 
-#define CANDLE_STATE_NORMAL		0
-#define CANDLE_STATE_DESTROYED	1
+#define ELEVATOR_STATE_NORMAL	0
 
-class Candle : public CGameObject
+class Elevator : public CGameObject
 {
+	int minX, maxX;
 public:
-	Candle();
+	Elevator(int minX, int maxX);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -18,3 +18,4 @@ public:
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void SetState(int state);
 };
+

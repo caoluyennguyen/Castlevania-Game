@@ -1,11 +1,11 @@
 #pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
 [TILEMAP]
-64	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	10	6	7	8	0
+64	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	9	6	7	8	0
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\Simon.png	255	0	255
-10	textures\Candle.png	255	0	255
+10	textures\SmallCandle.png	255	0	255
 20	textures\WHIP.png	255	0	255
 30	textures\Effect.png	255	0	255
 40	textures\Simon-2.png	255	0	255
@@ -19,7 +19,10 @@
 103	textures\weapon\HolyWater.png	255	0	255
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
-106	textures\blackknight64.png	255	0	128
+106	textures\blackknight64-left.png	255	0	128
+107	textures\blackknight64-right.png	255	0	128
+108	textures\bat-zombie-enemies-right.png	255	0	128
+109	textures\bat-zombie-enemies-left.png	255	0	128
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -107,9 +110,9 @@
 #stand on downstair left
 10611	120	64	180	128	0
 
-#CANDLE
-20001	0	0	32	64	10
-20002	32	0	64	64	10
+#SMALLCANDLE
+20001	0	0	16	32	10
+20002	16	0	32	32	10
 
 #WHIP LEFT
 30001	0	0	240	66	20
@@ -156,6 +159,18 @@
 2001	160	1	192	64	106
 2002	193	0	225	64	106
 2003	226	1	258	64	106
+2004	64	1	97	64	107
+2005	32	0	63	64	107
+2006	0	1	31	64	107
+
+#VAMPIREBAT
+3001	450	31	474	62	108
+3002	414	31	447	62	108
+3003	381	31	414	62	108
+3004	349	31	382	62	108
+3005	477	31	510	62	108
+3006	510	31	543	62	108
+3007	542	31	575	62	108
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -187,7 +202,7 @@
 124	10511	100
 125	10611	100
 
-# CANDLE
+# SMALL_CANDLE
 200	20001	100	20002	100
 
 # WHIP
@@ -220,7 +235,14 @@
 
 #BLACKKNIGHT
 1000	2001	100
-1001	2002	100	2003	100
+1001	2002	200	2003	200
+1002	2004	100
+1003	2005	200	2006	200
+
+#VAMPIREBAT
+2000	3001	100
+2001	3002	100	3003	100	3004	100
+2002	3005	100	3006	100	3007	100
 
 #
 # id	ani1	ani2	ani3
@@ -228,7 +250,7 @@
 [ANIMATION_SETS]
 # SIMON
 1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125
-# CANDLE
+# SMALL_CANDLE
 2	200	400
 # WHIP
 3	300	301
@@ -237,21 +259,30 @@
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # BLACKKNIGHT
-6	1000	1001
+6	1000	1001	1002	1003	400
+# VAMPIREBAT
+7	2000	2001	2002	400
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
+# type: 0 = Simon , 1 = Ground, 10 = SmallCandle, 3 = Whip , 4 = Item, 8 = BlackKnight
+	
+# --- SMALL CANDLE ---
+# type	x	y	ani_set_id	typeOfItem
+10	155	224	2	1
+10	408	236	2	1
+10	280	40	2	1
+
 # SIMON
 0	84	160	1
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b
 1	0	352	0	512	384
-1	352	224	0	512	274
-1	0	160	0	384	192
-#1	312	168	0	312	192
-#1	72	120	0	288	144
+1	320	224	0	512	274
+1	0	160	0	318	192
+1	32	128	0	64	160
+1	0	0	0	32	252
 
 # ITEM
 # item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
@@ -264,17 +295,18 @@
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
-6	352	172	0	402	222	-1
+6	325	172	0	375	222	-1
 
 # DOWNSTAIR
 # type	l	t	ani_set_id	r	b	nx
-7	236	302	0	286	350	1
-7	174	108	0	224	158	1
+7	184	302	0	234	350	1
+7	119	108	0	169	158	1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	288	-50	0	336	0	3
 
 # ENEMIES
-# type	x	y	ani_set_id
-8	136	96	6
+# type	x	y	ani_set_id	minX	maxX
+8	136	96	6	64	318
+9	80	30	7

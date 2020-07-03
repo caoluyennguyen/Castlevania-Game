@@ -12,6 +12,9 @@
 #include "Weapon.h"
 #include "UpStair.h"
 #include "DownStair.h"
+#include "VampireBat.h"
+#include "SmallCandle.h"
+#include "Elevator.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -95,7 +98,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isOnGround = false;
 				}
 			}
-			if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<Weapon*>(e->obj)) // if e->obj is Ground
+			if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<SmallCandle*>(e->obj) || dynamic_cast<Weapon*>(e->obj) ||
+				dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj) || e->obj->isEnemy) // if e->obj is Ground
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
@@ -121,11 +125,24 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
-			if (dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj))
+			if (dynamic_cast<Elevator*>(e->obj))
 			{
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
+				Elevator* p = dynamic_cast<Elevator*>(e->obj);
+				if (ny == -1)
+				{
+					this->vx = p->vx;
+					vy = 0;
+					isOnGround = true;
+					isStandOnElevator = true;
+					isStepOnStair = false;
+				}
+				else
+				{
+					y += dy;
+					isOnGround = false;
+				}
 			}
+			else isStandOnElevator = false;
 		}
 	}
 
@@ -147,7 +164,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->nxUpStair = obj->nx;
 					this->nxDownStair = -obj->nx;
 				}
-
 				if (this->nxUpStair == 1) {
 					if (!(this->isStepOnStair))
 					{
@@ -338,6 +354,19 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->isAbleToStepUpStair = false;
 			}
 		}
+		if (obj->isEnemy) {
+			if (dynamic_cast<VampireBat*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					VampireBat* p = dynamic_cast<VampireBat*>(obj);
+					p->SetAbleToFly();
+				}
+			}
+		}
 	}
 
 	// clean up collision events
@@ -384,12 +413,12 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case SIMON_STATE_IDLE_LEFT:
-		vx = 0;
+		if (!isStandOnElevator) vx = 0;
 		nx = -1;
 		//isStand = true;
 		break;
 	case SIMON_STATE_IDLE_RIGHT:
-		vx = 0;
+		if (!isStandOnElevator) vx = 0;
 		nx = 1;
 		//isStand = true;
 		break;
@@ -539,8 +568,8 @@ void Simon::SetState(int state)
 
 void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
+	left = x + 12;
+	top = y + 4;
 
 	right = x + SIMON_BBOX_WIDTH;
 	bottom = y + SIMON_BBOX_HEIGHT;
@@ -562,9 +591,4 @@ bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float
 	GetBoundingBox(simon_left, simon_top, simon_right, simon_bottom);
 
 	return CGameObject::AABB(simon_left, simon_top, simon_right, simon_bottom, obj_left, obj_top, obj_right, obj_bottom);
-}
-
-void Simon::AutoMoveToStair(LPGAMEOBJECT obj)
-{
-
 }

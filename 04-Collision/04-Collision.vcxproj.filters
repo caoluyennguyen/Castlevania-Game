@@ -96,6 +96,15 @@
     <ClInclude Include="BlackKnight.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="VampireBat.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SmallCandle.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Elevator.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -169,6 +178,15 @@
     </ClCompile>
     <ClCompile Include="BlackKnight.cpp">
       <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="VampireBat.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SmallCandle.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Elevator.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

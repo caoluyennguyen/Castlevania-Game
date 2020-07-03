@@ -1,16 +1,17 @@
 #pragma once
 #include "GameObject.h"
 
-#define CANDLE_BBOX_WIDTH 32
-#define CANDLE_BBOX_HEIGHT 64
+#define SMALL_CANDLE_BBOX_WIDTH		16
+#define SMALL_CANDLE_BBOX_HEIGHT	32
 
-#define CANDLE_STATE_NORMAL		0
-#define CANDLE_STATE_DESTROYED	1
+#define SMALL_CANDLE_STATE_NORMAL		0
+#define SMALL_CANDLE_STATE_DESTROYED	1
 
-class Candle : public CGameObject
+class SmallCandle : public CGameObject
 {
+	int typeOfItem;
 public:
-	Candle();
+	SmallCandle(int TypeOfItem);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -18,3 +19,4 @@ public:
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void SetState(int state);
 };
+
