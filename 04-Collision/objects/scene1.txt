@@ -19,10 +19,10 @@
 103	textures\weapon\HolyWater.png	255	0	255
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
-106	textures\blackknight64-left.png	255	0	128
-107	textures\blackknight64-right.png	255	0	128
-108	textures\bat-zombie-enemies-right.png	255	0	128
-109	textures\bat-zombie-enemies-left.png	255	0	128
+106	textures\blackknight64-left-fix.png	255	0	128
+107	textures\blackknight64-right-fix.png	255	0	128
+108	textures\bat-zombie-enemies-right-fix.png	255	0	128
+109	textures\bat-zombie-enemies-left-fix.png	255	0	128
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -295,7 +295,7 @@
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
-6	325	172	0	375	222	-1
+6	313	172	0	363	222	-1
 
 # DOWNSTAIR
 # type	l	t	ani_set_id	r	b	nx

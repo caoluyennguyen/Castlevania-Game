@@ -695,6 +695,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
+		simon->StartMoveOnStair();
+
 		if (simon->isStepOnStair)
 		{
 			simon->nx = simon->GetNxUpStair();
@@ -721,6 +723,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
+		simon->StartMoveOnStair();
+
 		if (simon->isStepOnStair)
 		{
 			simon->nx = simon->GetNxDownStair();
@@ -746,20 +750,23 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				else simon->SetState(SIMON_STATE_IDLE_LEFT);
 			}
 			else {
-				if (simon->isStandUpStair)
+				if (simon->IsAbleToStandOnStair())
 				{
-					if (simon->GetNxDownStair() == 1)
+					if (simon->isStandUpStair)
 					{
-						simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
+						if (simon->GetNxDownStair() == 1)
+						{
+							simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
+						}
+						else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
 					}
-					else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
-				}
-				else {
-					if (simon->GetNxDownStair() == 1)
-					{
-						simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
+					else {
+						if (simon->GetNxDownStair() == 1)
+						{
+							simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
+						}
+						else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
 					}
-					else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
 				}
 			}
 		}

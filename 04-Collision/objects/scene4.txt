@@ -1,11 +1,11 @@
 #pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
 [TILEMAP]
-32	textures\\map\\Scene4.png	textures\\map\\Scene4.txt	48	11	17	6	1
+32	textures\\map\\Scene4.png	textures\\map\\Scene4.txt	48	12	6	8	0
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\Simon.png	255	0	255
-10	textures\Candle.png	255	0	255
+10	textures\SmallCandle.png	255	0	255
 20	textures\WHIP.png	255	0	255
 30	textures\Effect.png	255	0	255
 40	textures\Simon-2.png	255	0	255
@@ -19,7 +19,11 @@
 103	textures\weapon\HolyWater.png	255	0	255
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
-106	textures\blackknight64.png	255	0	128
+106	textures\blackknight64-left-fix.png	255	0	128
+107	textures\blackknight64-right-fix.png	255	0	128
+108	textures\bat-zombie-enemies-right-fix.png	255	0	128
+109	textures\bat-zombie-enemies-left.png	255	0	128
+110	textures\wall.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -108,8 +112,8 @@
 10611	120	64	180	128	0
 
 #CANDLE
-20001	0	0	32	64	10
-20002	32	0	64	64	10
+20001	0	0	16	32	10
+20002	16	0	32	32	10
 
 #WHIP LEFT
 30001	0	0	240	66	20
@@ -242,17 +246,53 @@
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
+
+# CANDLE
+# type	x	y	ani_set_id
+10	312	128	2	1
+10	440	256	2	1
+10	568	256	2	1
+10	696	256	2	1
+10	824	192	2	1
+10	952	286	2	1
+10	1210	256	2	1
+10	1464	158	2	1
+
 # SIMON
 0	84	160	1
 
 # GROUND
-# type	l	t	ani_set_id	r	b	scene_id
-1	0	320	0	1536	352	1
+# type	l	t	ani_set_id	r	b
+1	320	320	0	638	352
+1	0	320	0	128	384
+1	158	320	0	190	352
+1	0	0	0	64	320
+1	256	192	0	320	256
+1	448	192	0	512	224
+1	704	320	0	768	352
+1	832	256	0	896	288
+1	896	320	0	960	352
+1	960	352	0	1088	384
+1	960	224	0	1024	256
+1	1088	192	0	1152	224
+1	1216	320	0	1344	352
+1	1344	288	0	1408	320
+1	1408	224	0	1472	256
+1	1472	256	0	1536	384
+1	1472	0	0	1536	158
 
-# CANDLE
-# type	x	y	ani_set_id
-2	1198	228	2
+# UPSTAIR
+# type	l	t	ani_set_id	r	b	nx
+6	246	140	0	296	190	-1
+6	815	204	0	865	254	-1
+6	1134	140	0	1184	190	1
+
+# DOWNSTAIR
+# type	l	t	ani_set_id	r	b	nx
+7	102	268	0	152	318	1
+7	746	268	0	796	318	1
+7	1264	268	0	1314	318	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	400	200	0	500	500	1
+50	1472	158	0	1536	256	6

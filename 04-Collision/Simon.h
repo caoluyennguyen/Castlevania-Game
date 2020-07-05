@@ -8,6 +8,7 @@ class Simon : public CGameObject
 	int nxUpStair, nxDownStair;
 	bool isOnGround = false;
 	DWORD untouchable_start;
+	DWORD move_on_stairs_start;
 public:
 	int untouchable;
 	int distance = 0;
@@ -17,6 +18,7 @@ public:
 	bool isAbleToStepUpStair = false;
 	bool isAbleToStepDownStair = false;
 	bool isStepOnStair = false;
+	bool isAbleToStandOnStair = false;
 	bool isStandUpStair = false;
 	bool isStandDownStair = false;
 	bool isAbleToMoveToStair = false;
@@ -39,10 +41,13 @@ public:
 	int GetNxDownStair() { return this->nxDownStair; }
 	void SetState(int state);
 	void StartUntouchable();
+	void StartMoveOnStair();
 
 	bool CheckStandGround() { return isOnGround; }
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
 	
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
+
+	bool IsAbleToStandOnStair();
 };

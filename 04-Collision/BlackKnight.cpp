@@ -21,9 +21,10 @@ void BlackKnight::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (this->GetState() == BLACKKNIGHT_STATE_DIE && animation_set->at(BLACKKNIGHT_STATE_DIE)->isOver(600))
+	if (this->GetState() == BLACKKNIGHT_STATE_DIE)
 	{
-		this->enable = false;
+		if (animation_set->at(BLACKKNIGHT_STATE_DIE)->isOver(600)) this->enable = false;
+		return;
 	}
 
 	// Calculate dx, dy 
@@ -35,12 +36,12 @@ void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->SetState(BLACKKNIGHT_STATE_WALK_RIGHT);
 		this->left = rand() % (maxX - minX + 1) + minX;
-		//this->right = rand() % 300 + 50;
+		this->right = rand() % (maxX - minX + 1) + minX;
 	}
 	else if (this->x > this->right)
 	{
 		this->SetState(BLACKKNIGHT_STATE_WALK_LEFT);
-		//this->left = rand() % 300 + 50;
+		this->left = rand() % (maxX - minX + 1) + minX;
 		this->right = rand() % (maxX - minX + 1) + minX;
 	}
 }

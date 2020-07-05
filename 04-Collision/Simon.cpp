@@ -68,7 +68,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (this->isStepOnStair)
+				if (this->isStepOnStair || this->isStandOnElevator)
 				{
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
@@ -579,6 +579,17 @@ void Simon::StartUntouchable()
 {
 	untouchable = 1;
 	untouchable_start = GetTickCount();
+}
+
+void Simon::StartMoveOnStair()
+{
+	move_on_stairs_start = GetTickCount();
+}
+
+bool Simon::IsAbleToStandOnStair()
+{
+	if (GetTickCount() - move_on_stairs_start < 100) return false;
+	else return true;
 }
 
 bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
