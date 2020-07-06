@@ -3,6 +3,10 @@
 #include "SmallCandle.h"
 #include "BlackKnight.h"
 #include "VampireBat.h"
+#include "Ghost.h"
+#include "Fleaman.h"
+#include "Raven.h"
+#include "Skeleton.h"
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -48,6 +52,58 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->enable)
 				{
 					obj->SetState(VAMPIREBAT_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<Ghost*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && obj->GetState() != GHOST_STATE_IDLE && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(GHOST_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<Fleaman*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(FLEAMAN_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<Raven*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(RAVEN_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<Skeleton*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(SKELETON_STATE_DIE);
 				}
 			}
 		}

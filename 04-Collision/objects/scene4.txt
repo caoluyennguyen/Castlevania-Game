@@ -19,11 +19,8 @@
 103	textures\weapon\HolyWater.png	255	0	255
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
-106	textures\blackknight64-left-fix.png	255	0	128
-107	textures\blackknight64-right-fix.png	255	0	128
-108	textures\bat-zombie-enemies-right-fix.png	255	0	128
-109	textures\bat-zombie-enemies-left.png	255	0	128
-110	textures\wall.png	255	0	255
+106	textures\enemies2-left.png	255	0	255
+107	textures\enemies2-right.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -156,10 +153,16 @@
 1002	32	0	64	26	103
 1003	64	0	96	26	103
 
-#BLACKKNIGHT
-2001	160	1	192	64	106
-2002	193	0	225	64	106
-2003	226	1	258	64	106
+#RAVEN
+2001	65	31	97	63	106
+2002	97	31	129	63	106
+2003	129	31	161	63	106
+2004	161	31	193	63	106
+
+#SKELETON
+#LEFT
+3001	193	0	226	63	106
+3002	226	0	258	63	106
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -222,9 +225,13 @@
 900	1001	100	1002	100	1003	100
 901	1002	100	1003	100
 
-#BLACKKNIGHT
+#RAVEN
 1000	2001	100
-1001	2002	100	2003	100
+1001	2002	100	2003	100	2004	100
+
+#SKELETON
+2000	3001	100
+2001	3001	100	3002	100
 
 #
 # id	ani1	ani2	ani3
@@ -240,8 +247,10 @@
 4	500	600	601	602
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
-# BLACKKNIGHT
-6	1000	1001
+# RAVEN
+6	1000	1001	400
+# SKELETON
+7	2000	2001	400
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -283,15 +292,20 @@
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
-6	246	140	0	296	190	-1
+6	226	140	0	276	190	-1
 6	815	204	0	865	254	-1
 6	1134	140	0	1184	190	1
 
 # DOWNSTAIR
 # type	l	t	ani_set_id	r	b	nx
-7	102	268	0	152	318	1
+7	82	268	0	132	318	1
 7	746	268	0	796	318	1
 7	1264	268	0	1314	318	-1
+
+# ENEMIES
+# type	x	y	ani_set_id
+14	544	64	6
+15	1310	256	7
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

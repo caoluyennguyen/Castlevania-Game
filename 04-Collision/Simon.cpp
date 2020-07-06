@@ -15,6 +15,10 @@
 #include "VampireBat.h"
 #include "SmallCandle.h"
 #include "Elevator.h"
+#include "Ghost.h"
+#include "Fleaman.h"
+#include "Raven.h"
+#include "Skeleton.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -364,6 +368,50 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					VampireBat* p = dynamic_cast<VampireBat*>(obj);
 					p->SetAbleToFly();
+				}
+			}
+			if (dynamic_cast<Ghost*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Ghost* p = dynamic_cast<Ghost*>(obj);
+					p->SetState(GHOST_STATE_FLY_LEFT);
+				}
+			}
+			if (dynamic_cast<Fleaman*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Fleaman* p = dynamic_cast<Fleaman*>(obj);
+					p->SetState(FLEAMAN_STATE_JUMP_RIGHT);
+				}
+			}
+			if (dynamic_cast<Raven*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Raven* p = dynamic_cast<Raven*>(obj);
+					p->SetState(RAVEN_STATE_FLY_LEFT);
+				}
+			}
+			if (dynamic_cast<Skeleton*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Skeleton* p = dynamic_cast<Skeleton*>(obj);
+					p->SetState(SKELETON_STATE_IDLE_LEFT);
 				}
 			}
 		}

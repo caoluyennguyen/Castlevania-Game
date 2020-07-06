@@ -12,6 +12,11 @@
 #include "VampireBat.h"
 #include "SmallCandle.h"
 #include "Elevator.h"
+#include "Ghost.h"
+#include "Fleaman.h"
+#include "Raven.h"
+#include "Skeleton.h"
+#include "Zombie.h"
 
 using namespace std;
 
@@ -46,6 +51,12 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_VAMPIREBAT	9
 #define OBJECT_TYPE_SMALLCANDLE	10
 #define OBJECT_TYPE_ELEVATOR	11
+#define OBJECT_TYPE_GHOST	12
+#define OBJECT_TYPE_FLEAMAN	13
+#define OBJECT_TYPE_RAVEN	14
+#define OBJECT_TYPE_SKELETON	15
+#define OBJECT_TYPE_ZOMBIE	16
+#define OBJECT_TYPE_BOSS	17
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -301,6 +312,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Elevator(minX, maxX);
 			break;
 		}
+		case OBJECT_TYPE_GHOST:
+		{
+			obj = new Ghost();
+			break;
+		}
+		case OBJECT_TYPE_FLEAMAN:
+			obj = new Fleaman();
+			break;
+		case OBJECT_TYPE_RAVEN:
+			obj = new Raven();
+			break;
+		case OBJECT_TYPE_SKELETON:
+			obj = new Skeleton();
+			break;
+		case OBJECT_TYPE_ZOMBIE:
+			obj = new Zombie();
+			break;
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -389,7 +417,7 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->enable)
 		{
