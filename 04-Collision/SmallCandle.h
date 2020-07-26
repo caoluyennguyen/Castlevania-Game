@@ -7,6 +7,7 @@
 #define SMALL_CANDLE_STATE_NORMAL		0
 #define SMALL_CANDLE_STATE_DESTROYED	1
 
+
 class SmallCandle : public CGameObject
 {
 	int typeOfItem;

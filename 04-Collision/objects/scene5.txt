@@ -21,6 +21,7 @@
 105	textures\item\Rect.png	255	0	255
 106	textures\bat-zombie-enemies-left.png	255	0	255
 107	textures\bat-zombie-ememies-right.png	255	0	255
+108	textures\Boss.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -126,6 +127,9 @@
 40001	0	0	32	60	30
 40002	32	0	64	60	30
 40003	64	0	96	60	30
+40004	96	0	145	60	30
+40005	145	0	195	60	30
+40006	196	0	246	60	30
 
 #DAGGER
 50001	0	0	32	18	60
@@ -157,6 +161,11 @@
 #LEFT
 2001	512	0	544	63	106
 2002	544	0	576	63	106
+
+#BOSS
+3001	0	0	96	46	108
+3002	96	0	192	46	108
+3003	192	0	288	46	108	
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -197,6 +206,7 @@
 
 # EFFECT
 400	40001	100	40002	100	40003	100
+401	40004	100	40005	100	40006	100
 
 # DAGGER
 500	50001	100
@@ -222,6 +232,10 @@
 # ZOMBIE
 1000	2001	100	2002	100
 
+# BOSS
+2000	3001	100	3002	100	3003	100
+2001	3002	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -238,6 +252,8 @@
 5	500	501	700	800	900	901
 # ZOMBIE
 6	1000	400
+# BOSS
+7	2000	2001	401
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -265,6 +281,7 @@
 # ENEMIES
 # type	x	y	ani_set_id
 16	528	186	6
+17	800	80	7
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

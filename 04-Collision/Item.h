@@ -1,5 +1,9 @@
 #pragma once
 #include "GameObject.h"
+
+#define ITEM_GRAVITY	0.001f
+#define ITEM_SMALLHEART	1
+
 class Item : public CGameObject
 {
 	//int typeOfItem;
@@ -13,5 +17,6 @@ public:
 
 	//int GetTypeOfItem() { return typeOfItem; };
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
+	void SetState(int state);
 };
 

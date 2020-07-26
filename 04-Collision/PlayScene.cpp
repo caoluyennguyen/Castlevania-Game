@@ -17,6 +17,7 @@
 #include "Raven.h"
 #include "Skeleton.h"
 #include "Zombie.h"
+#include "Boss.h"
 
 using namespace std;
 
@@ -249,7 +250,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = new Simon();
 			player = (Simon*)obj;
-			whip = new Whip();
+			//whip = new Whip();
 			weapon = new Weapon();
 			weapon->SetState(0);
 			break;
@@ -329,6 +330,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_ZOMBIE:
 			obj = new Zombie();
 			break;
+		case OBJECT_TYPE_BOSS:
+			obj = new Boss();
+			break;
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -342,7 +346,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	if (object_type == OBJECT_TYPE_SIMON)
 	{
-		whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
+		player->whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
 		weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
 	}
 }
@@ -404,11 +408,6 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-
-	//tilemap = new Tilemap();
-	//tilemap->LoadMap();
-
-	
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -433,11 +432,7 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	if (whip->enable)
-	{
-		whip->Update(dt, &coObjects);
-		whip->SetWhipPosition(cx, cy, player->isStand);
-	}
+
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -467,7 +462,7 @@ void CPlayScene::Render()
 			objects[i]->Render();
 		}
 	}
-	if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
+	/*if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
 		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT
 		|| player->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || player->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
 		|| player->GetState() == SIMON_HIT_UPSTAIR_RIGHT || player->GetState() == SIMON_HIT_UPSTAIR_LEFT)
@@ -479,7 +474,8 @@ void CPlayScene::Render()
 		}
 		
 	}
-	else whip->enable = false;
+	else whip->enable = false;*/
+	
 	if (weapon->enable)
 	{
 		weapon->Render();
@@ -507,7 +503,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	Simon* simon = ((CPlayScene*)scence)->player;
-	Whip* whip = ((CPlayScene*)scence)->whip;
+	//Whip* whip = ((CPlayScene*)scence)->whip;
 	Weapon* weapon = ((CPlayScene*)scence)->weapon;
 	switch (KeyCode)
 	{
@@ -532,8 +528,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		simon->SetSpeed(0, 0);
 		break;
 	case DIK_Z:
-		whip->enable = true;
-		whip->StartHit();
+		simon->whip->enable = true;
+		simon->whip->StartHit();
 		if (simon->GetState() == SIMON_STATE_HIT_SIT || simon->GetState() ==  SIMON_STATE_HIT_STAND
 			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT
 			|| simon->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_HIT_DOWNSTAIR_LEFT)
@@ -552,7 +548,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_HIT_SIT_RIGHT);
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND_RIGHT);
-			whip->animation_set->at(1)->resetAnimation();
+			simon->whip->animation_set->at(simon->whip_level + 1)->resetAnimation(); // reset to first sprite
 		}
 		else {
 			if (simon->isStepOnStair)
@@ -572,7 +568,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_HIT_SIT);
 			}
 			else simon->SetState(SIMON_STATE_HIT_STAND);
-			whip->animation_set->at(0)->resetAnimation();
+			simon->whip->animation_set->at(simon->whip_level)->resetAnimation(); // reset to first sprite
 		}
 		break;
 	case DIK_C:
@@ -723,8 +719,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
-		simon->StartMoveOnStair();
-
 		if (simon->isStepOnStair)
 		{
 			simon->nx = simon->GetNxUpStair();
@@ -751,8 +745,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
-		simon->StartMoveOnStair();
-
 		if (simon->isStepOnStair)
 		{
 			simon->nx = simon->GetNxDownStair();
@@ -778,23 +770,20 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				else simon->SetState(SIMON_STATE_IDLE_LEFT);
 			}
 			else {
-				if (simon->IsAbleToStandOnStair())
+				if (simon->isStandUpStair)
 				{
-					if (simon->isStandUpStair)
+					if (simon->GetNxDownStair() == 1)
 					{
-						if (simon->GetNxDownStair() == 1)
-						{
-							simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
-						}
-						else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
+						simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
 					}
-					else {
-						if (simon->GetNxDownStair() == 1)
-						{
-							simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
-						}
-						else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
+					else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
+				}
+				else {
+					if (simon->GetNxDownStair() == 1)
+					{
+						simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
 					}
+					else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
 				}
 			}
 		}

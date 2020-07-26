@@ -112,8 +112,11 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Whip::Render()
 {
-	if (this->nx == -1) animation_set->at(0)->Render(x, y);
-	else animation_set->at(1)->Render(x, y);
+	if (this->nx == -1) animation_set->at(state)->Render(x, y);
+	else animation_set->at(state + 1)->Render(x, y);
+
+	/*if (this->nx == -1) animation_set->at(state)->Render(x, y);
+	else animation_set->at(state + 1)->Render(x, y);*/
 
 	RenderBoundingBox();
 }
@@ -134,14 +137,16 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	{
 		left = x + 50;
 		top = y + 15;
-		right = left + WHIP_BBOX_WIDTH;
 		bottom = top + WHIP_BBOX_HEIGHT;
+		if (this->state < STATE_CHAIN_LONG_RIGHT) right = left + WHIP_BBOX_WIDTH
+		else right = left + LONG_CHAIN_BBOX_WIDTH;
 	}
 	else {
 		top = y + 15;
 		bottom = top + WHIP_BBOX_HEIGHT;
 		right = x + 190;
-		left = right - WHIP_BBOX_WIDTH;
+		if (this->state < STATE_CHAIN_LONG_RIGHT) left = right - WHIP_BBOX_WIDTH
+		else left = right - LONG_CHAIN_BBOX_WIDTH;
 	}
 }
 

@@ -19,6 +19,9 @@
 #include "Fleaman.h"
 #include "Raven.h"
 #include "Skeleton.h"
+#include "Zombie.h"
+#include "Boss.h"
+#include "Utils.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -27,7 +30,39 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// Simple fall down
 	if (!this->isStepOnStair) vy += SIMON_GRAVITY * dt;
-	else this->isOnGround = false;
+	else {
+		this->isOnGround = false;
+
+		// walk on stair
+		/*distanceWalkOnStair += distanceWalkOnStair + abs(vy) * dt;
+		DebugOut(L"DoCaoDiDuoc = %f . dy = %f . y = %f\n", distanceWalkOnStair, dy, this->y);
+		if (distanceWalkOnStair < 8.0f && distanceWalkOnStair != 0)
+		{
+			if (isStandUpStair)
+			{
+				x += abs(distanceWalkOnStair - 8.0f);
+				y -= abs(distanceWalkOnStair - 8.0f);
+			}
+		}
+		else if (distanceWalkOnStair > 8.0f && distanceWalkOnStair != 0)
+		{
+			if (isStandUpStair)
+			{
+				x += abs(distanceWalkOnStair - 8.0f * (distanceWalkOnStair / 8.0f));
+				y -= abs(distanceWalkOnStair - 8.0f * (distanceWalkOnStair / 8.0f));
+			}
+		}
+
+		distanceWalkOnStair = 0;*/
+	}
+
+	// Update whip
+	if (whip->enable)
+	{
+		whip->state = this->whip_level;
+		whip->Update(dt, coObjects);
+		whip->SetWhipPosition(this->x, this->y, this->isStand);
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -77,20 +112,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
 				}
-				/*else if (ny != 0)
-				{
-					if (ny == -1)
-					{
-						vy = 0;
-						isOnGround = true;
-					}
-					else
-					{
-						y += dy;
-						isOnGround = false;
-					}
-				}*/
-				else if (ny == -1)
+				else if (ny != 0)
 				{
 					vy = 0;
 					isOnGround = true;
@@ -103,7 +125,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<SmallCandle*>(e->obj) || dynamic_cast<Weapon*>(e->obj) ||
-				dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj) || e->obj->isEnemy) // if e->obj is Ground
+				dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj)) // if e->obj is Ground
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
@@ -147,6 +169,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			else isStandOnElevator = false;
+			if (e->obj->isEnemy)
+			{
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+				//this->SetState(SIMON_STATE_INJURED);
+			}
 		}
 	}
 
@@ -177,10 +205,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (this->isMoveToStair) {
 						if (distance != 0) {
-							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
-							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							if (abs(distance) > dx) this->x += dx;
 							else this->x += distance;
+							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							auto_start = GetTickCount();
 							return;
 						}
@@ -281,7 +309,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							else this->x += distance;
 							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
-							auto_start = GetTickCount();
+							auto_start = GetTickCount(); // problem when distance = 0 simon do not move correctly
 							return;
 						}
 						else {
@@ -414,6 +442,28 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					p->SetState(SKELETON_STATE_IDLE_LEFT);
 				}
 			}
+			if (dynamic_cast<Zombie*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Zombie* p = dynamic_cast<Zombie*>(obj);
+					p->SetState(ZOMBIE_STATE_DIE);
+				}
+			}
+			if (dynamic_cast<Boss*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Boss* p = dynamic_cast<Boss*>(obj);
+					p->SetState(BOSS_STATE_DIE);
+				}
+			}
 		}
 	}
 
@@ -423,35 +473,24 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Simon::Render()
 {
-	/*int ani;
-	if (state == SIMON_STATE_DIE)
-		ani = SIMON_ANI_DIE;
-	else {
-		if (vx == 0)
-		{
-			if (nx > 0) ani = SIMON_ANI_IDLE_RIGHT;
-			else ani = SIMON_ANI_IDLE_LEFT;
-		}
-		else if (vx > 0)
-			ani = SIMON_ANI_WALKING_RIGHT;
-		else ani = SIMON_ANI_WALKING_LEFT;
-	}*/
-	/*if ((this->GetState() == SIMON_STATE_GET_ITEM_RIGHT || this->GetState() == SIMON_STATE_GET_ITEM_LEFT)
-		&& this->animation_set->at(this->state)->isOver(1000))
-	{
-		return;
-	}*/
 	int alpha = 255;
-	/*if (untouchable) {
-		if (nx == 1)
-		{
-			SetState(SIMON_STATE_GET_ITEM_RIGHT);
-		}
-		else SetState(SIMON_STATE_GET_ITEM_LEFT);
-	}*/
 	animation_set->at(state)->Render(x, y, alpha);
-
 	RenderBoundingBox();
+
+	// Render whip
+	if (this->GetState() == SIMON_STATE_HIT_SIT || this->GetState() == SIMON_STATE_HIT_STAND
+		|| this->GetState() == SIMON_STATE_HIT_SIT_RIGHT || this->GetState() == SIMON_STATE_HIT_STAND_RIGHT
+		|| this->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || this->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
+		|| this->GetState() == SIMON_HIT_UPSTAIR_RIGHT || this->GetState() == SIMON_HIT_UPSTAIR_LEFT)
+	{
+		if (this->isThrowWeapon == false)
+		{
+			whip->nx = this->nx;
+			whip->Render();
+		}
+
+	}
+	else whip->enable = false;
 }
 
 void Simon::SetState(int state)
@@ -489,7 +528,8 @@ void Simon::SetState(int state)
 		isOnGround = false;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 	case SIMON_STATE_DIE:
-		vy = -SIMON_DIE_DEFLECT_SPEED;
+		//vy = -SIMON_DIE_DEFLECT_SPEED;
+		StartUntouchable();
 		break;
 	case SIMON_STATE_HIT_STAND:
 		isStand = true;
@@ -627,17 +667,6 @@ void Simon::StartUntouchable()
 {
 	untouchable = 1;
 	untouchable_start = GetTickCount();
-}
-
-void Simon::StartMoveOnStair()
-{
-	move_on_stairs_start = GetTickCount();
-}
-
-bool Simon::IsAbleToStandOnStair()
-{
-	if (GetTickCount() - move_on_stairs_start < 100) return false;
-	else return true;
 }
 
 bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)

@@ -74,13 +74,17 @@ void HeadUpDisplay::Render()
 	//Draw image
 	for (int i = 0; i < 8; i++)
 	{
-		currentHP[i]->Draw(x + i * 9 + game->GetCamPosX(), y);
+		/*currentHP[i]->Draw(x + i * 9 + game->GetCamPosX(), y);
 		loseHP[i]->Draw(x + (15-i) * 9 + game->GetCamPosX(), y);
 		bossHP[i]->Draw(x + i * 9 + game->GetCamPosX(), y + 15);
-		loseHP[i]->Draw(x + (15 - i) * 9 + game->GetCamPosX(), y + 15);
+		loseHP[i]->Draw(x + (15 - i) * 9 + game->GetCamPosX(), y + 15);*/
+		currentHP[i]->Draw(x + i * 9, y, 255, 0);
+		loseHP[i]->Draw(x + (15-i) * 9, y, 255, 0);
+		bossHP[i]->Draw(x + i * 9, y + 15, 255, 0);
+		loseHP[i]->Draw(x + (15 - i) * 9, y + 15, 255 , 0);
 	}
 
-	weapon->Draw(288 + game->GetCamPosX(), -38);
+	weapon->Draw(288, -38, 255, 0);
 }
 
 void HeadUpDisplay::Update(DWORD dt)

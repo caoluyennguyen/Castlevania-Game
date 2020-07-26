@@ -1,15 +1,18 @@
 #pragma once
 #include "GameObject.h"
 #include "Define.h"
+#include "Whip.h"
 
 class Simon : public CGameObject
 {
 	int weapon = 0;
 	int nxUpStair, nxDownStair;
+	int distanceWalkOnStair = 0;
 	bool isOnGround = false;
 	DWORD untouchable_start;
-	DWORD move_on_stairs_start;
 public:
+	Whip *whip;
+	int whip_level; // 0: normal, 2: chain, 4 long chain
 	int untouchable;
 	int distance = 0;
 	bool isStand = true;
@@ -28,6 +31,8 @@ public:
 	Simon() : CGameObject()
 	{
 		untouchable = 0;
+		whip = new Whip();
+		whip_level = 0;
 		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
 
@@ -41,7 +46,6 @@ public:
 	int GetNxDownStair() { return this->nxDownStair; }
 	void SetState(int state);
 	void StartUntouchable();
-	void StartMoveOnStair();
 
 	bool CheckStandGround() { return isOnGround; }
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
@@ -49,5 +53,4 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 
-	bool IsAbleToStandOnStair();
 };

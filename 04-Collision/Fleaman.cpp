@@ -1,6 +1,7 @@
 #include "Fleaman.h"
 #include "Ground.h"
 #include "Simon.h"
+#include "Ghost.h"
 
 Fleaman::Fleaman() : CGameObject()
 {
@@ -27,17 +28,18 @@ void Fleaman::GetActiveBoundingBox(float& left, float& top, float& right, float&
 void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
+	vy += FLEAMAN_GRAVITY * dt;
 
 	if (this->GetState() == FLEAMAN_STATE_DIE && animation_set->at(FLEAMAN_STATE_DIE)->isOver(600))
 	{
 		this->enable = false;
 	}
 
-	if (this->GetState() == FLEAMAN_STATE_JUMP_RIGHT)
+	/*if (this->GetState() == FLEAMAN_STATE_JUMP_RIGHT)
 	{
 		vy += jump * 0.01f;
 		if (vy < -0.025f) jump = 1;
-	}
+	}*/
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -58,6 +60,8 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;	// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.4f;
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -65,9 +69,9 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				this->SetState(FLEAMAN_STATE_IDLE_RIGHT);
+				if (ny != 0) vx = vy = 0;
 			}
-			if (dynamic_cast<Simon*>(e->obj)) // if e->obj is Ground
+			else if (dynamic_cast<Simon*>(e->obj) || dynamic_cast<Ghost*>(e->obj)) // if e->obj is Ground
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
