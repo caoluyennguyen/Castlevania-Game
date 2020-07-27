@@ -7,7 +7,7 @@
 Item::Item(int type) : CGameObject()
 {
 	//this->typeOfItem = type;
-	this->state = type;
+	this->SetState(type);
 	this->enable = true;
 }
 
@@ -50,8 +50,18 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	case 6:
 		left = x;
 		top = y;
-		right = x + 24;
-		bottom = y + 20;
+		right = x + 16;
+		bottom = y + 16;
+	case 7:
+		left = x;
+		top = y;
+		right = x + 28;
+		bottom = y + 28;
+	case 8:
+		left = x;
+		top = y;
+		right = x + 28;
+		bottom = y + 28;
 	default:
 		break;
 	}
@@ -61,7 +71,6 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy
 	CGameObject::Update(dt, coObjects);
-	vy += ITEM_GRAVITY * dt;
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -84,7 +93,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else this->enable = true;
 			}
 		}
-		if (dynamic_cast<SmallCandle*>(obj))
+		else if (dynamic_cast<SmallCandle*>(obj))
 		{
 			SmallCandle* e = dynamic_cast<SmallCandle*> (obj);
 
@@ -101,23 +110,6 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else this->enable = true;
 			}
 		}
-		/*if (dynamic_cast<Ground*>(obj))
-		{
-			Ground* e = dynamic_cast<Ground*> (obj);
-
-			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
-
-			if (CheckCollision(left, top, right, bottom) == true)
-			{
-				dx = dy = 0;
-			}
-			else {
-				x += dx;
-				y += dy;
-			}
-		}*/
 	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -128,7 +120,14 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (this->isEnable())
 	{
-		if (coEvents.size() == 0)
+		if (this->state == ITEM_SMALLHEART && isShake) {
+			vx += ITEM_SMALLHEART_VX * shake;
+			if (vx > ITEM_SMALLHEART_VX_MAX) shake = -1;
+			else if (vx < ITEM_SMALLHEART_VX_MIN) shake = 1;
+		}
+		vy += gravity * dt;
+
+		if (coEvents.size() == 0 && vx != 0)
 		{
 			x += dx;
 			y += dy;
@@ -149,7 +148,10 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 				{
-					if (ny != 0) vx = vy = 0;
+					if (ny < 0) {
+						isShake = false;
+						vx = 0;
+					}
 				}
 				else if (dynamic_cast<Simon*>(e->obj))
 				{
@@ -190,6 +192,7 @@ void Item::SetState(int state)
 	switch (state)
 	{
 	case ITEM_SMALLHEART:
+		gravity = 0.0001f;
 		//animation_set->at(CANDLE_STATE_DESTROYED)->resetAnimation();
 		//animation_set->at(CANDLE_STATE_DESTROYED)->setStartFrameTime(GetTickCount());
 	default:

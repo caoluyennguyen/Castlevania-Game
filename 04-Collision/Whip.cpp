@@ -144,9 +144,9 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	else {
 		top = y + 15;
 		bottom = top + WHIP_BBOX_HEIGHT;
-		right = x + 190;
-		if (this->state < STATE_CHAIN_LONG_RIGHT) left = right - WHIP_BBOX_WIDTH
-		else left = right - LONG_CHAIN_BBOX_WIDTH;
+		left = x + 140;
+		if (this->state < STATE_CHAIN_LONG_LEFT) right = left + WHIP_BBOX_WIDTH
+		else right = left + LONG_CHAIN_BBOX_WIDTH;
 	}
 }
 

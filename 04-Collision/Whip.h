@@ -9,7 +9,7 @@
 #define STATE_WHIP_NORMAL_RIGHT		1
 #define STATE_CHAIN_NORMAL_LEFT		2
 #define STATE_CHAIN_NORMAL_RIGHT	3
-#define STATE_CHAIN_LONG_RIGHT		4
+#define STATE_CHAIN_LONG_LEFT		4
 #define STATE_CHAIN_LONG_RIGHT		5
 
 class Whip : public CGameObject

@@ -282,11 +282,11 @@
 # ITEM
 # item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 # type	x	y	ani_set_id	type_of_item
-4	176	255	4	3
-4	432	270	4	2
-4	686	270	4	2
-4	942	255	4	3
-4	1198	275	4	0
+4	176	250	4	3
+4	432	265	4	2
+4	686	265	4	2
+4	942	250	4	3
+4	1198	270	4	0
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx

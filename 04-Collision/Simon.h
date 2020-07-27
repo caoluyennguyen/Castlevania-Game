@@ -12,7 +12,7 @@ class Simon : public CGameObject
 	DWORD untouchable_start;
 public:
 	Whip *whip;
-	int whip_level; // 0: normal, 2: chain, 4 long chain
+	int whip_level; // 0: normal, 2: chain, 4: long chain
 	int untouchable;
 	int distance = 0;
 	bool isStand = true;
@@ -32,7 +32,7 @@ public:
 	{
 		untouchable = 0;
 		whip = new Whip();
-		whip_level = 0;
+		whip_level = 4;
 		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
 

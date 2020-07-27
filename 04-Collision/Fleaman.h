@@ -4,7 +4,7 @@
 #define FLEAMAN_BBOX_WIDTH 30
 #define FLEAMAN_BBOX_HEIGHT 31
 
-#define FLEAMAN_GRAVITY 0.002f
+#define FLEAMAN_GRAVITY 0.001f
 
 #define FLEAMAN_STATE_IDLE_RIGHT	0
 #define FLEAMAN_STATE_JUMP_RIGHT	1
@@ -24,4 +24,3 @@ public:
 	void SetState(int state);
 	void StartJump() { start_jump = GetTickCount(); }
 };
-

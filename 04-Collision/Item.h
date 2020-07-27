@@ -1,12 +1,18 @@
 #pragma once
 #include "GameObject.h"
 
-#define ITEM_GRAVITY	0.001f
-#define ITEM_SMALLHEART	1
+#define ITEM_GRAVITY	0.0005f
+#define ITEM_SMALLHEART	6
+#define ITEM_SMALLHEART_VX	0.01f
+#define ITEM_SMALLHEART_VX_MAX	0.09f
+#define ITEM_SMALLHEART_VX_MIN	-0.09f
 
 class Item : public CGameObject
 {
 	//int typeOfItem;
+	bool isShake = true;
+	int shake = 1;
+	float gravity = ITEM_GRAVITY;
 public:
 	Item(int type);
 

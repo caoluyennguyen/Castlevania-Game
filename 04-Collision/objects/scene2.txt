@@ -23,7 +23,9 @@
 107	textures\blackknight64-right-fix.png	255	0	128
 108	textures\bat-zombie-enemies-right-fix.png	255	0	128
 109	textures\bat-zombie-enemies-left.png	255	0	128
-110	textures\wall.png	255	0	255
+110	textures\item\SmallHeart.png	255	0	255
+111	textures\item\money.png	255	0	255
+112	textures\wall.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -174,7 +176,15 @@
 3007	542	31	575	62	108
 
 #ELEVATOR
-4001	0	0	64	16	110
+6001	0	0	64	16	112
+
+#SMALLHEART
+4001	0	0	16	16	110
+
+#MONEY
+5001	0	0	30	30	111
+5002	30	0	60	30	111
+5003	60	0	90	30	111
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -227,6 +237,10 @@
 601	70001	100
 #CHAIN
 602	80001	100
+# MONEY
+603	5001	100	5002	100	5003	100
+# SMALLHEART
+604	4001	100
 
 #WEAPON
 #AXE
@@ -249,7 +263,7 @@
 2002	3005	100	3006	100	3007	100
 
 #ELEVATOR
-3000	4001	100
+3000	6001	100
 
 #
 # id	ani1	ani2	ani3
@@ -261,8 +275,8 @@
 2	200	400
 # WHIP
 3	300	301
-# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
-4	500	600	601	602
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART
+4	500	801	603	604	801	603	604
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # BLACKKNIGHT
@@ -302,9 +316,15 @@
 1	0	158	0	64	384
 
 # ITEM
-# item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
+# item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART
 # type	x	y	ani_set_id	type_of_item
-# 4	176	255	4	3
+4	918	32	4	6
+4	790	32	4	6
+4	662	32	4	6
+4	534	32	4	6
+4	406	32	4	6
+4	278	32	4	5
+4	150	32	4	6
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
