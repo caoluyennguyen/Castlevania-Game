@@ -12,7 +12,7 @@ class HeadUpDisplay
 {
 private:
 	static HeadUpDisplay* __instance;
-	int x, y, score, time;
+	int x, y, score, time, stage;
 
 	CSprite* current, * lose, * boss, * weapon;
 	vector<LPSPRITE> currentHP, loseHP, bossHP;
@@ -21,13 +21,16 @@ private:
 	string headUpDetails;
 	ID3DXFont* font;
 public:
-	HeadUpDisplay() {};
+	HeadUpDisplay();
 	HeadUpDisplay(CGame* game);
 	void LoadResource();
 	void UnLoadResource();
 	void Update(DWORD dt);
 	void Render();
 
-	static HeadUpDisplay* GetInstance(CGame* game);
+	static HeadUpDisplay* GetInstance();
+
+	void AddScore(int score) { this->score += score; }
+	void SetStage(int stage) { this->stage = stage; }
 };
 

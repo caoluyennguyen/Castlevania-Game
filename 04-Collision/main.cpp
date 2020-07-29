@@ -179,7 +179,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();
-	headUpDisplay = HeadUpDisplay::GetInstance(game);
+	headUpDisplay = HeadUpDisplay::GetInstance();
 
 	game->Load(L"mario-sample.txt");
 	

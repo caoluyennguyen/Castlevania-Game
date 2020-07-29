@@ -126,6 +126,7 @@
     <ClInclude Include="BlackKnight.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="DownStair.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Goomba.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HeadUpDisplay.h" />
     <ClInclude Include="Input.h" />
@@ -162,6 +164,7 @@
     <ClCompile Include="BlackKnight.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Candle.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DownStair.cpp" />
     <ClCompile Include="Elevator.cpp" />
@@ -170,6 +173,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="HeadUpDisplay.cpp" />
     <ClCompile Include="Input.cpp" />

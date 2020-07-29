@@ -10,6 +10,7 @@
 #include "Item.h"
 #include "Tilemap.h"
 #include "Weapon.h"
+#include "Grid.h"
 
 class CPlayScene : public CScene
 {
@@ -18,8 +19,10 @@ protected:
 	//Whip* whip;
 	Weapon* weapon;
 	Tilemap* tilemap;
+	Grid* grid;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> coObjects;
 
 	void _ParseSection_TILEMAP(string line);
 	void _ParseSection_TEXTURES(string line);
@@ -27,6 +30,7 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_GRID(string line);
 public:
 	CPlayScene(int id, LPCWSTR filePath);
 
@@ -34,8 +38,6 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
-	void WhipUpdate(DWORD dt, int x, int y);
 
 	friend class CPlayScenceKeyHandler;
 };

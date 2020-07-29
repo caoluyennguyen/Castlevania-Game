@@ -19,6 +19,9 @@
     <Filter Include="Objects\Enemies">
       <UniqueIdentifier>{cbce5d7f-0560-46e3-9ae9-bd630bd13bad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SpacePartitioning">
+      <UniqueIdentifier>{87009565-d362-411c-9186-bdf8446f4a9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -123,6 +126,12 @@
     <ClInclude Include="Boss.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files\SpacePartitioning</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files\SpacePartitioning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -223,6 +232,12 @@
     </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Header Files\SpacePartitioning</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Header Files\SpacePartitioning</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

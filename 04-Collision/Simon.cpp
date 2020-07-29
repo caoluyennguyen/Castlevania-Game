@@ -22,6 +22,7 @@
 #include "Zombie.h"
 #include "Boss.h"
 #include "Utils.h"
+#include "HeadUpDisplay.h"
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -32,28 +33,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!this->isStepOnStair) vy += SIMON_GRAVITY * dt;
 	else {
 		this->isOnGround = false;
-
-		// walk on stair
-		/*distanceWalkOnStair += distanceWalkOnStair + abs(vy) * dt;
-		DebugOut(L"DoCaoDiDuoc = %f . dy = %f . y = %f\n", distanceWalkOnStair, dy, this->y);
-		if (distanceWalkOnStair < 8.0f && distanceWalkOnStair != 0)
-		{
-			if (isStandUpStair)
-			{
-				x += abs(distanceWalkOnStair - 8.0f);
-				y -= abs(distanceWalkOnStair - 8.0f);
-			}
-		}
-		else if (distanceWalkOnStair > 8.0f && distanceWalkOnStair != 0)
-		{
-			if (isStandUpStair)
-			{
-				x += abs(distanceWalkOnStair - 8.0f * (distanceWalkOnStair / 8.0f));
-				y -= abs(distanceWalkOnStair - 8.0f * (distanceWalkOnStair / 8.0f));
-			}
-		}
-
-		distanceWalkOnStair = 0;*/
 	}
 
 	// Update whip
@@ -144,6 +123,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else SetState(SIMON_STATE_GET_ITEM_RIGHT);
 				}
 				
+				HeadUpDisplay::GetInstance()->AddScore(100);
 				e->obj->enable = false;
 			}
 			if (dynamic_cast<CPortal*>(e->obj))
@@ -606,6 +586,7 @@ void Simon::SetState(int state)
 		isStepOnStair = true;
 		isStandUpStair = true;
 		isStandDownStair = false;
+		animation_set->at(SIMON_GO_UPSTAIR_RIGHT)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_GO_UPSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
@@ -614,6 +595,7 @@ void Simon::SetState(int state)
 		isStepOnStair = true;
 		isStandUpStair = true;
 		isStandDownStair = false;
+		animation_set->at(SIMON_GO_UPSTAIR_LEFT)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_GO_DOWNSTAIR_RIGHT:
 		vx = SIMON_WALKING_SPEED;
@@ -622,6 +604,7 @@ void Simon::SetState(int state)
 		isStepOnStair = true;
 		isStandUpStair = false;
 		isStandDownStair = true;
+		animation_set->at(SIMON_GO_DOWNSTAIR_RIGHT)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_GO_DOWNSTAIR_LEFT:
 		vx = -SIMON_WALKING_SPEED;
@@ -630,26 +613,31 @@ void Simon::SetState(int state)
 		isStepOnStair = true;
 		isStandUpStair = false;
 		isStandDownStair = true;
+		animation_set->at(SIMON_GO_DOWNSTAIR_LEFT)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_STAND_ON_UPSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
 		isStepOnStair = true;
+		animation_set->at(SIMON_GO_UPSTAIR_RIGHT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_UPSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
 		isStepOnStair = true;
+		animation_set->at(SIMON_GO_UPSTAIR_LEFT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
 		isStepOnStair = true;
+		animation_set->at(SIMON_GO_DOWNSTAIR_RIGHT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
 		isStepOnStair = true;
+		animation_set->at(SIMON_GO_DOWNSTAIR_LEFT)->resetAnimation();
 		break;
 	}
 }

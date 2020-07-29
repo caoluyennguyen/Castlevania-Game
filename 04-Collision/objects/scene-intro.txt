@@ -288,16 +288,9 @@
 4	942	250	4	3
 4	1198	270	4	0
 
-# UPSTAIR
-# type	l	t	ani_set_id	r	b	nx
-# 6	276	126	0	326	176	-1
-# 6	376	126	0	426	176	1
-
-# DOWNSTAIR
-# type	l	t	ani_set_id	r	b	nx
-# 7	176	226	0	226	286	1
-# 7	476	226	0	526	286	-1
-
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	1354	100	0	1454	300	2
+
+[GRID]
+textures\map\GridSceneIntro.txt

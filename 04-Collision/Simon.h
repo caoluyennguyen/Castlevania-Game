@@ -5,6 +5,9 @@
 
 class Simon : public CGameObject
 {
+	int score;
+	int heart;
+	int playerHP;
 	int weapon = 0;
 	int nxUpStair, nxDownStair;
 	int distanceWalkOnStair = 0;
@@ -30,9 +33,11 @@ public:
 
 	Simon() : CGameObject()
 	{
+		score = 0;
+
 		untouchable = 0;
 		whip = new Whip();
-		whip_level = 4;
+		whip_level = 2;
 		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
 
@@ -53,4 +58,14 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 
+	int GetScore() { return this->score; }
+	void AddScore(int score) { this->score += score; }
+	int GetHeart() { return this->heart; }
+	void AddHeart(int heart) { this->heart += heart; }
+	void SubtractHeart(int heart) { this->heart -= heart; }
+	int GetPlayerHP() { return playerHP; }
+	void AddPlayerHP(int playerHP) { this->playerHP += playerHP; }
+	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; }
+	int GetWeapon() { return weapon; }
+	void SetWeapon(int weapon) { this->weapon = weapon; }
 };

@@ -21,6 +21,7 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		// Calculate dx, dy 
 		CGameObject::Update(dt);
+		vy += 0.01f;
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -83,10 +84,10 @@ void Zombie::SetState(int state)
 	switch (state)
 	{
 	case ZOMBIE_STATE_WALK_LEFT:
-		//vx = -0.1f;
+		vx = -0.1f;
 		break;
 	case ZOMBIE_STATE_WALK_RIGHT:
-		//vx = 0.1f;
+		vx = 0.1f;
 		break;
 	case ZOMBIE_STATE_DIE:
 		vx = vy = 0;

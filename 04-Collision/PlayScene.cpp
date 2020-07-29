@@ -39,6 +39,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_GRID	7
 
 #define OBJECT_TYPE_SIMON	0
 #define OBJECT_TYPE_GROUND	1
@@ -58,11 +59,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SKELETON	15
 #define OBJECT_TYPE_ZOMBIE	16
 #define OBJECT_TYPE_BOSS	17
-
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
-
 
 void CPlayScene::_ParseSection_TILEMAP(string line)
 {
@@ -351,6 +350,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 }
 
+void CPlayScene::_ParseSection_GRID(string line)
+{
+	vector<string> tokens = split(line);
+
+	DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+
+	//if (tokens.size() < 2) return; // skip invalid lines - an object set must have at least id, x, y
+
+	LPCWSTR path = ToLPCWSTR(tokens[0]);
+
+	grid = new Grid(path, &objects);
+}
+
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
@@ -386,6 +398,9 @@ void CPlayScene::Load()
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
 		}
+		if (line == "[GRID]") {
+			section = SCENE_SECTION_GRID; continue;
+		}
 		if (line[0] == '[') {
 			section = SCENE_SECTION_UNKNOWN; continue;
 		}
@@ -400,6 +415,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_GRID: _ParseSection_GRID(line); break;
 		}
 	}
 
@@ -412,23 +428,6 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (objects[i]->enable)
-		{
-			coObjects.push_back(objects[i]);
-		}
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -442,6 +441,31 @@ void CPlayScene::Update(DWORD dt)
 		cx = 0;
 	}
 	CGame::GetInstance()->SetCamPos(cx, -70.0f /*cy*/);
+
+	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
+	// TO-DO: This is a "dirty" way, need a more organized way 
+
+	coObjects.clear();
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		if (objects[i]->enable)
+		{
+			coObjects.push_back(objects[i]);
+		}
+	}
+
+	/*grid->GetListObject(&coObjects);
+	coObjects.push_back(player);
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &objects);
+	}*/
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &coObjects);
+	}
 
 	if (weapon->x < cx + SCREEN_WIDTH && weapon->x > cx && weapon->y < cy + SCREEN_HEIGHT && weapon->isEnable())
 	{
@@ -462,19 +486,17 @@ void CPlayScene::Render()
 			objects[i]->Render();
 		}
 	}
-	/*if (player->GetState() == SIMON_STATE_HIT_SIT || player->GetState() == SIMON_STATE_HIT_STAND
-		|| player->GetState() == SIMON_STATE_HIT_SIT_RIGHT || player->GetState() == SIMON_STATE_HIT_STAND_RIGHT
-		|| player->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || player->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
-		|| player->GetState() == SIMON_HIT_UPSTAIR_RIGHT || player->GetState() == SIMON_HIT_UPSTAIR_LEFT)
+
+	/*grid->GetListObject(&coObjects);
+	coObjects.push_back(player);
+
+	for (int i = 0; i < coObjects.size(); i++)
 	{
-		if (player->isThrowWeapon == false)
+		if (coObjects[i]->enable)
 		{
-			whip->nx = player->nx;
-			whip->Render();
+			coObjects[i]->Render();
 		}
-		
-	}
-	else whip->enable = false;*/
+	}*/
 	
 	if (weapon->enable)
 	{
@@ -691,6 +713,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	if ((simon->GetState() == SIMON_HIT_UPSTAIR_LEFT || simon->GetState() == SIMON_HIT_UPSTAIR_RIGHT)
 		&& simon->animation_set->at(simon->state)->isOver(300) == false)
+	{
+		return;
+	}
+	if ((simon->GetState() == SIMON_GO_UPSTAIR_RIGHT || simon->GetState() == SIMON_GO_UPSTAIR_LEFT ||
+		simon->GetState() == SIMON_GO_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_GO_DOWNSTAIR_LEFT)
+		&& simon->animation_set->at(simon->state)->isOver(150) == false)
 	{
 		return;
 	}

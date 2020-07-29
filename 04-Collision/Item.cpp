@@ -155,7 +155,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<Simon*>(e->obj))
 				{
-					this->enable = false;
+					vy = 0;
 				}
 				else {
 					x += dx;

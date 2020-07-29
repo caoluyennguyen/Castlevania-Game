@@ -2,15 +2,15 @@
 
 HeadUpDisplay* HeadUpDisplay::__instance = NULL;
 
-HeadUpDisplay* HeadUpDisplay::GetInstance(CGame* game)
+HeadUpDisplay* HeadUpDisplay::GetInstance()
 {
-	if (__instance == NULL) __instance = new HeadUpDisplay(game);
+	if (__instance == NULL) __instance = new HeadUpDisplay();
 	return __instance;
 }
 
-HeadUpDisplay::HeadUpDisplay(CGame *game)
+HeadUpDisplay::HeadUpDisplay()
 {
-	this->game = game;
+	score = 0;
 	time = 0;
 	x = 105;
 	y = -38;
@@ -23,7 +23,7 @@ void HeadUpDisplay::LoadResource()
 	AddFontResourceEx(FILEPATH_FONT, FR_PRIVATE, NULL);
 
 	HRESULT hr = D3DXCreateFont(
-		game->GetDirect3DDevice(), 16, 0, FW_NORMAL, 1, false,
+		CGame::GetInstance()->GetDirect3DDevice(), 16, 0, FW_NORMAL, 1, false,
 		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
 		ANTIALIASED_QUALITY, FF_DONTCARE, L"Press Start", &font);
 
@@ -33,7 +33,10 @@ void HeadUpDisplay::LoadResource()
 		return;
 	}
 
-	headUpDetails = "SCORE-000000 TIME 0000 SCENE 00\n";
+	/*headUpDetails = "SCORE-000000 TIME 0000 STAGEu 00\n";
+	headUpDetails += "PLAYER                  -00\n";
+	headUpDetails += "ENEMY                   -00\n";*/
+	headUpDetails = "SCORE-" + to_string(0) + " TIME 0000 STAGEu 00\n";
 	headUpDetails += "PLAYER                  -00\n";
 	headUpDetails += "ENEMY                   -00\n";
 
@@ -91,7 +94,7 @@ void HeadUpDisplay::Update(DWORD dt)
 {
 	time += dt;
 
-	headUpDetails = "SCORE-000000 TIME " + to_string(time/1000) + " SCENE 00" + "\n";
+	headUpDetails = "SCORE-" + to_string(score) + " TIME " + to_string(time/1000) + " SCENE 00" + "\n";
 	headUpDetails += "PLAYER                  -00\n";
 	headUpDetails += "ENEMY                   -00\n";
 }
