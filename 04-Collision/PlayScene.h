@@ -16,7 +16,6 @@ class CPlayScene : public CScene
 {
 protected:
 	Simon* player;					// A play scene has to have player, right? 
-	//Whip* whip;
 	Weapon* weapon;
 	Tilemap* tilemap;
 	Grid* grid;

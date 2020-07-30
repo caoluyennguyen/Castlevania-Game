@@ -3,6 +3,7 @@
 Raven::Raven() : CGameObject()
 {
 	this->isEnemy = true;
+	this->isActive = true;
 	SetState(RAVEN_STATE_IDLE);
 }
 

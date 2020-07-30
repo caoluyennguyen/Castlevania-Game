@@ -7,6 +7,8 @@
 #include "Fleaman.h"
 #include "Raven.h"
 #include "Skeleton.h"
+#include "Zombie.h"
+#include "Boss.h"
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -105,6 +107,29 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					obj->SetState(SKELETON_STATE_DIE);
 				}
+			}
+		}
+		if (dynamic_cast<Zombie*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				if (this->enable)
+				{
+					obj->SetState(ZOMBIE_STATE_DIE);
+				}
+			}
+		}
+		if (dynamic_cast<Boss*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				obj->SetState(BOSS_STATE_DIE);
 			}
 		}
 	}

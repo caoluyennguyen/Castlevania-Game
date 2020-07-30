@@ -24,6 +24,14 @@
 #include "Utils.h"
 #include "HeadUpDisplay.h"
 
+Simon* Simon::__instance = NULL;
+
+Simon* Simon::GetInstance()
+{
+	if (__instance == NULL) __instance = new Simon();
+	return __instance;
+}
+
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
@@ -194,7 +202,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 						else {
 							distance = 0;
-							if (GetTickCount() - auto_start < 200)
+							if (GetTickCount() - auto_start < 290)
 							{
 								this->SetState(SIMON_GO_DOWNSTAIR_RIGHT);
 							}
@@ -233,7 +241,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 						else {
 							distance = 0;
-							if (GetTickCount() - auto_start < 200)
+							if (GetTickCount() - auto_start < 290)
 							{
 								this->SetState(SIMON_GO_DOWNSTAIR_LEFT);
 							}
@@ -419,7 +427,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
 				{
 					Skeleton* p = dynamic_cast<Skeleton*>(obj);
-					p->SetState(SKELETON_STATE_IDLE_LEFT);
+					p->isAbleToThrowBone = true;
 				}
 			}
 			if (dynamic_cast<Zombie*>(obj))
@@ -430,7 +438,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
 				{
 					Zombie* p = dynamic_cast<Zombie*>(obj);
-					p->SetState(ZOMBIE_STATE_DIE);
+					//p->SetState(ZOMBIE_STATE_DIE);
+					p->isActive = true;
 				}
 			}
 			if (dynamic_cast<Boss*>(obj))
@@ -441,7 +450,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
 				{
 					Boss* p = dynamic_cast<Boss*>(obj);
-					p->SetState(BOSS_STATE_DIE);
+					p->SetState(BOSS_STATE_FLY);
+					//p->isActive = true;
 				}
 			}
 		}

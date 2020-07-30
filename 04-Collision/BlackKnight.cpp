@@ -8,6 +8,7 @@ BlackKnight::BlackKnight(int minX, int maxX) : CGameObject()
 	this->right = rand() % (maxX - minX + 1) + minX;
 	this->vx = 0.05f;
 	this->isEnemy = true;
+	this->isActive = true;
 	SetState(BLACKKNIGHT_STATE_WALK_LEFT);
 }
 
@@ -30,7 +31,6 @@ void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	x += dx;
-
 
 	if (this->x < this->left)
 	{

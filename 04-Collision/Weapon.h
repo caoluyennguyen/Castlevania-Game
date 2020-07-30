@@ -1,6 +1,15 @@
 #pragma once
 #include "GameObject.h"
 
+#define DAGGER_LEFT 0
+#define DAGGER_RIGHT 1
+#define AXE 2
+#define BOOMERANG 3
+#define HOLYWATER 4
+#define FIRE 5
+#define BONE 6
+
+#define WEAPON_GRAVITY 0.001f
 class Weapon : public CGameObject
 {
 	int nxFlyBack;

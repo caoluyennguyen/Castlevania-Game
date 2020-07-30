@@ -201,21 +201,6 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 	}
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
-	
-	/*LPANIMATION_SET s = new CAnimationSet();
-
-	CAnimations* animations = CAnimations::GetInstance();
-
-	LPANIMATION ani = animations->Get(401);
-	s->push_back(ani);
-	ani = animations->Get(402);
-	s->push_back(ani);
-	ani = animations->Get(403);
-	s->push_back(ani);
-	ani = animations->Get(404);
-	s->push_back(ani);
-
-	CAnimationSets::GetInstance()->Add(1, s);*/
 }
 
 /*
@@ -247,11 +232,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"[ERROR] MARIO object was created before! ");
 				return;
 			}
-			obj = new Simon();
+			obj = Simon::GetInstance();
 			player = (Simon*)obj;
 			//whip = new Whip();
 			weapon = new Weapon();
-			weapon->SetState(0);
+			weapon->SetState(DAGGER_LEFT);
 			break;
 		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
 		case OBJECT_TYPE_GROUND: 
@@ -324,13 +309,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Raven();
 			break;
 		case OBJECT_TYPE_SKELETON:
-			obj = new Skeleton();
+			obj = new Skeleton(atof(tokens[4].c_str()));
 			break;
 		case OBJECT_TYPE_ZOMBIE:
-			obj = new Zombie();
+			obj = new Zombie(atof(tokens[4].c_str()));
 			break;
 		case OBJECT_TYPE_BOSS:
-			obj = new Boss();
+			obj = new Boss(player);
 			break;
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -347,6 +332,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		player->whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
 		weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
+	}
+	if (object_type == OBJECT_TYPE_SKELETON)
+	{
+		Skeleton* skeleton = dynamic_cast<Skeleton*>(obj);
+		skeleton->weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
 	}
 }
 
@@ -446,7 +436,7 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	coObjects.clear();
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->enable)
 		{
@@ -464,6 +454,11 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		/*if (dynamic_cast<Boss*>(objects[i])){
+			Boss* boss = dynamic_cast<Boss*>(objects[i]);
+			boss->SetSimonPosition(player->x, player->y);
+		}*/
+		if (objects[i]->isEnemy && !objects[i]->isActive) continue;
 		objects[i]->Update(dt, &coObjects);
 	}
 
@@ -483,7 +478,9 @@ void CPlayScene::Render()
 	{
 		if (objects[i]->enable)
 		{
-			objects[i]->Render();
+			if (objects[i]->isEnemy && !objects[i]->isActive) objects[i]->RenderActiveBoundingBox();
+			else objects[i]->Render();
+			//objects[i]->RenderActiveBoundingBox();
 		}
 	}
 
@@ -616,7 +613,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else if (weapon->state == 2)
 		{
-			weapon->StartAxeFalling();
+			weapon->vy = -0.4f;
 			weapon->vx = weapon->nx * 0.1f;
 		}
 		else if (weapon->state == 4)

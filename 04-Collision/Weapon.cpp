@@ -4,13 +4,6 @@
 #include "Ground.h"
 #include "Simon.h"
 
-#define DAGGER_LEFT 0
-#define DAGGER_RIGHT 1
-#define AXE 2
-#define BOOMERANG 3
-#define HOLYWATER 4
-#define FIRE 5
-
 Weapon::Weapon() : CGameObject()
 {
 	this->enable = false;
@@ -19,6 +12,7 @@ Weapon::Weapon() : CGameObject()
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
+	if (state == AXE || state == HOLYWATER || state == BONE) vy += WEAPON_GRAVITY * dt;
 
 	if (GetTickCount() - renderHolywater > 500 && this->state == FIRE)
 	{
@@ -40,18 +34,6 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			nx = nxFlyBack;
 			vx = vxFlyBack;
 		}
-
-		if (this->state == AXE)
-		{
-			if (GetTickCount() - axeFalling > 400)
-			{
-				vy += 0.02f;
-			}
-			else vy = -0.2f;
-		}
-		
-		x += dx;
-		y += dy;
 	}
 	else
 	{
@@ -78,10 +60,6 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					this->SetState(FIRE);
 				}
-				else {
-					x += dx;
-					y += dy;
-				}
 			}
 			else if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Candle
 			{
@@ -99,21 +77,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					nx = nxFlyBack;
 					vx = vxFlyBack;
 				}
-
-				if (this->state == AXE)
-				{
-					if (GetTickCount() - axeFalling > 400)
-					{
-						vy += 0.02f;
-					}
-					else vy = -0.2f;
-				}
-
-				x += dx;
-				y += dy;
 			}
 		}
 	}
+
+	x += dx;
+	y += dy;
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -163,8 +132,7 @@ void Weapon::SetState(int state)
 		vy = 0;
 		break;
 	case AXE:
-		vx = 0.1;
-		vy = 0.2;
+		vx = 0.1f;
 		break;
 	case BOOMERANG:
 		vy = 0;
@@ -176,6 +144,8 @@ void Weapon::SetState(int state)
 		break;
 	case FIRE:
 		vx = vy = 0;
+		break;
+	case BONE:
 		break;
 	default:
 		break;

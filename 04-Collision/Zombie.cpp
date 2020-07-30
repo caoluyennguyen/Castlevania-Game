@@ -1,10 +1,12 @@
 #include "Zombie.h"
 #include "Ground.h"
 
-Zombie::Zombie() : CGameObject()
+Zombie::Zombie(int state) : CGameObject()
 {
+	isActive = false;
 	this->isEnemy = true;
-	SetState(ZOMBIE_STATE_WALK_LEFT);
+	this->isActive = true;
+	SetState(state);
 }
 
 void Zombie::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -22,6 +24,11 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// Calculate dx, dy 
 		CGameObject::Update(dt);
 		vy += 0.01f;
+
+		if (isActive) {
+			if (state == ZOMBIE_STATE_WALK_LEFT) vx = -0.1f;
+			else vx = 0.1f;
+		}
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -84,10 +91,8 @@ void Zombie::SetState(int state)
 	switch (state)
 	{
 	case ZOMBIE_STATE_WALK_LEFT:
-		vx = -0.1f;
 		break;
 	case ZOMBIE_STATE_WALK_RIGHT:
-		vx = 0.1f;
 		break;
 	case ZOMBIE_STATE_DIE:
 		vx = vy = 0;
@@ -104,5 +109,5 @@ void Zombie::GetActiveBoundingBox(float& left, float& top, float& right, float& 
 	left = x - 100;
 	top = y - 100;
 	right = left + 10;
-	bottom = top + 600;
+	bottom = top + 200;
 }

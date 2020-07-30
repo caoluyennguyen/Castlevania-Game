@@ -6,6 +6,7 @@ VampireBat::VampireBat() : CGameObject()
 {
 	vx = vy = 0;
 	isEnemy = true;
+	isActive = true;
 	timeToFly = GetTickCount();
 	maxHeightToFly = x + 96;
 

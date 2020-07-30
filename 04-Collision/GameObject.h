@@ -60,6 +60,7 @@ public:
 
 	bool enable = true;
 	bool isEnemy = false;
+	bool isActive = false;
 
 	DWORD dt;
 

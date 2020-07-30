@@ -345,7 +345,7 @@
 # ENEMIES
 # type	x	y	ani_set_id
 14	544	64	6
-15	1310	256	7
+15	1310	256	7	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

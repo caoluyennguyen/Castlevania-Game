@@ -4,6 +4,7 @@ Ghost::Ghost() : CGameObject()
 {
 	this->fly = 1;
 	this->isEnemy = true;
+	this->isActive = true;
 	SetState(GHOST_STATE_IDLE);
 }
 

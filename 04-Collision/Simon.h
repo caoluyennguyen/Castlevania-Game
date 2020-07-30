@@ -13,6 +13,7 @@ class Simon : public CGameObject
 	int distanceWalkOnStair = 0;
 	bool isOnGround = false;
 	DWORD untouchable_start;
+	static Simon* __instance;
 public:
 	Whip *whip;
 	int whip_level; // 0: normal, 2: chain, 4: long chain
@@ -31,6 +32,7 @@ public:
 	bool isMoveToStair = false;
 	DWORD auto_start;
 
+	static Simon* GetInstance();
 	Simon() : CGameObject()
 	{
 		score = 0;

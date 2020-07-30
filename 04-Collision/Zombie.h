@@ -11,7 +11,7 @@
 class Zombie : public CGameObject
 {
 public:
-	Zombie();
+	Zombie(int state);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

@@ -267,8 +267,9 @@
 1000	2001	100	2002	100
 
 # BOSS
-2000	3001	100	3002	100	3003	100
-2001	3002	100
+2000	3002	100	3003	100
+2001	3001	100
+2002	3002	100
 
 #
 # id	ani1	ani2	ani3
@@ -287,7 +288,7 @@
 # ZOMBIE
 6	1000	400
 # BOSS
-7	2000	2001	401
+7	2001	2002	401	2000
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -306,7 +307,7 @@
 10	1464	192	2	1
 
 # SIMON
-0	84	160	1
+0	1200	160	1
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id
@@ -314,8 +315,10 @@
 
 # ENEMIES
 # type	x	y	ani_set_id
-16	528	186	6
-17	800	80	7
+# Zomb	x	y	ani_set_id	state: 0: left, 2: right
+16	528	186	6	0
+# Boss
+17	1229	32	7
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

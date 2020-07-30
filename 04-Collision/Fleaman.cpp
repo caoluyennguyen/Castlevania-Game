@@ -6,6 +6,7 @@
 Fleaman::Fleaman() : CGameObject()
 {
 	this->isEnemy = true;
+	this->isActive = true;
 	SetState(FLEAMAN_STATE_IDLE_RIGHT);
 }
 
