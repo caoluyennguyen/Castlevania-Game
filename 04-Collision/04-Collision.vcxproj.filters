@@ -132,6 +132,9 @@
     <ClInclude Include="Cell.h">
       <Filter>Header Files\SpacePartitioning</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Header Files\SpacePartitioning</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

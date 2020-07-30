@@ -11,6 +11,10 @@
 
 class Raven : public CGameObject
 {
+	int hp;
+	DWORD startWaiting;
+	DWORD endWaiting;
+	bool isWaiting = false;
 public:
 	Raven();
 
@@ -19,5 +23,9 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetState(int state);
+
+	void LoseHp(int hp) { this->hp -= hp; }
+	void StartWaiting() { isWaiting = true; startWaiting = GetTickCount(); }
+	void CalculateVelocity();
 };
 

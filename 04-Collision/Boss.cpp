@@ -68,6 +68,8 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!isFlyToPoint)
 	{
 		isFlyToPoint = true;
+
+		// Calculate point fly
 		if (count == 1)
 		{
 			isFlyToSimon = true;
@@ -77,6 +79,8 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			point = GetRandomPoint();
 		}
+
+		// Calculate velocity
 		CalculateVelocity();
 	}
 	else

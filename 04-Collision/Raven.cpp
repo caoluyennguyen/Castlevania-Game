@@ -1,4 +1,5 @@
 #include "Raven.h"
+#include "Simon.h"
 
 Raven::Raven() : CGameObject()
 {
@@ -17,26 +18,29 @@ void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//if (this->GetState() != RAVEN_STATE_DIE)
-	//{
-	//	// Calculate dx, dy 
-	//	CGameObject::Update(dt);
-	//	x += dx;
-	//	y += dy;
+	CGameObject::Update(dt);
+	x += dx;
+	y += dy;
 
-	//	if (this->GetState() == RAVEN_STATE_FLY_LEFT)
-	//	{
-	//		vy += fly * 0.002f;
-	//		if (vy > 0.05f) fly = -1;
-	//		else if (vy < -0.05f) fly = 1;
-	//	}
-	//}
-	//else {
-	//	if (animation_set->at(RAVEN_STATE_DIE)->isOver(300))
-	//	{
-	//		this->enable = false;
-	//	}
-	//}
+	if (!isWaiting)
+	{
+		if (GetTickCount() - endWaiting > 1000)
+		{
+			StartWaiting();
+		}
+	}
+	else {
+		if (GetTickCount() - startWaiting > 1000) {
+			isWaiting = false;
+			endWaiting = GetTickCount();
+		}
+		else {
+			vx = vy = 0;
+			return;
+		}
+	}
+
+	CalculateVelocity();
 }
 
 void Raven::Render()
@@ -78,4 +82,37 @@ void Raven::GetActiveBoundingBox(float& left, float& top, float& right, float& b
 	top = y;
 	right = left - 10;
 	bottom = top + 600;
+}
+
+void Raven::CalculateVelocity()
+{
+	float dx = abs(x - Simon::GetInstance()->x);
+	float dy = abs(y - Simon::GetInstance()->y);
+
+	int nx, ny;
+
+	if (x < Simon::GetInstance()->x) {
+		nx = 1;
+		state = RAVEN_STATE_FLY_RIGHT;
+	}
+	else {
+		nx = -1;
+		state = RAVEN_STATE_FLY_LEFT;
+	}
+
+	if (y < Simon::GetInstance()->y)
+		ny = 1;
+	else
+		ny = -1;
+
+	if (dx < 10 && dy < 10)
+	{
+		vx = nx * dx / 250;
+		vy = ny * dy / 250;
+	}
+	else
+	{
+		vx = nx * dx / 1000;
+		vy = ny * dy / 1000;
+	}
 }

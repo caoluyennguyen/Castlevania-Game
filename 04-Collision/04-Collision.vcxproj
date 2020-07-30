@@ -131,6 +131,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="DownStair.h" />
     <ClInclude Include="Elevator.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fleaman.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DownStair.cpp" />
     <ClCompile Include="Elevator.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fleaman.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
