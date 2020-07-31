@@ -37,6 +37,7 @@ public:
 	static Simon* GetInstance();
 	Simon() : CGameObject()
 	{
+		playerHP = 16;
 		score = 0;
 
 		untouchable = 0;

@@ -1,5 +1,6 @@
 #include "Boss.h"
 #include "Whip.h"
+#include "HeadUpDisplay.h"
 
 Boss::Boss(Simon *simon) : CGameObject()
 {
@@ -25,6 +26,7 @@ void Boss::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->state == BOSS_STATE_IDLE) return;
+	HeadUpDisplay::GetInstance()->SetBossHP(hp);
 
 	CGameObject::Update(dt);
 	/*for (UINT i = 0; i < coObjects->size(); i++)

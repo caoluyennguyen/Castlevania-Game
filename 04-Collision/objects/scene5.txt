@@ -330,7 +330,7 @@
 # Boss
 17	1229	32	7
 # BreakableWall
-18	1200	250	8
+18	1200	280	8
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

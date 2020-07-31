@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "HeadUpDisplay.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -424,6 +425,9 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	if (!flag) return;
+
+	// Update Simon HP
+	HeadUpDisplay::GetInstance()->SetSimonHP(player->GetPlayerHP());
 	
 	// Update camera to follow mario
 	float cx, cy;

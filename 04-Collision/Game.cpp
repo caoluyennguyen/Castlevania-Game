@@ -400,4 +400,5 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 	HeadUpDisplay::GetInstance()->LoadResource();
+	HeadUpDisplay::GetInstance()->SetScene(scene_id);
 }

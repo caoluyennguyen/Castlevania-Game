@@ -13,6 +13,7 @@ class HeadUpDisplay
 private:
 	static HeadUpDisplay* __instance;
 	int x, y, score, time, stage;
+	int simonHp, bossHp, simonHeart, scene;
 
 	CSprite* current, * lose, * boss, * weapon;
 	vector<LPSPRITE> currentHP, loseHP, bossHP;
@@ -32,5 +33,9 @@ public:
 
 	void AddScore(int score) { this->score += score; }
 	void SetStage(int stage) { this->stage = stage; }
+
+	void SetSimonHP(int hp) { this->simonHp = hp; }
+	void SetBossHP(int hp) { this->bossHp = hp; }
+	void SetScene(int scene) { this->scene = scene; }
 };
 

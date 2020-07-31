@@ -12,6 +12,7 @@ HeadUpDisplay::HeadUpDisplay()
 {
 	score = 0;
 	time = 0;
+	bossHp = 0;
 	x = 105;
 	y = -38;
 }
@@ -72,12 +73,23 @@ void HeadUpDisplay::Render()
 	}
 	
 	//Draw image
-	for (int i = 0; i < 8; i++)
+	// Simon hp
+	for (int i = 0; i < simonHp; i++)
 	{
 		currentHP[i]->Draw(x + i * 9, y, 255, 0);
-		loseHP[i]->Draw(x + (15-i) * 9, y, 255, 0);
+	}
+	for (int i = simonHp; i < 16; i++)
+	{
+		loseHP[i]->Draw(x + (15 - i) * 9, y, 255, 0);
+	}
+	// Boss hp
+	for (int i = 0; i < bossHp; i++)
+	{
 		bossHP[i]->Draw(x + i * 9, y + 15, 255, 0);
-		loseHP[i]->Draw(x + (15 - i) * 9, y + 15, 255 , 0);
+	}
+	for (int i = bossHp; i < 16; i++)
+	{
+		loseHP[i]->Draw(x + (15 - i) * 9, y + 15, 255, 0);
 	}
 
 	weapon->Draw(288, -38, 255, 0);
@@ -87,8 +99,8 @@ void HeadUpDisplay::Update(DWORD dt)
 {
 	time += dt;
 
-	headUpDetails = "SCORE-" + to_string(score) + " TIME " + to_string(time/1000) + " SCENE 00" + "\n";
-	headUpDetails += "PLAYER                  -00\n";
+	headUpDetails = "SCORE-" + to_string(score) + " TIME " + to_string(time/1000) + " SCENE 0" + to_string(scene) + "\n";
+	headUpDetails += "PLAYER                  -0" + to_string(simonHeart) + "\n";
 	headUpDetails += "ENEMY                   -00\n";
 }
 
