@@ -125,6 +125,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BlackKnight.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BreakableWall.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="debug.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="UpStair.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VampireBat.h" />
+    <ClInclude Include="WallPiece.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="Zombie.h" />
@@ -164,6 +166,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BlackKnight.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BreakableWall.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="debug.cpp" />
@@ -194,6 +197,7 @@
     <ClCompile Include="UpStair.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VampireBat.cpp" />
+    <ClCompile Include="WallPiece.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Whip.cpp" />
     <ClCompile Include="Zombie.cpp" />

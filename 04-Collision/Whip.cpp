@@ -9,6 +9,7 @@
 #include "Skeleton.h"
 #include "Zombie.h"
 #include "Boss.h"
+#include "BreakableWall.h"
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -130,6 +131,16 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
 			{
 				obj->SetState(BOSS_STATE_DIE);
+			}
+		}
+		if (dynamic_cast<BreakableWall*>(obj))
+		{
+			float left, top, right, bottom;
+			obj->GetBoundingBox(left, top, right, bottom);
+
+			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
+			{
+				obj->SetState(BREAK);
 			}
 		}
 	}

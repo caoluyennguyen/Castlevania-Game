@@ -5,7 +5,7 @@ Zombie::Zombie(int state) : CGameObject()
 {
 	isActive = false;
 	this->isEnemy = true;
-	this->isActive = true;
+	//this->isActive = true;
 	SetState(state);
 }
 

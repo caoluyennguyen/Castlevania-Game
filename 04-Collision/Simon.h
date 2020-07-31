@@ -12,10 +12,12 @@ class Simon : public CGameObject
 	int nxUpStair, nxDownStair;
 	int distanceWalkOnStair = 0;
 	bool isOnGround = false;
+	bool isTouchUpStair = false;
+	bool isTouchDownStair = false;
 	DWORD untouchable_start;
 	static Simon* __instance;
 public:
-	Whip *whip;
+	Whip* whip = NULL;
 	int whip_level; // 0: normal, 2: chain, 4: long chain
 	int untouchable;
 	int distance = 0;
@@ -70,4 +72,6 @@ public:
 	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; }
 	int GetWeapon() { return weapon; }
 	void SetWeapon(int weapon) { this->weapon = weapon; }
+
+	void Unload() { whip = new Whip(); }
 };

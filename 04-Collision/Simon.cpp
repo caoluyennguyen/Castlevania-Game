@@ -138,6 +138,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				break;
 			}
 			if (dynamic_cast<Elevator*>(e->obj))
 			{
@@ -173,12 +174,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (dynamic_cast<UpStair*>(obj))
 		{
+			//if (isTouchUpStair) continue;
+
 			if (obj->nx != this->nx); // if simon is back to stair do something
 			float left, top, right, bottom;
 			obj->GetBoundingBox(left, top, right, bottom);
 
 			if (this->CheckCollision(left, top, right, bottom))
 			{
+				//isTouchUpStair = true;
 				if (this->isOnGround) {
 					this->isAbleToStepDownStair = true;
 					this->nxUpStair = obj->nx;
@@ -198,7 +202,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							auto_start = GetTickCount();
-							return;
+							//return;
 						}
 						else {
 							distance = 0;
@@ -237,7 +241,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (abs(distance) > dx) this->x += dx;
 							else this->x += distance;
 							auto_start = GetTickCount();
-							return;
+							//return;
 						}
 						else {
 							distance = 0;
@@ -268,15 +272,20 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else {
 				this->isAbleToMoveToStair = false;
 				this->isAbleToStepDownStair = false;
+				//this->isTouchUpStair = false;
 			}
 		}
 		if (dynamic_cast<DownStair*>(obj))
 		{
+			//if (isTouchDownStair) continue;
+
 			float left, top, right, bottom;
 			obj->GetBoundingBox(left, top, right, bottom);
 
 			if (this->CheckCollision(left, top, right, bottom))
 			{
+				//isTouchDownStair = true;
+
 				if (this->isOnGround) {
 					this->nxDownStair = obj->nx;
 					this->nxUpStair = -obj->nx;
@@ -298,7 +307,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							auto_start = GetTickCount(); // problem when distance = 0 simon do not move correctly
-							return;
+							//return;
 						}
 						else {
 							distance = 0;
@@ -339,7 +348,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (abs(distance) > dx) this->x += dx;
 							else this->x += distance;
 							auto_start = GetTickCount();
-							return;
+							//return;
 						}
 						else {
 							distance = 0;
@@ -372,6 +381,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else {
 				this->isAbleToMoveToStair = false;
 				this->isAbleToStepUpStair = false;
+				//this->isTouchDownStair = false;
 			}
 		}
 		if (obj->isEnemy) {
@@ -405,7 +415,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
 				{
 					Fleaman* p = dynamic_cast<Fleaman*>(obj);
-					p->SetState(FLEAMAN_STATE_JUMP_RIGHT);
+					if (p->GetState() == FLEAMAN_STATE_IDLE_RIGHT) p->SetState(FLEAMAN_STATE_JUMP_RIGHT);
 				}
 			}
 			if (dynamic_cast<Raven*>(obj))

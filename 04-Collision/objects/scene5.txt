@@ -22,6 +22,7 @@
 106	textures\bat-zombie-enemies-left.png	255	0	255
 107	textures\bat-zombie-ememies-right.png	255	0	255
 108	textures\Boss.png	255	0	255
+109	textures\BreakWall.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -195,7 +196,11 @@
 #BOSS
 3001	0	0	96	46	108
 3002	96	0	192	46	108
-3003	192	0	288	46	108	
+3003	192	0	288	46	108
+
+#BREAKABLEWALL
+4001	0	0	32	32	109
+4002	32	0	64	32	109
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -271,6 +276,9 @@
 2001	3001	100
 2002	3002	100
 
+# BREAKABLE WALL
+3000	4002	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -289,6 +297,8 @@
 6	1000	400
 # BOSS
 7	2001	2002	401	2000
+# BREAKABLE WALL
+8	3000
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -319,6 +329,8 @@
 16	528	186	6	0
 # Boss
 17	1229	32	7
+# BreakableWall
+18	1200	250	8
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

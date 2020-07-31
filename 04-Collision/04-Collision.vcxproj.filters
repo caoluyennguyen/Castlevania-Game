@@ -22,6 +22,9 @@
     <Filter Include="Header Files\SpacePartitioning">
       <UniqueIdentifier>{87009565-d362-411c-9186-bdf8446f4a9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\BreakableWall">
+      <UniqueIdentifier>{fe29f759-2b69-4185-9b4d-69362cd33018}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -135,6 +138,12 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BreakableWall.h">
+      <Filter>Objects\BreakableWall</Filter>
+    </ClInclude>
+    <ClInclude Include="WallPiece.h">
+      <Filter>Objects\BreakableWall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -244,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakableWall.cpp">
+      <Filter>Objects\BreakableWall</Filter>
+    </ClCompile>
+    <ClCompile Include="WallPiece.cpp">
+      <Filter>Objects\BreakableWall</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

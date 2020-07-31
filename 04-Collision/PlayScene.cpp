@@ -18,6 +18,7 @@
 #include "Skeleton.h"
 #include "Zombie.h"
 #include "Boss.h"
+#include "BreakableWall.h"
 
 using namespace std;
 
@@ -59,6 +60,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SKELETON	15
 #define OBJECT_TYPE_ZOMBIE	16
 #define OBJECT_TYPE_BOSS	17
+#define OBJECT_TYPE_BREAKABLE_WALL	18
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -234,7 +236,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
-			//whip = new Whip();
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
 			break;
@@ -317,6 +318,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_BOSS:
 			obj = new Boss(player);
 			break;
+		case OBJECT_TYPE_BREAKABLE_WALL:
+			obj = new BreakableWall();
+			break;
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -333,7 +337,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player->whip->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WHIP));
 		weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
 	}
-	if (object_type == OBJECT_TYPE_SKELETON)
+	else if (object_type == OBJECT_TYPE_SKELETON)
 	{
 		Skeleton* skeleton = dynamic_cast<Skeleton*>(obj);
 		skeleton->weapon->SetAnimationSet(animation_sets->Get(OBJECT_TYPE_WEAPON));
@@ -355,6 +359,7 @@ void CPlayScene::_ParseSection_GRID(string line)
 
 void CPlayScene::Load()
 {
+	flag = true;
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
 	ifstream f;
@@ -418,6 +423,8 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
+	if (!flag) return;
+	
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -454,10 +461,6 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		/*if (dynamic_cast<Boss*>(objects[i])){
-			Boss* boss = dynamic_cast<Boss*>(objects[i]);
-			boss->SetSimonPosition(player->x, player->y);
-		}*/
 		if (objects[i]->isEnemy && !objects[i]->isActive) continue;
 		objects[i]->Update(dt, &coObjects);
 	}
@@ -508,12 +511,15 @@ void CPlayScene::Render()
 
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
-
+	for (int i = 0; i < objects.size(); i++) {
+		if (!dynamic_cast<Simon*>(objects[i])) delete objects[i];
+	}
 	objects.clear();
+	coObjects.clear();
 	player = NULL;
 	tilemap = NULL;
+	weapon = NULL;
+	grid = NULL;
 	flag = false;
 }
 
@@ -666,6 +672,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		weapon->nx = simon->nx;
 		weapon->SetState(4);
+		break;
+	case DIK_T:
+		CGame::GetInstance()->SwitchScene(1);
+		break;
+	case DIK_Y:
+		CGame::GetInstance()->SwitchScene(2);
+		break;
+	case DIK_U:
+		CGame::GetInstance()->SwitchScene(3);
+		break;
+	case DIK_I:
+		CGame::GetInstance()->SwitchScene(4);
+		break;
+	case DIK_O:
+		CGame::GetInstance()->SwitchScene(5);
+		break;
+	case DIK_P:
+		CGame::GetInstance()->SwitchScene(6);
 		break;
 	}
 }

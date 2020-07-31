@@ -5,8 +5,10 @@
 
 Fleaman::Fleaman() : CGameObject()
 {
+	this->jump = -1;
 	this->isEnemy = true;
 	this->isActive = true;
+	this->isAbleToJump = true;
 	SetState(FLEAMAN_STATE_IDLE_RIGHT);
 }
 
@@ -36,10 +38,16 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->enable = false;
 	}
 
-	/*if (this->GetState() == FLEAMAN_STATE_JUMP_RIGHT)
+	/*if (state != FLEAMAN_STATE_IDLE_RIGHT)
 	{
-		vy += jump * 0.01f;
-		if (vy < -0.025f) jump = 1;
+		if (isAbleToJump)
+		{
+			this->SetState(FLEAMAN_STATE_JUMP_RIGHT);
+			isAbleToJump = false;
+		}
+		else {
+			isJumping = true;
+		}
 	}*/
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -70,7 +78,16 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (ny != 0) vx = vy = 0;
+				if (ny != 0) {
+					if (this->GetState() == FLEAMAN_STATE_IDLE_RIGHT) vx = vy = 0;
+					else if (this->GetState() != FLEAMAN_STATE_DIE) {
+						CalculateOrietation();
+						this->SetState(FLEAMAN_STATE_JUMP_RIGHT);
+					}
+				}
+				//jump *= -1;
+				//isAbleToJump = true;
+				//isJumping = false;
 			}
 			else if (dynamic_cast<Simon*>(e->obj) || dynamic_cast<Ghost*>(e->obj)) // if e->obj is Ground
 			{
@@ -112,12 +129,44 @@ void Fleaman::SetState(int state)
 		break;
 	case FLEAMAN_STATE_JUMP_RIGHT:
 	{
-		start_jump = GetTickCount();
-		vx = 0.2f;
-		vy = -0.02f;
+		vx = nx * 0.2f;
+		vy = -0.2f;
 		break;
 	}
 	default:
 		break;
 	}
+}
+
+void Fleaman::CalculateOrietation()
+{
+	float dx = abs(x - Simon::GetInstance()->x);
+	float dy = abs(y - Simon::GetInstance()->y);
+
+	// int nx, ny;
+
+	if (x < Simon::GetInstance()->x) {
+		this->nx = 1;
+		//state = FLEAMAN_STATE_JUMP_RIGHT;
+	}
+	else {
+		this->nx = -1;
+		//state = FLEAMAN_STATE_JUMP_LEFT;
+	}
+
+	/*if (y < Simon::GetInstance()->y)
+		ny = 1;
+	else
+		ny = -1;
+
+	if (dx < 10 && dy < 10)
+	{
+		vx = nx * dx / 250;
+		vy = ny * dy / 250;
+	}
+	else
+	{
+		vx = nx * dx / 1000;
+		vy = ny * dy / 1000;
+	}*/
 }

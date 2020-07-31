@@ -334,7 +334,7 @@
 10	150	32	2	0
 
 # SIMON
-0	900	100	1
+0	740	320	1
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b
@@ -362,7 +362,7 @@
 
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
-# 6	325	172	0	375	222	-1
+6	900	210	0	942	218	-1
 
 # DOWNSTAIR
 # type	l	t	ani_set_id	r	b	nx
@@ -371,6 +371,7 @@
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	0	64	0	32	160	4
+# 50	728	390	0	769	400	2
 
 # ENEMIES
 # type	x	y	ani_set_id	minX	maxX

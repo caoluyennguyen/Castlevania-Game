@@ -121,10 +121,10 @@ void Grid::GetListObject(vector<LPGAMEOBJECT> *listObject)
 	int i, j, k;
 	left = CGame::GetInstance()->GetCamPosX() / cellWidth;
 	top = CGame::GetInstance()->GetCamPosY() / cellWidth;
-	right = (int)(CGame::GetInstance()->GetCamPosX() + CGame::GetInstance()->GetScreenWidth()) / cellWidth;
-		//+ ((int)(CGame::GetInstance()->GetCamPosX() + CGame::GetInstance()->GetScreenWidth()) % cellWidth ? 1 : 0);
-	bottom = (int)(CGame::GetInstance()->GetCamPosY() + CGame::GetInstance()->GetScreenHeight()) / cellWidth;
-		//+ ((int)(CGame::GetInstance()->GetCamPosY() + CGame::GetInstance()->GetScreenHeight()) % cellWidth ? 1 : 0);
+	right = (int)(CGame::GetInstance()->GetCamPosX() + CGame::GetInstance()->GetScreenWidth()) / cellWidth
+		+ ((int)(CGame::GetInstance()->GetCamPosX() + CGame::GetInstance()->GetScreenWidth()) % cellWidth ? 1 : 0);
+	bottom = (int)(CGame::GetInstance()->GetCamPosY() + CGame::GetInstance()->GetScreenHeight()) / cellWidth
+		+ ((int)(CGame::GetInstance()->GetCamPosY() + CGame::GetInstance()->GetScreenHeight()) % cellWidth ? 1 : 0);
 
 	LPGAMEOBJECT obj;
 
@@ -133,13 +133,13 @@ void Grid::GetListObject(vector<LPGAMEOBJECT> *listObject)
 		return;
 	}
 
-	if (right > numRow)
+	if (right > numCol)
 	{
-		right = numRow;
+		right = numCol;
 	}
-	if (bottom > numCol)
+	if (bottom > numRow)
 	{
-		bottom = numCol;
+		bottom = numRow;
 	}
 	if (left < 0)
 	{
