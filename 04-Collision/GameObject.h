@@ -56,9 +56,11 @@ public:
 
 	int nx;
 
+	int id;
 	int state;
-
+	
 	bool enable = true;
+	bool isHide = false;
 	bool isEnemy = false;
 	bool isActive = false;
 
@@ -74,6 +76,7 @@ public:
 	bool isEnable() { return this->enable; }
 
 	int GetState() { return this->state; }
+	void SetId(int id) { this->id = id; }
 
 	void RenderBoundingBox();
 	void RenderActiveBoundingBox();

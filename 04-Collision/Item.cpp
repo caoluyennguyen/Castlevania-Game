@@ -15,49 +15,49 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	switch (this->state)
 	{
-	case 0:
+	case DAGGER:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 18;
 		break;
-	case 1:
+	case AXE:
 		left = x;
 		top = y;
 		right = x + 30;
 		bottom = y + 28;
-	case 2:
+	case HEART:
 		left = x;
 		top = y;
 		right = x + 24;
 		bottom = y + 20;
-	case 3:
+	case CHAIN:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 32;
-	case 4:
+	case BOOMERANG:
 		left = x;
 		top = y;
 		right = x + 32;
-		bottom = y + 18;
+		bottom = y + 28;
 		break;
-	case 5:
+	case MONEY:
 		left = x;
 		top = y;
 		right = x + 30;
-		bottom = y + 28;
-	case 6:
+		bottom = y + 30;
+	case SMALLHEART:
 		left = x;
 		top = y;
 		right = x + 16;
 		bottom = y + 16;
-	case 7:
+	case TRIPPLESHOT:
 		left = x;
 		top = y;
 		right = x + 28;
 		bottom = y + 28;
-	case 8:
+	case HOLYWATER:
 		left = x;
 		top = y;
 		right = x + 28;

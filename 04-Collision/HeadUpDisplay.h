@@ -7,16 +7,19 @@
 #include "PlayScene.h"
 
 #define FILEPATH_FONT L"Font\\prstart.ttf"
+#define TIME_PLAY 1000
 
 class HeadUpDisplay
 {
 private:
 	static HeadUpDisplay* __instance;
-	int x, y, score, time, stage;
+	int x, y, score, time, stage, weaponId;
 	int simonHp, bossHp, simonHeart, scene;
+	string str_score, str_time, str_simonHeart, str_scene;
 
 	CSprite* current, * lose, * boss, * weapon;
 	vector<LPSPRITE> currentHP, loseHP, bossHP;
+	vector<LPSPRITE> weaponIcon;
 
 	CGame* game;
 	string headUpDetails;
@@ -37,5 +40,7 @@ public:
 	void SetSimonHP(int hp) { this->simonHp = hp; }
 	void SetBossHP(int hp) { this->bossHp = hp; }
 	void SetScene(int scene) { this->scene = scene; }
+	void SetWeapon(int weapon) { this->weaponId = weapon; }
+	void SetHeart(int heart) { this->simonHeart = heart; }
 };
 

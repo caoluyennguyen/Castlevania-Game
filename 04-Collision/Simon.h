@@ -14,6 +14,7 @@ class Simon : public CGameObject
 	bool isOnGround = false;
 	bool isTouchUpStair = false;
 	bool isTouchDownStair = false;
+	bool isFightingBoss = false;
 	DWORD untouchable_start;
 	static Simon* __instance;
 public:
@@ -38,11 +39,12 @@ public:
 	Simon() : CGameObject()
 	{
 		playerHP = 16;
+		heart = 16;
 		score = 0;
 
 		untouchable = 0;
 		whip = new Whip();
-		whip_level = 2;
+		whip_level = 0;
 		SetState(SIMON_STATE_IDLE_RIGHT);
 	}
 
@@ -73,6 +75,7 @@ public:
 	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; }
 	int GetWeapon() { return weapon; }
 	void SetWeapon(int weapon) { this->weapon = weapon; }
+	bool IsFightingBoss() { return this->isFightingBoss; }
 
 	void Unload() { whip = new Whip(); }
 };

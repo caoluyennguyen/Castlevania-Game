@@ -25,6 +25,9 @@
     <Filter Include="Objects\BreakableWall">
       <UniqueIdentifier>{fe29f759-2b69-4185-9b4d-69362cd33018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\TileMap">
+      <UniqueIdentifier>{d9c978a0-f960-4735-9018-7ad71fdc7e44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -84,9 +87,6 @@
     <ClInclude Include="Item.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Tilemap.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Weapon.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -144,6 +144,9 @@
     <ClInclude Include="WallPiece.h">
       <Filter>Objects\BreakableWall</Filter>
     </ClInclude>
+    <ClInclude Include="Tilemap.h">
+      <Filter>Header Files\TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -198,9 +201,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Tilemap.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
@@ -259,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="WallPiece.cpp">
       <Filter>Objects\BreakableWall</Filter>
+    </ClCompile>
+    <ClCompile Include="Tilemap.cpp">
+      <Filter>Header Files\TileMap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

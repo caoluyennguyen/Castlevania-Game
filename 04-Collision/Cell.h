@@ -5,12 +5,12 @@
 class Cell
 {
 private:
-	int objectId;
+	vector<int> listObjectId;
 	vector<CGameObject*> listObjects;
 public:
-	void Add(CGameObject* obj) { listObjects.push_back(obj); }
+	void Add(CGameObject* obj, int id) { listObjects.push_back(obj); listObjectId.push_back(id); }
 	vector<CGameObject*> GetListObjects() { return listObjects; }
-	void Clear() { listObjects.clear(); }
+	void Unload() { listObjects.clear(); }
 };
 
 typedef Cell* LPCELL;

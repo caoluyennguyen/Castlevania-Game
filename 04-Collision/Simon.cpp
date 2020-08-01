@@ -23,6 +23,7 @@
 #include "Boss.h"
 #include "Utils.h"
 #include "HeadUpDisplay.h"
+#include "BreakableWall.h"
 
 Simon* Simon::__instance = NULL;
 
@@ -121,14 +122,33 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
+				Item* item = dynamic_cast<Item*>(e->obj);
+				//if (item->isHide) continue;
 				//StartUntouchable();
-				if (e->obj->GetState() == 3)
+				switch (e->obj->GetState())
 				{
+				case 0:
+					this->weapon = 0;
+					break;
+				case 1:
+					this->weapon = 1;
+					break;
+				case 4:
+					this->weapon = 2;
+					break;
+				case 8:
+					this->weapon = 3;
+					break;
+				case CHAIN:
 					if (nx == 1)
 					{
 						SetState(SIMON_STATE_GET_ITEM_LEFT);
 					}
 					else SetState(SIMON_STATE_GET_ITEM_RIGHT);
+					this->whip_level += 2;
+					break;
+				default:
+					break;
 				}
 				
 				HeadUpDisplay::GetInstance()->AddScore(100);
@@ -139,6 +159,29 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 				break;
+			}
+			if (dynamic_cast<BreakableWall*>(e->obj))
+			{
+				if (e->obj->GetState() == BREAK) {
+					if (e->nx != 0) x += dx;
+					if (e->ny != 0) y += dy;
+				}
+				else {
+					if (ny != 0)
+					{
+						vy = 0;
+						isOnGround = true;
+						isStepOnStair = false;
+					}
+				}
+				break;
+			}
+			if (e->obj->isEnemy && this->untouchable != 1)
+			{
+				if (e->nx != 0) x += dx;
+				//if (e->ny != 0 && !isOnGround) y += dy;
+				if (this->nx == 1) this->SetState(SIMON_STATE_INJURED_RIGHT);
+				else this->SetState(SIMON_STATE_INJURED_LEFT);
 			}
 			if (dynamic_cast<Elevator*>(e->obj))
 			{
@@ -158,12 +201,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			else isStandOnElevator = false;
-			if (e->obj->isEnemy)
-			{
-				if (e->nx != 0) x += dx;
-				//if (e->ny != 0) y += dy;
-				//this->SetState(SIMON_STATE_INJURED);
-			}
 		}
 	}
 
@@ -174,7 +211,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (dynamic_cast<UpStair*>(obj))
 		{
-			//if (isTouchUpStair) continue;
+			if (isTouchUpStair) continue;
 
 			if (obj->nx != this->nx); // if simon is back to stair do something
 			float left, top, right, bottom;
@@ -182,7 +219,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (this->CheckCollision(left, top, right, bottom))
 			{
-				//isTouchUpStair = true;
+				isTouchUpStair = true;
 				if (this->isOnGround) {
 					this->isAbleToStepDownStair = true;
 					this->nxUpStair = obj->nx;
@@ -277,14 +314,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (dynamic_cast<DownStair*>(obj))
 		{
-			//if (isTouchDownStair) continue;
+			if (isTouchDownStair) continue;
 
 			float left, top, right, bottom;
 			obj->GetBoundingBox(left, top, right, bottom);
 
 			if (this->CheckCollision(left, top, right, bottom))
 			{
-				//isTouchDownStair = true;
+				isTouchDownStair = true;
 
 				if (this->isOnGround) {
 					this->nxDownStair = obj->nx;
@@ -384,6 +421,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//this->isTouchDownStair = false;
 			}
 		}
+
 		if (obj->isEnemy) {
 			if (dynamic_cast<VampireBat*>(obj))
 			{
@@ -459,6 +497,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
 				{
+					this->isFightingBoss = true;
 					Boss* p = dynamic_cast<Boss*>(obj);
 					p->SetState(BOSS_STATE_FLY);
 					//p->isActive = true;
@@ -467,6 +506,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	isTouchUpStair = isTouchDownStair = false;
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
@@ -658,6 +698,22 @@ void Simon::SetState(int state)
 		nx = -1;
 		isStepOnStair = true;
 		animation_set->at(SIMON_GO_DOWNSTAIR_LEFT)->resetAnimation();
+		break;
+	case SIMON_STATE_INJURED_RIGHT:
+		this->playerHP -= 1;
+		vy = -0.2f;
+		vx = -0.2f;
+		StartUntouchable();
+		animation_set->at(SIMON_STATE_INJURED_RIGHT)->setStartFrameTime(GetTickCount());
+		isStepOnStair = false;
+		break;
+	case SIMON_STATE_INJURED_LEFT:
+		this->playerHP -= 1;
+		vy = -0.2f;
+		vx = 0.2f;
+		StartUntouchable();
+		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
+		isStepOnStair = false;
 		break;
 	}
 }

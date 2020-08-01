@@ -1,5 +1,6 @@
 #include "Tilemap.h"
 #include "Textures.h"
+#include "Simon.h"
 #include <iostream>
 #include <fstream>
 
@@ -18,7 +19,6 @@ Tilemap::Tilemap(int pixel, LPCWSTR bgImagePath, LPCWSTR filePath, int numCol, i
 	this->idCell = idCell;
 
 	LoadMap();
-	//Render();
 }
 
 void Tilemap::LoadMap()
@@ -97,10 +97,17 @@ void Tilemap::Render()
 
 void Tilemap::Render(int x)
 {
-	int start = x / pixel - 8;
-	//int start = x / 32 - 8;
-	//int start = x / 48 - 8;
-	int finish = start + 25;
+	int start;
+	int finish;
+	if (Simon::GetInstance()->IsFightingBoss()) {
+		start = 23;
+		finish = 48;
+	}
+	else {
+		start = x / pixel - 8;
+		finish = start + 25;
+	}
+
 	if (start < 0)
 	{
 		start = 0;
@@ -114,8 +121,6 @@ void Tilemap::Render(int x)
 		for (int j = start; j < finish; j++)
 		{
 			sprites->Get(cellId[i][j])->Draw(j*pixel, i*pixel);
-			//sprites->Get(cellId[i][j])->Draw(j*32, i*32);
-			//sprites->Get(cellId[i][j])->Draw(j*48, i*48);
 		}
 	}
 }

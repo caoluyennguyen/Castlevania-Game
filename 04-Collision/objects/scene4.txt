@@ -21,6 +21,11 @@
 105	textures\item\Rect.png	255	0	255
 106	textures\enemies2-left.png	255	0	255
 107	textures\enemies2-right.png	255	0	255
+110	textures\item\SmallHeart.png	255	0	255
+111	textures\item\money.png	255	0	255
+112	textures\wall.png	255	0	255
+113	textures\item\TripleShot.png	255	0	255
+114	textures\item\HolyWater.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -110,7 +115,7 @@
 #injured right
 10711	420	64	480	128	40
 #injured left
-10712	0	64	60	128	40
+10811	0	64	60	128	0
 
 #CANDLE
 20001	0	0	16	32	10
@@ -201,6 +206,20 @@
 3001	193	0	226	63	106
 3002	226	0	258	63	106
 
+#MONEY
+5001	0	0	30	30	111
+5002	30	0	60	30	111
+5003	60	0	90	30	111
+
+#TRIPPLESHOT
+6001	0	0	28	28	113
+
+#HOLYWATER
+7001	0	0	28	28	114
+
+#SMALLHEART
+8001	0	0	16	16	110
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -231,7 +250,7 @@
 124	10511	100
 125	10611	100
 126	10711	100
-127	10712	100
+127	10811	100
 
 # CANDLE
 200	20001	100	20002	100
@@ -258,6 +277,14 @@
 601	70001	100
 # CHAIN
 602	80001	100
+# MONEY
+603	5001	100	5002	100	5003	100
+# SMALLHEART
+604	8001	100
+# TRIPPLESHOT
+605	6001	100
+# HOLYWATER
+606	7001	100
 
 # WEAPON
 # AXE
@@ -287,8 +314,8 @@
 2	200	400
 # WHIP
 3	300	301	302	303	304	305
-# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
-4	500	600	601	602
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART, 7 = TRIPPLESHOT, 8 = HOLYWATER
+4	500	600	601	602	801	603	604	605	606
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # RAVEN
@@ -351,6 +378,16 @@
 # type	x	y	ani_set_id
 14	544	64	6
 15	1310	256	7	-1
+
+# ITEM
+4	312	128	4	2
+4	440	256	4	6
+4	568	256	4	6
+4	696	256	4	5
+4	824	192	4	6
+4	952	286	4	5
+4	1210	256	4	1
+4	1464	158	4	6
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

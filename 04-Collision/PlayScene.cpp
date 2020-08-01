@@ -223,6 +223,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
+	int id;
+
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
 	CGameObject* obj = NULL;
@@ -239,24 +241,33 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			player = (Simon*)obj;
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
+			//id = atoi(tokens[4].c_str());
 			break;
-		case OBJECT_TYPE_CANDLE: obj = new Candle(); break;
+		case OBJECT_TYPE_CANDLE:
+		{
+			obj = new Candle(); 
+			//id = atoi(tokens[4].c_str());
+			break;
+		}
 		case OBJECT_TYPE_GROUND: 
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
+			//id = atoi(tokens[7].c_str());
 			obj = new Ground(x, y, r, b);
 		}
 		break;
 		case OBJECT_TYPE_ITEM: 
 			obj = new Item(atof(tokens[4].c_str()));
 			obj->enable = false;
+			//id = atoi(tokens[5].c_str());
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
+			//id = atoi(tokens[7].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
 			break;
 		}
@@ -328,6 +339,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	obj->SetPosition(x, y);
+	//obj->SetId(id);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
@@ -428,6 +440,8 @@ void CPlayScene::Update(DWORD dt)
 
 	// Update Simon HP
 	HeadUpDisplay::GetInstance()->SetSimonHP(player->GetPlayerHP());
+	HeadUpDisplay::GetInstance()->SetWeapon(player->GetWeapon());
+	HeadUpDisplay::GetInstance()->SetHeart(player->GetHeart());
 	
 	// Update camera to follow mario
 	float cx, cy;
@@ -441,7 +455,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx = 0;
 	}
-	CGame::GetInstance()->SetCamPos(cx, -70.0f /*cy*/);
+	if (!player->IsFightingBoss()) CGame::GetInstance()->SetCamPos(cx, -70.0f /*cy*/);
 
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -455,14 +469,11 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 
+	// Load object from grid
 	/*grid->GetListObject(&coObjects);
-	coObjects.push_back(player);
+	coObjects.push_back(player);*/
 
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &objects);
-	}*/
-
+	// Update object
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->isEnemy && !objects[i]->isActive) continue;
@@ -487,14 +498,10 @@ void CPlayScene::Render()
 		{
 			if (objects[i]->isEnemy && !objects[i]->isActive) objects[i]->RenderActiveBoundingBox();
 			else objects[i]->Render();
-			//objects[i]->RenderActiveBoundingBox();
 		}
 	}
 
-	/*grid->GetListObject(&coObjects);
-	coObjects.push_back(player);
-
-	for (int i = 0; i < coObjects.size(); i++)
+	/*for (int i = 0; i < coObjects.size(); i++)
 	{
 		if (coObjects[i]->enable)
 		{
@@ -663,19 +670,28 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_1:
-		if (simon->nx == 1) weapon->SetState(1);
-		else weapon->SetState(0);
+		if (simon->nx == 1) {
+			weapon->SetState(1);
+			simon->SetWeapon(1);
+		}
+		else {
+			weapon->SetState(0);
+			simon->SetWeapon(0);
+		}
 		break;
 	case DIK_2:
 		weapon->nx = simon->nx;
 		weapon->SetState(2);
+		simon->SetWeapon(2);
 		break;
 	case DIK_3:
 		weapon->SetState(3);
+		simon->SetWeapon(3);
 		break;
 	case DIK_4:
 		weapon->nx = simon->nx;
 		weapon->SetState(4);
+		simon->SetWeapon(4);
 		break;
 	case DIK_T:
 		CGame::GetInstance()->SwitchScene(1);
@@ -744,6 +760,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	if ((simon->GetState() == SIMON_GO_UPSTAIR_RIGHT || simon->GetState() == SIMON_GO_UPSTAIR_LEFT ||
 		simon->GetState() == SIMON_GO_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_GO_DOWNSTAIR_LEFT)
 		&& simon->animation_set->at(simon->state)->isOver(150) == false)
+	{
+		return;
+	}
+
+	if ((simon->GetState() == SIMON_STATE_INJURED_RIGHT || simon->GetState() == SIMON_STATE_INJURED_LEFT)
+		&& simon->animation_set->at(simon->state)->isOver(300) == false)
 	{
 		return;
 	}

@@ -1,5 +1,6 @@
 #include "Zombie.h"
 #include "Ground.h"
+#include "SmallCandle.h"
 
 Zombie::Zombie(int state) : CGameObject()
 {
@@ -58,6 +59,10 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (e->ny != 0) vy = 0;
 				}
+				else if (dynamic_cast<SmallCandle*>(e->obj)) // if e->obj is Ground
+				{
+					x += dx;
+				}
 				else {
 					x += dx;
 					y += dy;
@@ -106,7 +111,7 @@ void Zombie::SetState(int state)
 
 void Zombie::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 100;
+	left = x - 200;
 	top = y - 100;
 	right = left + 10;
 	bottom = top + 200;

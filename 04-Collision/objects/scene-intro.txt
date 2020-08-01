@@ -264,33 +264,33 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item
 # SIMON
-0	84	160	1
+0	84	160	1	0
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b	scene_id
-1	0	288	0	1536	320	1
+1	0	288	0	1536	320	1	1
 
 # CANDLE
 # type	x	y	ani_set_id
-#2	50	228	2
-2	176	228	2
-2	432	228	2
-2	686	228	2
-2	942	228	2
-2	1198	228	2
+2	0	0	2	2
+2	176	228	2	3
+2	432	228	2	4
+2	686	228	2	5
+2	942	228	2	6
+2	1198	228	2	7
 
 # ITEM
 # item_type: 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
 # type	x	y	ani_set_id	type_of_item
-4	176	250	4	3
-4	432	265	4	2
-4	686	265	4	2
-4	942	250	4	3
-4	1198	270	4	0
+4	176	250	4	3	8
+4	432	250	4	2	9
+4	686	250	4	2	10
+4	942	250	4	3	11
+4	1198	250	4	0	12
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	1354	100	0	1454	300	2
+50	1354	100	0	1454	300	2	13
 
 [GRID]
 textures\map\GridSceneIntro.txt

@@ -121,9 +121,9 @@ void Boss::SetState(int state)
 
 void Boss::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 100;
+	left = x + 100;
 	top = y;
-	right = x - 90;
+	right = left + 10;
 	bottom = y + 800;
 }
 

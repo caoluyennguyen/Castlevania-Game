@@ -23,6 +23,11 @@
 107	textures\bat-zombie-ememies-right.png	255	0	255
 108	textures\Boss.png	255	0	255
 109	textures\BreakWall.png	255	0	255
+110	textures\item\SmallHeart.png	255	0	255
+111	textures\item\money.png	255	0	255
+112	textures\wall.png	255	0	255
+113	textures\item\TripleShot.png	255	0	255
+114	textures\item\HolyWater.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -109,6 +114,10 @@
 10511	300	64	360	128	40
 #stand on downstair left
 10611	120	64	180	128	0
+#injured right
+10711	420	64	480	128	40
+#injured left
+10811	0	64	60	128	0
 
 #CANDLE
 20001	0	0	16	32	10
@@ -202,6 +211,20 @@
 4001	0	0	32	32	109
 4002	32	0	64	32	109
 
+#MONEY
+5001	0	0	30	30	111
+5002	30	0	60	30	111
+5003	60	0	90	30	111
+
+#TRIPPLESHOT
+6001	0	0	28	28	113
+
+#HOLYWATER
+7001	0	0	28	28	114
+
+#SMALLHEART
+8001	0	0	16	16	110
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -231,6 +254,8 @@
 123	10411	100
 124	10511	100
 125	10611	100
+126	10711	100
+127	10811	100
 
 # CANDLE
 200	20001	100	20002	100
@@ -258,6 +283,14 @@
 601	70001	100
 # CHAIN
 602	80001	100
+# MONEY
+603	5001	100	5002	100	5003	100
+# SMALLHEART
+604	8001	100
+# TRIPPLESHOT
+605	6001	100
+# HOLYWATER
+606	7001	100
 
 # WEAPON
 # AXE
@@ -278,19 +311,20 @@
 
 # BREAKABLE WALL
 3000	4002	100
+3001	4001	100
 
 #
 # id	ani1	ani2	ani3
 #
 [ANIMATION_SETS]
 # SIMON
-1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125
+1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
 # CANDLE
 2	200	400
 # WHIP
 3	300	301	302	303	304	305
-# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN
-4	500	600	601	602
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART, 7 = TRIPPLESHOT, 8 = HOLYWATER
+4	500	600	601	602	801	603	604	605	606
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # ZOMBIE
@@ -298,13 +332,17 @@
 # BOSS
 7	2001	2002	401	2000
 # BREAKABLE WALL
-8	3000
+8	3000	3001
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
+# BREAKABLEWALL
+18	1374	256	8
+
 # CANDLE
 # type	x	y	ani_set_id	type_of_item
+10	0	0	2	1
 10	184	64	2	1
 10	312	128	2	1
 10	568	256	2	1
@@ -317,20 +355,38 @@
 10	1464	192	2	1
 
 # SIMON
-0	1200	160	1
+0	29	52	1
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id
-1	0	320	0	1536	352	1
+1	0	0	0	10	384
+1	0	320	0	1536	352
+1	0	128	0	224	160
+1	256	192	0	608	224
+1	1342	256	0	1374	288
+1	1440	192	0	1536	224
+1	1504	0	0	1536	384
 
 # ENEMIES
 # type	x	y	ani_set_id
-# Zomb	x	y	ani_set_id	state: 0: left, 2: right
-16	528	186	6	0
-# Boss
+#ZOMBIE x	y	ani_set_id	state: 0: left, 2: right
+16	428	110	6	0
+16	428	229	6	0
+16	499	229	6	0
+16	1029	229	6	0
+# BOSS
 17	1229	32	7
-# BreakableWall
-18	1200	280	8
+# ITEM
+4	184	64	4	6
+4	312	128	4	6
+4	568	256	4	6
+4	696	192	4	1
+4	824	256	4	6
+4	952	256	4	6
+4	1080	192	4	2
+4	1216	256	4	6
+4	1344	192	4	6
+4	1464	192	4	2
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

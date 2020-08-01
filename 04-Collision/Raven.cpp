@@ -22,6 +22,11 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += dx;
 	y += dy;
 
+	if (state == RAVEN_STATE_DIE && animation_set->at(RAVEN_STATE_DIE)->isOver(300))
+	{
+		this->enable = false;
+	}
+
 	if (!isWaiting)
 	{
 		if (GetTickCount() - endWaiting > 1000)

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+
 #include "HeadUpDisplay.h"
 
 HeadUpDisplay* HeadUpDisplay::__instance = NULL;
@@ -52,6 +55,15 @@ void HeadUpDisplay::LoadResource()
 	}
 
 	weapon = new CSprite(103, 0, 0, 95, 40, CTextures::GetInstance()->Get(105));
+
+	weaponIcon.push_back(CSprites::GetInstance()->Get(50001));
+	weaponIcon.push_back(CSprites::GetInstance()->Get(50001));
+	weaponIcon.push_back(CSprites::GetInstance()->Get(60001));
+	weaponIcon.push_back(CSprites::GetInstance()->Get(90001));
+	weaponIcon.push_back(CSprites::GetInstance()->Get(1001));
+
+	ifstream f;
+	f.open(L"hud.txt");
 }
 
 void HeadUpDisplay::UnLoadResource()
@@ -59,6 +71,7 @@ void HeadUpDisplay::UnLoadResource()
 	currentHP.clear();
 	loseHP.clear();
 	bossHP.clear();
+	weaponIcon.clear();
 }
 
 void HeadUpDisplay::Render()
@@ -78,7 +91,7 @@ void HeadUpDisplay::Render()
 	{
 		currentHP[i]->Draw(x + i * 9, y, 255, 0);
 	}
-	for (int i = simonHp; i < 16; i++)
+	for (int i = 0; i < 16 - simonHp; i++)
 	{
 		loseHP[i]->Draw(x + (15 - i) * 9, y, 255, 0);
 	}
@@ -93,14 +106,27 @@ void HeadUpDisplay::Render()
 	}
 
 	weapon->Draw(288, -38, 255, 0);
+
+	weaponIcon[weaponId]->Draw(299, -29, 255, 0);
+
+	str_score = to_string(score);
+	while (str_score.length() < 6) str_score = "0" + str_score;
+
+	str_time = to_string(time/1000);
+	while (str_time.length() < 4) str_time = "0" + str_time;
+
+	str_scene = to_string(scene);
+
+	str_simonHeart = to_string(simonHeart);
+	while (str_simonHeart.length() < 2) str_simonHeart = "0" + str_simonHeart;
 }
 
 void HeadUpDisplay::Update(DWORD dt)
 {
 	time += dt;
 
-	headUpDetails = "SCORE-" + to_string(score) + " TIME " + to_string(time/1000) + " SCENE 0" + to_string(scene) + "\n";
-	headUpDetails += "PLAYER                  -0" + to_string(simonHeart) + "\n";
+	headUpDetails = "SCORE-" + str_score + " TIME " + str_time + " SCENE 0" + str_scene + "\n";
+	headUpDetails += "PLAYER                  -" + str_simonHeart + "\n";
 	headUpDetails += "ENEMY                   -00\n";
 }
 

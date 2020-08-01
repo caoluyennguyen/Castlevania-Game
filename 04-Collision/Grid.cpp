@@ -70,7 +70,7 @@ void Grid::_ParseSection_OBJECTS(string line)
 	for (int i = 2; i < tokens.size(); i++)
 	{
 		objectId = atoi(tokens[i].c_str());
-		cells[cellX][cellY].Add(listObject->at(objectId));
+		cells[cellX][cellY].Add(listObject->at(objectId), objectId);
 	}
 }
 
@@ -163,11 +163,11 @@ void Grid::GetListObject(vector<LPGAMEOBJECT> *listObject)
 					for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
 					{
 						obj = cells[i][j].GetListObjects().at(k);
-						/*if (!checkContainId(list_object, e)) {
-							list_object->push_back(e);
-						}*/
+						if (CheckObjectId(listObject, obj)) {
+							listObject->push_back(obj);
+						}
 
-						listObject->push_back(obj);
+						//listObject->push_back(obj);
 					}
 				}
 			}
@@ -178,5 +178,27 @@ void Grid::GetListObject(vector<LPGAMEOBJECT> *listObject)
 
 void Grid::Unload()
 {
+	if (cells)
+	{
+		for (int i = 0; i < numCol; i++)
+		{
+			for (int j = 0; j < numRow; j++)
+			{
+				cells[i][j].Unload();
+			}
+		}
+		delete cells;
+		cells = NULL;
+	}
+}
 
+bool Grid::CheckObjectId(vector<LPGAMEOBJECT> *listObjects, LPGAMEOBJECT obj)
+{
+	for (int i = 0; i < listObjects->size(); i++)
+	{
+		if (listObjects->at(i)->id == obj->id) {
+			return false;
+		}
+	}
+	return true;
 }

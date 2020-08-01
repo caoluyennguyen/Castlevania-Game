@@ -1,6 +1,16 @@
 #pragma once
 #include "GameObject.h"
 
+#define DAGGER 0
+#define AXE 1
+#define HEART 2
+#define CHAIN 3
+#define BOOMERANG 4
+#define MONEY 5
+#define SMALLHEART 6
+#define TRIPPLESHOT 7
+#define HOLYWATER 8
+
 #define ITEM_GRAVITY	0.0005f
 #define ITEM_SMALLHEART	6
 #define ITEM_SMALLHEART_VX	0.01f

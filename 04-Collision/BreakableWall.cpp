@@ -22,7 +22,7 @@ void BreakableWall::Render()
 	if (state == NORMAL)
 		return;
 
-	//animation_set->at(0)->Render(x, y);
+	if (state == BREAK) animation_set->at(BREAK)->Render(x, y);
 
 	if (isBreakToPieces == true && pieces != NULL)
 	{
