@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Item.h"
 
 #define CANDLE_BBOX_WIDTH 32
 #define CANDLE_BBOX_HEIGHT 64
@@ -9,6 +10,7 @@
 
 class Candle : public CGameObject
 {
+	Item* item;
 public:
 	Candle();
 

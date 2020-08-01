@@ -163,6 +163,7 @@ void Grid::GetListObject(vector<LPGAMEOBJECT> *listObject)
 					for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
 					{
 						obj = cells[i][j].GetListObjects().at(k);
+						if (obj->enable == false) continue;
 						if (CheckObjectId(listObject, obj)) {
 							listObject->push_back(obj);
 						}

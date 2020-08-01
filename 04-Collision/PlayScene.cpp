@@ -246,29 +246,33 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_CANDLE:
 		{
 			obj = new Candle(); 
-			//id = atoi(tokens[4].c_str());
+			id = atoi(tokens[4].c_str());
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_GROUND: 
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			//id = atoi(tokens[7].c_str());
+			id = atoi(tokens[7].c_str());
 			obj = new Ground(x, y, r, b);
+			obj->SetId(id);
 		}
 		break;
 		case OBJECT_TYPE_ITEM: 
 			obj = new Item(atof(tokens[4].c_str()));
 			obj->enable = false;
-			//id = atoi(tokens[5].c_str());
+			id = atoi(tokens[5].c_str());
+			obj->SetId(id);
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
-			//id = atoi(tokens[7].c_str());
+			id = atoi(tokens[7].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_UPSTAIR:
@@ -339,7 +343,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	obj->SetPosition(x, y);
-	//obj->SetId(id);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
@@ -451,6 +454,7 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
+	// Lock camera when fighting boss
 	if (cx < 0)
 	{
 		cx = 0;
@@ -461,17 +465,17 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	coObjects.clear();
-	for (size_t i = 0; i < objects.size(); i++)
+	/*for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->enable)
 		{
 			coObjects.push_back(objects[i]);
 		}
-	}
+	}*/
 
 	// Load object from grid
-	/*grid->GetListObject(&coObjects);
-	coObjects.push_back(player);*/
+	grid->GetListObject(&coObjects);
+	coObjects.push_back(player);
 
 	// Update object
 	for (size_t i = 0; i < objects.size(); i++)
@@ -482,7 +486,6 @@ void CPlayScene::Update(DWORD dt)
 
 	if (weapon->x < cx + SCREEN_WIDTH && weapon->x > cx && weapon->y < cy + SCREEN_HEIGHT && weapon->isEnable())
 	{
-		coObjects.push_back(player);
 		weapon->Update(dt, &coObjects);
 	}
 	else weapon->enable = false;
@@ -765,7 +768,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 
 	if ((simon->GetState() == SIMON_STATE_INJURED_RIGHT || simon->GetState() == SIMON_STATE_INJURED_LEFT)
-		&& simon->animation_set->at(simon->state)->isOver(300) == false)
+		&& simon->animation_set->at(simon->state)->isOver(500) == false)
 	{
 		return;
 	}

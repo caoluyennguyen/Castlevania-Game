@@ -122,24 +122,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Item*>(e->obj)) // if e->obj is Ground
 			{
-				Item* item = dynamic_cast<Item*>(e->obj);
+				//Item* item = dynamic_cast<Item*>(e->obj);
 				//if (item->isHide) continue;
-				//StartUntouchable();
 				switch (e->obj->GetState())
 				{
-				case 0:
+				case ITEM_DAGGER:
 					this->weapon = 0;
 					break;
-				case 1:
+				case ITEM_AXE:
 					this->weapon = 1;
 					break;
-				case 4:
+				case ITEM_BOOMERANG:
 					this->weapon = 2;
 					break;
-				case 8:
+				case ITEM_HOLYWATER:
 					this->weapon = 3;
 					break;
-				case CHAIN:
+				case ITEM_CHAIN:
 					if (nx == 1)
 					{
 						SetState(SIMON_STATE_GET_ITEM_LEFT);

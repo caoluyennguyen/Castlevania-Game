@@ -15,49 +15,49 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	switch (this->state)
 	{
-	case DAGGER:
+	case ITEM_DAGGER:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 18;
 		break;
-	case AXE:
+	case ITEM_AXE:
 		left = x;
 		top = y;
 		right = x + 30;
 		bottom = y + 28;
-	case HEART:
+	case ITEM_HEART:
 		left = x;
 		top = y;
 		right = x + 24;
 		bottom = y + 20;
-	case CHAIN:
+	case ITEM_CHAIN:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 32;
-	case BOOMERANG:
+	case ITEM_BOOMERANG:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 28;
 		break;
-	case MONEY:
+	case ITEM_MONEY:
 		left = x;
 		top = y;
 		right = x + 30;
 		bottom = y + 30;
-	case SMALLHEART:
+	case ITEM_SMALLHEART:
 		left = x;
 		top = y;
 		right = x + 16;
 		bottom = y + 16;
-	case TRIPPLESHOT:
+	case ITEM_TRIPPLESHOT:
 		left = x;
 		top = y;
 		right = x + 28;
 		bottom = y + 28;
-	case HOLYWATER:
+	case ITEM_HOLYWATER:
 		left = x;
 		top = y;
 		right = x + 28;
@@ -155,6 +155,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<Simon*>(e->obj))
 				{
+					//this->enable = false;
 					vy = 0;
 				}
 				else {
