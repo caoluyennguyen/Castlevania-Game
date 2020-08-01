@@ -254,7 +254,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			id = atoi(tokens[7].c_str());
+			id = atoi(tokens[6].c_str());
 			obj = new Ground(x, y, r, b);
 			obj->SetId(id);
 		}
@@ -280,7 +280,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
 			float nx = atof(tokens[6].c_str());
+			int id = atof(tokens[7].c_str());
 			obj = new UpStair(x, y, r, b, nx);
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_DOWNSTAIR:
@@ -288,7 +290,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
 			float nx = atof(tokens[6].c_str());
+			int id = atof(tokens[7].c_str());
 			obj = new DownStair(x, y, r, b, nx);
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_BLACKKNIGHT:
@@ -303,15 +307,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		case OBJECT_TYPE_SMALLCANDLE:
 		{
-			float typeOfItem = atof(tokens[4].c_str());
-			obj = new SmallCandle(typeOfItem);
+			float id = atof(tokens[4].c_str());
+			obj = new SmallCandle(0);
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_ELEVATOR:
 		{
 			float minX = atof(tokens[4].c_str());
 			float maxX = atof(tokens[5].c_str());
+			float id = atof(tokens[6].c_str());
 			obj = new Elevator(minX, maxX);
+			obj->SetId(id);
 			break;
 		}
 		case OBJECT_TYPE_GHOST:
@@ -475,7 +482,13 @@ void CPlayScene::Update(DWORD dt)
 
 	// Load object from grid
 	grid->GetListObject(&coObjects);
+	// Add player to grid
 	coObjects.push_back(player);
+	// Add enemy to grid
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->isEnemy && objects[i]->enable) coObjects.push_back(objects[i]);
+	}
 
 	// Update object
 	for (size_t i = 0; i < objects.size(); i++)
@@ -493,24 +506,24 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	tilemap->Render(player->x);
+	//tilemap->Render(player->x);
 
-	for (int i = 0; i < objects.size(); i++)
+	/*for (int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->enable)
 		{
 			if (objects[i]->isEnemy && !objects[i]->isActive) objects[i]->RenderActiveBoundingBox();
 			else objects[i]->Render();
 		}
-	}
+	}*/
 
-	/*for (int i = 0; i < coObjects.size(); i++)
+	for (int i = 0; i < coObjects.size(); i++)
 	{
 		if (coObjects[i]->enable)
 		{
 			coObjects[i]->Render();
 		}
-	}*/
+	}
 	
 	if (weapon->enable)
 	{
@@ -533,8 +546,10 @@ void CPlayScene::Unload()
 	player = NULL;
 	tilemap = NULL;
 	weapon = NULL;
-	grid = NULL;
 	flag = false;
+
+	if (grid != NULL) grid->Unload();
+	grid = NULL;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)

@@ -35,6 +35,9 @@ Simon* Simon::GetInstance()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// DebugOut(L"dt: %d\n", dt);
+	// if (dt > 16) dt = 16;
+	
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -178,7 +181,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (e->obj->isEnemy && this->untouchable != 1)
 			{
 				if (e->nx != 0) x += dx;
-				//if (e->ny != 0 && !isOnGround) y += dy;
+				if (e->ny != 0) y += dy;
 				if (this->nx == 1) this->SetState(SIMON_STATE_INJURED_RIGHT);
 				else this->SetState(SIMON_STATE_INJURED_LEFT);
 			}
