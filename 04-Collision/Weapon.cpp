@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Ground.h"
 #include "Simon.h"
+#include "SmallCandle.h"
 
 Weapon::Weapon() : CGameObject()
 {
@@ -61,7 +62,7 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->SetState(FIRE);
 				}
 			}
-			else if (dynamic_cast<Candle*>(e->obj)) // if e->obj is Candle
+			else if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<SmallCandle*>(e->obj)) // if e->obj is Candle
 			{
 				if (this->isEnable())
 				{

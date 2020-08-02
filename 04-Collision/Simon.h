@@ -72,7 +72,7 @@ public:
 	void SubtractHeart(int heart) { this->heart -= heart; }
 	int GetPlayerHP() { return playerHP; }
 	void AddPlayerHP(int playerHP) { this->playerHP += playerHP; }
-	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; }
+	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; if (this->playerHP < 0) this->playerHP = 0; }
 	int GetWeapon() { return weapon; }
 	void SetWeapon(int weapon) { this->weapon = weapon; }
 	bool IsFightingBoss() { return this->isFightingBoss; }

@@ -4,7 +4,7 @@
 Raven::Raven() : CGameObject()
 {
 	this->isEnemy = true;
-	this->isActive = true;
+	this->isActive = false;
 	SetState(RAVEN_STATE_IDLE);
 }
 
@@ -27,21 +27,24 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->enable = false;
 	}
 
-	if (!isWaiting)
-	{
-		if (GetTickCount() - endWaiting > 1000)
+	if (isActive) {
+
+		if (!isWaiting)
 		{
-			StartWaiting();
-		}
-	}
-	else {
-		if (GetTickCount() - startWaiting > 1000) {
-			isWaiting = false;
-			endWaiting = GetTickCount();
+			if (GetTickCount() - endWaiting > 1000)
+			{
+				StartWaiting();
+			}
 		}
 		else {
-			vx = vy = 0;
-			return;
+			if (GetTickCount() - startWaiting > 1000) {
+				isWaiting = false;
+				endWaiting = GetTickCount();
+			}
+			else {
+				vx = vy = 0;
+				return;
+			}
 		}
 	}
 
@@ -66,7 +69,7 @@ void Raven::SetState(int state)
 		vx = vy = 0;
 		break;
 	case RAVEN_STATE_FLY_LEFT:
-		//vx = -0.1f;
+		isActive = true;
 		break;
 	case RAVEN_STATE_FLY_RIGHT:
 		//vx = 0.1f;
@@ -83,7 +86,7 @@ void Raven::SetState(int state)
 
 void Raven::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 190;
+	left = x - 150;
 	top = y;
 	right = left - 10;
 	bottom = top + 600;

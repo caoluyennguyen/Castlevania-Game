@@ -60,6 +60,7 @@ void Grid::_ParseSection_SETTINGS(string line)
 void Grid::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
+	DebugOut(L"--> %s\n", ToWSTR(line).c_str());
 
 	if (tokens.size() < 1) return; // skip invalid lines
 

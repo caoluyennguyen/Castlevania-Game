@@ -25,6 +25,7 @@
 109	textures\bat-zombie-enemies-left.png	255	0	128
 110	textures\item\SmallHeart.png	255	0	255
 111	textures\item\money.png	255	0	255
+112	textures\BreakWall.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -216,6 +217,10 @@
 5002	30	0	60	30	111
 5003	60	0	90	30	111
 
+#BREAKABLEWALL
+6001	0	0	32	32	112
+6002	32	0	64	32	112
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -299,6 +304,10 @@
 2001	3002	100	3003	100	3004	100
 2002	3005	100	3006	100	3007	100
 
+# BREAKABLE WALL
+3000	6002	100
+3001	6001	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -318,6 +327,8 @@
 6	1000	1001	1002	1003	400
 # VAMPIREBAT
 7	2000	2001	2002	400
+# BREAKABLE WALL
+8	3000	3001
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -361,6 +372,10 @@
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	id
 50	288	-50	0	336	0	3	15
+
+# BREAKABLEWALL
+18	448	168	8	16
+18	448	200	8	17
 
 # ENEMIES
 # type	x	y	ani_set_id	minX	maxX

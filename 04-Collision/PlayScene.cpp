@@ -307,7 +307,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		case OBJECT_TYPE_SMALLCANDLE:
 		{
-			float id = atof(tokens[4].c_str());
+			int id = atof(tokens[4].c_str());
 			obj = new SmallCandle(0);
 			obj->SetId(id);
 			break;
@@ -316,7 +316,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			float minX = atof(tokens[4].c_str());
 			float maxX = atof(tokens[5].c_str());
-			float id = atof(tokens[6].c_str());
+			int id = atof(tokens[6].c_str());
 			obj = new Elevator(minX, maxX);
 			obj->SetId(id);
 			break;
@@ -342,8 +342,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Boss(player);
 			break;
 		case OBJECT_TYPE_BREAKABLE_WALL:
+		{
+			int id = atof(tokens[4].c_str());
 			obj = new BreakableWall();
+			obj->SetId(id);
 			break;
+		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -637,6 +641,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		simon->isThrowWeapon = true;
 		weapon->enable = true;
 		weapon->nx = simon->nx;
+		weapon->state = simon->GetWeapon();
 		weapon->SetWeaponPosition(simon->x, simon->y, simon->isStand);
 
 		if (weapon->state == 3)
@@ -783,7 +788,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 
 	if ((simon->GetState() == SIMON_STATE_INJURED_RIGHT || simon->GetState() == SIMON_STATE_INJURED_LEFT)
-		&& simon->animation_set->at(simon->state)->isOver(500) == false)
+		&& simon->animation_set->at(simon->state)->isOver(400) == false)
 	{
 		return;
 	}

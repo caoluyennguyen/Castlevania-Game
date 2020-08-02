@@ -133,13 +133,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->weapon = 0;
 					break;
 				case ITEM_AXE:
-					this->weapon = 1;
-					break;
-				case ITEM_BOOMERANG:
 					this->weapon = 2;
 					break;
-				case ITEM_HOLYWATER:
+				case ITEM_BOOMERANG:
 					this->weapon = 3;
+					break;
+				case ITEM_HOLYWATER:
+					this->weapon = 4;
 					break;
 				case ITEM_CHAIN:
 					if (nx == 1)
@@ -155,6 +155,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				
 				HeadUpDisplay::GetInstance()->AddScore(100);
 				e->obj->enable = false;
+				if (e->nx != 0) x += dx;
+				if (!isOnGround) y += dy;
 			}
 			if (dynamic_cast<CPortal*>(e->obj))
 			{
@@ -178,12 +180,21 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				break;
 			}
-			if (e->obj->isEnemy && this->untouchable != 1)
+			if (e->obj->isEnemy && this->untouchable == 0)
 			{
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-				if (this->nx == 1) this->SetState(SIMON_STATE_INJURED_RIGHT);
-				else this->SetState(SIMON_STATE_INJURED_LEFT);
+				if (e->nx > 0) {
+					x += dx;
+					this->SetState(SIMON_STATE_INJURED_LEFT);
+				}
+				else {
+					x += dx;
+					this->SetState(SIMON_STATE_INJURED_RIGHT);
+				}
+				if (e->ny != 0) {
+					y += dy;
+					if (nx > 0) this->SetState(SIMON_STATE_INJURED_LEFT);
+					else this->SetState(SIMON_STATE_INJURED_RIGHT);
+				}
 			}
 			if (dynamic_cast<Elevator*>(e->obj))
 			{
@@ -516,6 +527,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Simon::Render()
 {
 	int alpha = 255;
+	if (untouchable) alpha = 128;
 	animation_set->at(state)->Render(x, y, alpha);
 	RenderBoundingBox();
 
@@ -571,7 +583,7 @@ void Simon::SetState(int state)
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
 	case SIMON_STATE_DIE:
 		//vy = -SIMON_DIE_DEFLECT_SPEED;
-		StartUntouchable();
+		//StartUntouchable();
 		break;
 	case SIMON_STATE_HIT_STAND:
 		isStand = true;
@@ -702,7 +714,7 @@ void Simon::SetState(int state)
 		animation_set->at(SIMON_GO_DOWNSTAIR_LEFT)->resetAnimation();
 		break;
 	case SIMON_STATE_INJURED_RIGHT:
-		this->playerHP -= 1;
+		this->SubtractPlayerHP(1);
 		vy = -0.2f;
 		vx = -0.2f;
 		StartUntouchable();
@@ -710,7 +722,7 @@ void Simon::SetState(int state)
 		isStepOnStair = false;
 		break;
 	case SIMON_STATE_INJURED_LEFT:
-		this->playerHP -= 1;
+		this->SubtractPlayerHP(1);
 		vy = -0.2f;
 		vx = 0.2f;
 		StartUntouchable();
