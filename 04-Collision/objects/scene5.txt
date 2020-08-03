@@ -28,6 +28,7 @@
 112	textures\wall.png	255	0	255
 113	textures\item\TripleShot.png	255	0	255
 114	textures\item\HolyWater.png	255	0	255
+115	textures\item\InvisibilityPotion.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -118,6 +119,10 @@
 10711	420	64	480	128	40
 #injured left
 10811	0	64	60	128	0
+#die right
+10911	180	198	240	262	40
+#die left
+11011	240	198	300	262	0
 
 #CANDLE
 20001	0	0	16	32	10
@@ -225,6 +230,9 @@
 #SMALLHEART
 8001	0	0	16	16	110
 
+#INVISIBILITY
+9001	0	0	29	36	115
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -256,6 +264,8 @@
 125	10611	100
 126	10711	100
 127	10811	100
+128	10911	100
+129	11011	100
 
 # CANDLE
 200	20001	100	20002	100
@@ -318,7 +328,7 @@
 #
 [ANIMATION_SETS]
 # SIMON
-1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	100	101	107	102	103	104	104	105	106	108	109	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127	128	129
 # CANDLE
 2	200	400
 # WHIP
@@ -338,7 +348,7 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
 # BREAKABLEWALL
-18	1374	256	8	0
+18	1376	256	8	0
 
 # CANDLE
 # type	x	y	ani_set_id	type_of_item
@@ -355,7 +365,8 @@
 10	1464	192	2	11
 
 # SIMON
-0	29	52	1
+# 0	29	52	1
+0	1229	52	1
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id

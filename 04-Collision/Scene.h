@@ -7,6 +7,7 @@ class CScene
 protected:
 	CKeyEventHandler* key_handler;
 	int id;
+	int mapWidth, mapHeight;
 	LPCWSTR sceneFilePath;
 public:
 	bool flag = false;

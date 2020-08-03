@@ -8,9 +8,9 @@ class Simon : public CGameObject
 	int score;
 	int heart;
 	int playerHP;
-	int weapon = 0;
+	int weapon;
+	int weapon_count;
 	int nxUpStair, nxDownStair;
-	int distanceWalkOnStair = 0;
 	bool isOnGround = false;
 	bool isTouchUpStair = false;
 	bool isTouchDownStair = false;
@@ -38,9 +38,11 @@ public:
 	static Simon* GetInstance();
 	Simon() : CGameObject()
 	{
-		playerHP = 16;
+		playerHP = 2;
 		heart = 16;
 		score = 0;
+		weapon = -1;
+		weapon_count = 1;
 
 		untouchable = 0;
 		whip = new Whip();
@@ -73,9 +75,15 @@ public:
 	int GetPlayerHP() { return playerHP; }
 	void AddPlayerHP(int playerHP) { this->playerHP += playerHP; }
 	void SubtractPlayerHP(int playerHP) { this->playerHP -= playerHP; if (this->playerHP < 0) this->playerHP = 0; }
+	int GetNumOfWeapon() { return this->weapon_count; }
+	void AddNumOfWeapon() {
+		this->weapon_count += 1;
+	}
+	void SubtractNumOfWeapon() { this->weapon_count -= 1; }
 	int GetWeapon() { return weapon; }
 	void SetWeapon(int weapon) { this->weapon = weapon; }
 	bool IsFightingBoss() { return this->isFightingBoss; }
 
 	void Unload() { whip = new Whip(); }
+	void Reset();
 };

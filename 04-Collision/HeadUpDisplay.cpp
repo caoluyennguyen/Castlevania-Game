@@ -107,7 +107,7 @@ void HeadUpDisplay::Render()
 
 	weapon->Draw(288, -38, 255, 0);
 
-	weaponIcon[weaponId]->Draw(299, -29, 255, 0);
+	if (weaponId > 0) weaponIcon[weaponId]->Draw(299, -29, 255, 0);
 
 	str_score = to_string(score);
 	while (str_score.length() < 6) str_score = "0" + str_score;

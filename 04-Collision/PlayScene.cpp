@@ -239,6 +239,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
+			player->Reset();
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
 			//id = atoi(tokens[4].c_str());
@@ -339,7 +340,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new Zombie(atof(tokens[4].c_str()));
 			break;
 		case OBJECT_TYPE_BOSS:
-			obj = new Boss(player);
+			obj = new Boss();
 			break;
 		case OBJECT_TYPE_BREAKABLE_WALL:
 		{
@@ -501,11 +502,14 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 
-	if (weapon->x < cx + SCREEN_WIDTH && weapon->x > cx && weapon->y < cy + SCREEN_HEIGHT && weapon->isEnable())
+	if ((weapon->x > cx + SCREEN_WIDTH || weapon->x < cx || weapon->y > cy + SCREEN_HEIGHT) && weapon->isEnable())
 	{
+		weapon->enable = false;
+		player->AddNumOfWeapon();
+	}
+	else {
 		weapon->Update(dt, &coObjects);
 	}
-	else weapon->enable = false;
 }
 
 void CPlayScene::Render()
@@ -565,6 +569,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Weapon* weapon = ((CPlayScene*)scence)->weapon;
 	switch (KeyCode)
 	{
+	case DIK_L:
+		simon->Reset();
+		break;
 	case DIK_X:
 		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_HIT_STAND || simon->GetState() == SIMON_STATE_HIT_SIT
 			|| simon->GetState() == SIMON_STATE_JUMP_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT || simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT
@@ -634,10 +641,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			|| simon->GetState() == SIMON_STATE_HIT_SIT_RIGHT || simon->GetState() == SIMON_STATE_HIT_STAND_RIGHT
 			|| simon->GetState() == SIMON_HIT_DOWNSTAIR_RIGHT || simon->GetState() == SIMON_HIT_DOWNSTAIR_LEFT
 			|| simon->GetState() == SIMON_HIT_UPSTAIR_RIGHT || simon->GetState() == SIMON_HIT_UPSTAIR_LEFT
-			|| weapon->enable == true)
+			|| simon->GetHeart() < 1 || simon->GetWeapon() < 0 || simon->GetNumOfWeapon() < 1)
 		{
 			return;
 		}
+		simon->SubtractHeart(1);
+		simon->SubtractNumOfWeapon();
 		simon->isThrowWeapon = true;
 		weapon->enable = true;
 		weapon->nx = simon->nx;
@@ -789,6 +798,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 	if ((simon->GetState() == SIMON_STATE_INJURED_RIGHT || simon->GetState() == SIMON_STATE_INJURED_LEFT)
 		&& simon->animation_set->at(simon->state)->isOver(400) == false)
+	{
+		return;
+	}
+
+	if ((simon->GetState() == SIMON_STATE_DIE_RIGHT || simon->GetState() == SIMON_STATE_DIE_LEFT)
+		&& simon->animation_set->at(simon->state)->isOver(200) == true)
 	{
 		return;
 	}

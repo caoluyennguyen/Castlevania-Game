@@ -115,8 +115,8 @@ void Raven::CalculateVelocity()
 
 	if (dx < 10 && dy < 10)
 	{
-		vx = nx * dx / 250;
-		vy = ny * dy / 250;
+		vx = nx * dx / 500;
+		vy = ny * dy / 500;
 	}
 	else
 	{

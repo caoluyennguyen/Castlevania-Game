@@ -68,13 +68,17 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(CANDLE_STATE_DESTROYED);
 					this->enable = false;
+					Simon::GetInstance()->AddNumOfWeapon();
 				}
 			}
 			else
 			{
 				if (GetTickCount() - boomerangBack > 800 && this->state == BOOMERANG)
 				{
-					if (dynamic_cast<Simon*>(e->obj)) this->enable = false;
+					if (dynamic_cast<Simon*>(e->obj)) {
+						this->enable = false;
+						Simon::GetInstance()->AddNumOfWeapon();
+					}
 					nx = nxFlyBack;
 					vx = vxFlyBack;
 				}

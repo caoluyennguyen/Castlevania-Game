@@ -2,12 +2,10 @@
 #include "Whip.h"
 #include "HeadUpDisplay.h"
 
-Boss::Boss(Simon *simon) : CGameObject()
+Boss::Boss() : CGameObject()
 {
 	hp = 16;
 	score = 3000;
-	isWaiting = GetTickCount();
-	this->simon = simon;
 
 	this->isEnemy = true;
 	this->isActive = true;
@@ -25,7 +23,10 @@ void Boss::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (this->state == BOSS_STATE_IDLE) return;
+	if (this->state == BOSS_STATE_IDLE) {
+		waiting = GetTickCount();
+		return;
+	}
 	HeadUpDisplay::GetInstance()->SetBossHP(hp);
 
 	CGameObject::Update(dt);
@@ -75,7 +76,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (count == 1)
 		{
 			isFlyToSimon = true;
-			this->simon->GetPosition(point.x, point.y);
+			Simon::GetInstance()->GetPosition(point.x, point.y);
 		}
 		else
 		{

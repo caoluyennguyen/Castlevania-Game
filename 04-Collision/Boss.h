@@ -27,7 +27,7 @@ class Boss : public CGameObject
 	bool isFlyToSimon;
 	bool isFlyToPoint;
 public:
-	Boss(Simon *simon);
+	Boss();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

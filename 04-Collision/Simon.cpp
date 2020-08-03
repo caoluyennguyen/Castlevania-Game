@@ -37,6 +37,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// DebugOut(L"dt: %d\n", dt);
 	// if (dt > 16) dt = 16;
+
+	if (playerHP < 1) {
+		if (nx > 1) this->SetState(SIMON_STATE_DIE_RIGHT);
+		else this->SetState(SIMON_STATE_DIE_LEFT);
+	}
 	
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -149,11 +154,18 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else SetState(SIMON_STATE_GET_ITEM_RIGHT);
 					this->whip_level += 2;
 					break;
+				case ITEM_HEART:
+					this->heart += 1;
+					break;
+				case ITEM_MONEY:
+					this->AddScore(1000);
+					HeadUpDisplay::GetInstance()->AddScore(1000);
+					break;
 				default:
 					break;
 				}
 				
-				HeadUpDisplay::GetInstance()->AddScore(100);
+				//HeadUpDisplay::GetInstance()->AddScore(100);
 				e->obj->enable = false;
 				if (e->nx != 0) x += dx;
 				if (!isOnGround) y += dy;
@@ -607,9 +619,6 @@ void Simon::SetState(int state)
 		vy = -SIMON_JUMP_SPEED_Y;
 		isOnGround = false;
 		animation_set->at(state)->setStartFrameTime(GetTickCount());
-	case SIMON_STATE_DIE_RIGHT:
-		vy = -SIMON_DIE_DEFLECT_SPEED;
-		break;
 	case SIMON_STATE_HIT_STAND_RIGHT:
 		isStand = true;
 		if (this->isOnGround)
@@ -729,6 +738,13 @@ void Simon::SetState(int state)
 		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
 		isStepOnStair = false;
 		break;
+	case SIMON_STATE_DIE_LEFT:
+		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
+		break;
+	case SIMON_STATE_DIE_RIGHT:
+		StartUntouchable();
+		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
+		break;
 	}
 }
 
@@ -757,4 +773,17 @@ bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float
 	GetBoundingBox(simon_left, simon_top, simon_right, simon_bottom);
 
 	return CGameObject::AABB(simon_left, simon_top, simon_right, simon_bottom, obj_left, obj_top, obj_right, obj_bottom);
+}
+
+void Simon::Reset()
+{
+	this->SetState(SIMON_STATE_IDLE_RIGHT);
+	playerHP = 16;
+	heart = 16;
+	score = 0;
+	weapon = -1;
+	weapon_count = 1;
+
+	untouchable = 0;
+	whip_level = 0;
 }
