@@ -1,6 +1,6 @@
-#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell	mapWidth
 [TILEMAP]
-64	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	9	6	7	8	0
+64	textures\\map\\Scene1.png	textures\\map\\Scene1.txt	9	6	7	8	0	512
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -26,6 +26,7 @@
 110	textures\item\SmallHeart.png	255	0	255
 111	textures\item\money.png	255	0	255
 112	textures\BreakWall.png	255	0	255
+116	textures\item\Crown.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -225,6 +226,12 @@
 6001	0	0	32	32	112
 6002	32	0	64	32	112
 
+#CROWN
+9002	0	0	32	32	116
+9003	32	0	64	32	116
+9004	64	0	96	32	116
+9005	96	0	128	32	116
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -314,6 +321,9 @@
 3000	6002	100
 3001	6001	100
 
+# CROWN
+5000	9002	100	9003	100	9004	100	9005	100
+
 #
 # id	ani1	ani2	ani3
 #
@@ -324,9 +334,8 @@
 2	200	400
 # WHIP
 3	300	301	302	303	304	305
-# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART
-# 4	500	600	601	602	801	603	604
-4	500	801	603	604	801	603	604
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART, 7 = TRIPPLESHOT, 8 = HOLYWATER, 9 = INVISIBILITYPOTION, 10 = CROWN
+4	500	600	601	602	801	603	604	605	606	4000	5000
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # BLACKKNIGHT

@@ -131,8 +131,8 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (GetTickCount() - isRender > 200 && CheckCollision(left, top, right, bottom) == true)
 			{
 				Boss* boss = dynamic_cast<Boss*>(obj);
-				//boss->LostHp(8);
-				boss->SetHp(0);
+				boss->LostHp(2);
+				//boss->SetHp(0);
 				boss->SetState(BOSS_STATE_DIE);
 			}
 		}

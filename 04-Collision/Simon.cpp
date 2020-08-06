@@ -39,8 +39,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// if (dt > 16) dt = 16;
 
 	if (playerHP < 1) {
-		if (nx > 1) this->SetState(SIMON_STATE_DIE_RIGHT);
-		else this->SetState(SIMON_STATE_DIE_LEFT);
+		if (nx > 1) {
+			this->SetState(SIMON_STATE_DIE_RIGHT);
+		}
+		else {
+			this->SetState(SIMON_STATE_DIE_LEFT);
+		}
+
+		untouchable = 0;
 	}
 	
 	// Calculate dx, dy 
@@ -113,6 +119,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					isOnGround = true;
 					isStepOnStair = false;
+				}
+				else if (nx != 0)
+				{
+					vx = 0;
 				}
 				else
 				{
@@ -192,7 +202,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				break;
 			}
-			if (e->obj->isEnemy && this->untouchable == 0)
+			if (e->obj->isEnemy && this->untouchable == 0 && e->obj->isActive)
 			{
 				if (e->nx > 0) {
 					x += dx;
@@ -221,7 +231,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else
 				{
-					y += dy;
+					//y += dy;
 					isOnGround = false;
 				}
 			}
@@ -538,8 +548,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Simon::Render()
 {
-	int alpha = 255;
-	if (untouchable) alpha = 128;
+	alpha = 255;
+	if (untouchable) alpha = rand() % 255;
 	animation_set->at(state)->Render(x, y, alpha);
 	RenderBoundingBox();
 
@@ -739,10 +749,11 @@ void Simon::SetState(int state)
 		isStepOnStair = false;
 		break;
 	case SIMON_STATE_DIE_LEFT:
+		vx = 0;
 		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
 		break;
 	case SIMON_STATE_DIE_RIGHT:
-		StartUntouchable();
+		vx = 0;
 		animation_set->at(SIMON_STATE_INJURED_LEFT)->setStartFrameTime(GetTickCount());
 		break;
 	}
@@ -783,6 +794,7 @@ void Simon::Reset()
 	score = 0;
 	weapon = -1;
 	weapon_count = 1;
+	isFightingBoss = false;
 
 	untouchable = 0;
 	whip_level = 0;

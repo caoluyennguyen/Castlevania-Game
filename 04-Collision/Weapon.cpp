@@ -4,6 +4,14 @@
 #include "Ground.h"
 #include "Simon.h"
 #include "SmallCandle.h"
+#include "BlackKnight.h"
+#include "Boss.h"
+#include "Fleaman.h"
+#include "Ghost.h"
+#include "Raven.h"
+#include "Skeleton.h"
+#include "VampireBat.h"
+#include "Zombie.h"
 
 Weapon::Weapon() : CGameObject()
 {
@@ -71,6 +79,86 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					Simon::GetInstance()->AddNumOfWeapon();
 				}
 			}
+			else if (dynamic_cast<BlackKnight*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(BLACKKNIGHT_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<VampireBat*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(VAMPIREBAT_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Ghost*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(GHOST_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Fleaman*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(FLEAMAN_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Raven*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(RAVEN_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Skeleton*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(SKELETON_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Zombie*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				if (this->enable)
+				{
+					e->obj->SetState(ZOMBIE_STATE_DIE);
+				}
+			}
+			else if (dynamic_cast<Boss*>(e->obj))
+			{
+				float left, top, right, bottom;
+				e->obj->GetBoundingBox(left, top, right, bottom);
+
+				Boss* boss = dynamic_cast<Boss*>(e->obj);
+				boss->LostHp(2);
+				//boss->SetHp(0);
+				boss->SetState(BOSS_STATE_DIE);
+			}
 			else
 			{
 				if (GetTickCount() - boomerangBack > 800 && this->state == BOOMERANG)
@@ -82,6 +170,11 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					nx = nxFlyBack;
 					vx = vxFlyBack;
 				}
+			}
+
+			if (e->obj->isEnemy) {
+				this->enable = false;
+				Simon::GetInstance()->AddNumOfWeapon();
 			}
 		}
 	}

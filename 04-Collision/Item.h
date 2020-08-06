@@ -10,6 +10,10 @@
 #define ITEM_SMALLHEART 6
 #define ITEM_TRIPPLESHOT 7
 #define ITEM_HOLYWATER 8
+#define ITEM_INVISIBILITYPOTION 9
+#define ITEM_CROWN 10
+#define ITEM_DOUBLESHOT 11
+#define ITEM_ONEPIECE 12
 
 #define ITEM_GRAVITY	0.0005f
 #define ITEM_SMALLHEART	6
@@ -19,7 +23,8 @@
 
 class Item : public CGameObject
 {
-	//int typeOfItem;
+	int alpha;
+	DWORD timeDisappear;
 	bool isShake = true;
 	int shake = 1;
 	float gravity = ITEM_GRAVITY;
@@ -31,7 +36,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 
-	//int GetTypeOfItem() { return typeOfItem; };
+	void StartTimeDisappear() { timeDisappear = GetTickCount(); };
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
 	void SetState(int state);
 };

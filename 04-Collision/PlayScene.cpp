@@ -80,6 +80,7 @@ void CPlayScene::_ParseSection_TILEMAP(string line)
 	int numColToRead = atoi(tokens[5].c_str());
 	int numRowToRead = atoi(tokens[6].c_str());
 	int idCell = atoi(tokens[7].c_str());
+	mapWidth = atoi(tokens[8].c_str());
 
 	//CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
 	tilemap = new Tilemap(pixel, img_path.c_str(), file_path.c_str(), numCol, numRow, numColToRead, numRowToRead, idCell);
@@ -239,7 +240,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
-			player->Reset();
+			//player->Reset();
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
 			//id = atoi(tokens[4].c_str());
@@ -467,10 +468,8 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetScreenHeight() / 2;
 
 	// Lock camera when fighting boss
-	if (cx < 0)
-	{
-		cx = 0;
-	}
+	if (cx < 0) cx = 0;
+	else if (cx > mapWidth - game->GetScreenWidth()) cx = mapWidth - game->GetScreenWidth();
 	if (!player->IsFightingBoss()) CGame::GetInstance()->SetCamPos(cx, -70.0f /*cy*/);
 
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -514,7 +513,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	//tilemap->Render(player->x);
+	tilemap->Render(player->x);
 
 	/*for (int i = 0; i < objects.size(); i++)
 	{
@@ -567,6 +566,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon* simon = ((CPlayScene*)scence)->player;
 	//Whip* whip = ((CPlayScene*)scence)->whip;
 	Weapon* weapon = ((CPlayScene*)scence)->weapon;
+
 	switch (KeyCode)
 	{
 	case DIK_L:
@@ -802,8 +802,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		return;
 	}
 
-	if ((simon->GetState() == SIMON_STATE_DIE_RIGHT || simon->GetState() == SIMON_STATE_DIE_LEFT)
-		&& simon->animation_set->at(simon->state)->isOver(200) == true)
+	if (simon->GetState() == SIMON_STATE_DIE_RIGHT || simon->GetState() == SIMON_STATE_DIE_LEFT)
 	{
 		return;
 	}

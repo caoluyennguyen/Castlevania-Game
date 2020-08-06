@@ -1,6 +1,6 @@
-#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell	mapWidth
 [TILEMAP]
-32	textures\\map\\Scene4.png	textures\\map\\Scene4.txt	48	12	6	8	0
+32	textures\\map\\Scene4.png	textures\\map\\Scene4.txt	48	12	6	8	0	1536
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -370,15 +370,15 @@
 # UPSTAIR
 # type	l	t	ani_set_id	r	b	nx
 6	82	268	0	128	315	1	26
-6	226	140	0	276	190	-1	27
-6	815	204	0	865	254	-1	28
-6	1134	140	0	1184	190	1	29
+6	206	140	0	256	191	-1	27
+6	795	204	0	845	254	-1	28
+6	1124	140	0	1174	190	1	29
 
 # DOWNSTAIR
 # type	l	t	ani_set_id	r	b	nx
 7	82	268	0	128	315	1	30
-7	746	268	0	796	315	1	31
-7	1264	268	0	1314	315	-1	32
+7	726	268	0	776	315	1	31
+7	1254	268	0	1304	315	-1	32
 
 # ENEMIES
 # type	x	y	ani_set_id

@@ -1,6 +1,6 @@
-#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell	mapWidth
 [TILEMAP]
-32	textures\\map\\SceneIntro.png	textures\\map\\SceneIntro.txt	48	10	17	4	1
+32	textures\\map\\SceneIntro.png	textures\\map\\SceneIntro.txt	48	10	17	4	1	1536
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]

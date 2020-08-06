@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "Enemy.h"
 
 #define BLACKKNIGHT_BBOX_WIDTH 32
 #define BLACKKNIGHT_BBOX_HEIGHT 64
@@ -10,7 +10,7 @@
 #define BLACKKNIGHT_STATE_WALK_RIGHT	3
 #define BLACKKNIGHT_STATE_DIE			4
 
-class BlackKnight : public CGameObject
+class BlackKnight : public Enemy
 {
 	int left, right, minX, maxX;
 public:

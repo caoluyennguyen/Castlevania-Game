@@ -1,6 +1,6 @@
-#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell
+#pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell	mapWidth
 [TILEMAP]
-32	textures\\map\\Scene5.png	textures\\map\\Scene5.txt	48	11	17	6	1
+32	textures\\map\\Scene5.png	textures\\map\\Scene5.txt	48	11	17	6	1	1536
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -29,6 +29,8 @@
 113	textures\item\TripleShot.png	255	0	255
 114	textures\item\HolyWater.png	255	0	255
 115	textures\item\InvisibilityPotion.png	255	0	255
+116	textures\item\Crown.png	255	0	255
+117	textures\item\DoubleShot.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -233,6 +235,15 @@
 #INVISIBILITY
 9001	0	0	29	36	115
 
+#CROWN
+9002	0	0	32	32	116
+9003	32	0	64	32	116
+9004	64	0	96	32	116
+9005	96	0	128	32	116
+
+#DOUBLESHOT
+9006	0	0	28	28	117
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -302,6 +313,14 @@
 # HOLYWATER
 606	7001	100
 
+# INVISIBILITYPOTION
+4000	9001	100
+
+# CROWN
+5000	9002	100	9003	100	9004	100	9005	100
+# DOUBLESHOT
+6000	9006	100
+
 # WEAPON
 # AXE
 700	60001	100	60002	100	60003	100	60004	100
@@ -333,8 +352,8 @@
 2	200	400
 # WHIP
 3	300	301	302	303	304	305
-# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART, 7 = TRIPPLESHOT, 8 = HOLYWATER
-4	500	600	601	602	801	603	604	605	606
+# ITEM : 0 = DAGGER , 1 = AXE , 2 = HEART , 3 = CHAIN, 4 = BOOMERANG, 5 = MONEY, 6 = SMALLHEART, 7 = TRIPPLESHOT, 8 = HOLYWATER, 9 = INVISIBILITYPOTION, 10 = CROWN, 11 = DOUBLESHOT
+4	500	600	601	602	800	603	604	605	606	4000	5000	6000
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # ZOMBIE
@@ -365,8 +384,8 @@
 10	1464	192	2	11
 
 # SIMON
-# 0	29	52	1
-0	1229	52	1
+0	29	52	1
+# 0	1229	52	1
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id
@@ -392,12 +411,13 @@
 4	312	128	4	6	26
 4	568	256	4	6	27
 4	696	192	4	1	28
-4	824	256	4	6	29
+4	824	256	4	9	29
 4	952	256	4	6	30
 4	1080	192	4	2	31
 4	1216	256	4	6	32
 4	1344	192	4	6	33
 4	1464	192	4	2	34
+4	1379	256	4	11	35
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

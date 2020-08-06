@@ -3,6 +3,7 @@
 #include "SmallCandle.h"
 #include "Ground.h"
 #include "Simon.h"
+#include "BreakableWall.h"
 
 Item::Item(int type) : CGameObject()
 {
@@ -26,16 +27,19 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		top = y;
 		right = x + 30;
 		bottom = y + 28;
+		break;
 	case ITEM_HEART:
 		left = x;
 		top = y;
 		right = x + 24;
 		bottom = y + 20;
+		break;
 	case ITEM_CHAIN:
 		left = x;
 		top = y;
 		right = x + 32;
 		bottom = y + 32;
+		break;
 	case ITEM_BOOMERANG:
 		left = x;
 		top = y;
@@ -47,21 +51,49 @@ void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		top = y;
 		right = x + 30;
 		bottom = y + 30;
+		break;
 	case ITEM_SMALLHEART:
 		left = x;
 		top = y;
 		right = x + 16;
 		bottom = y + 16;
+		break;
 	case ITEM_TRIPPLESHOT:
 		left = x;
 		top = y;
 		right = x + 28;
 		bottom = y + 28;
+		break;
 	case ITEM_HOLYWATER:
 		left = x;
 		top = y;
 		right = x + 28;
 		bottom = y + 28;
+		break;
+	case ITEM_INVISIBILITYPOTION:
+		left = x;
+		top = y;
+		right = x + 29;
+		bottom = y + 36;
+		break;
+	case ITEM_CROWN:
+		left = x;
+		top = y;
+		right = x + 32;
+		bottom = y + 32;
+		break;
+	case ITEM_DOUBLESHOT:
+		left = x;
+		top = y;
+		right = x + 32;
+		bottom = y + 32;
+		break;
+	case ITEM_ONEPIECE:
+		left = x;
+		top = y;
+		right = x + 32;
+		bottom = y + 32;
+		break;
 	default:
 		break;
 	}
@@ -71,6 +103,8 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy
 	CGameObject::Update(dt, coObjects);
+
+	//if (GetTickCount() - timeDisappear > 1500 && this->enable) this->enable = false;
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -90,7 +124,10 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					this->enable = false;
 				}
-				else this->enable = true;
+				else {
+					this->enable = true;
+					StartTimeDisappear();
+				}
 			}
 		}
 		else if (dynamic_cast<SmallCandle*>(obj))
@@ -107,7 +144,30 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					this->enable = false;
 				}
-				else this->enable = true;
+				else {
+					this->enable = true;
+					StartTimeDisappear();
+				}
+			}
+		}
+		else if (dynamic_cast<BreakableWall*>(obj))
+		{
+			BreakableWall* e = dynamic_cast<BreakableWall*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				if (e->GetState() == NORMAL)
+				{
+					this->enable = false;
+				}
+				else {
+					this->enable = true;
+					StartTimeDisappear();
+				}
 			}
 		}
 	}
@@ -169,7 +229,10 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Item::Render()
 {
-	animation_set->at(this->state)->Render(x, y);
+	alpha = 255;
+	if (GetTickCount() - timeDisappear > 1000) alpha = 128;
+
+	animation_set->at(this->state)->Render(x, y, alpha);
 
 	RenderBoundingBox();
 }

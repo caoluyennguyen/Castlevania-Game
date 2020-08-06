@@ -5,6 +5,7 @@
 
 class Simon : public CGameObject
 {
+	int alpha;
 	int score;
 	int heart;
 	int playerHP;

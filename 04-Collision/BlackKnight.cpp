@@ -1,6 +1,6 @@
 #include "BlackKnight.h"
 
-BlackKnight::BlackKnight(int minX, int maxX) : CGameObject()
+BlackKnight::BlackKnight(int minX, int maxX) : Enemy()
 {
 	this->minX = minX;
 	this->maxX = maxX;
@@ -29,7 +29,7 @@ void BlackKnight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	// Calculate dx, dy 
-	CGameObject::Update(dt);
+	Enemy::Update(dt);
 	x += dx;
 
 	if (this->x < this->left)
