@@ -9,9 +9,9 @@ SmallCandle::SmallCandle(int TypeOfItem) : CGameObject()
 void SmallCandle::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y;
 	right = x + SMALL_CANDLE_BBOX_WIDTH;
 	bottom = y + SMALL_CANDLE_BBOX_HEIGHT;
+	top = bottom - 25;
 }
 
 void SmallCandle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

@@ -104,8 +104,8 @@ void Tilemap::Render(int x)
 		finish = 48;
 	}
 	else {
-		start = x / pixel - 8;
-		finish = start + 25;
+		start = x / pixel - 12;
+		finish = start + 29;
 	}
 
 	if (start < 0)

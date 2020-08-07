@@ -20,7 +20,7 @@
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
 106	textures\bat-zombie-enemies-left.png	255	0	255
-107	textures\bat-zombie-ememies-right-fix.png	255	0	255
+107	textures\bat-zombie-enemies-right-fix.png	255	0	255
 108	textures\Boss.png	255	0	255
 109	textures\BreakWall.png	255	0	255
 110	textures\item\SmallHeart.png	255	0	255
@@ -209,6 +209,9 @@
 #LEFT
 2001	512	0	544	63	106
 2002	544	0	576	63	106
+#RIGHT
+2003	0	0	31	62	107
+2004	31	0	62	62	107
 
 #BOSS
 3001	0	0	96	46	108
@@ -335,6 +338,7 @@
 
 # ZOMBIE
 1000	2001	100	2002	100
+1001	2003	100	2004	100
 
 # BOSS
 2000	3002	100	3003	100
@@ -361,7 +365,7 @@
 # WEAPON : 0 = DAGGER LEFT , 1 = DAGGER RIGHT , 2 = AXE , 3 = BOOMERANG , 4 = HOLYWATER, 5 = FIRE
 5	500	501	700	800	900	901
 # ZOMBIE
-6	1000	400
+6	1000	400	1001
 # BOSS
 7	2001	2002	401	2000	2003
 # BREAKABLE WALL
@@ -371,11 +375,11 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Ground, 2 = Candle, 3 = Whip , 4 = Item, 8 = BlackKnight
 # BREAKABLEWALL
-18	1376	256	8	0
+18	1380	258	8	0
 
 # CANDLE
 # type	x	y	ani_set_id	type_of_item
-10	0	0	2	1
+10	-10	-10	2	1
 10	184	64	2	2
 10	312	128	2	3
 10	568	256	2	4
@@ -404,7 +408,7 @@
 # ENEMIES
 # type	x	y	ani_set_id
 #ZOMBIE x	y	ani_set_id	state: 0: left, 2: right
-16	428	110	6	0
+16	422	110	6	0
 16	428	229	6	0
 16	499	229	6	0
 16	1029	229	6	0
@@ -422,6 +426,18 @@
 4	1344	192	4	6	33
 4	1464	192	4	2	34
 4	1379	256	4	11	35
+
+# UPSTAIR
+# type	l	t	ani_set_id	r	b	nx
+6	192	100	0	240	125	1	36
+6	576	158	0	629	190	1	37
+6	1405	158	0	1455	190	-1	38
+
+# DOWNSTAIR
+# type	l	t	ani_set_id	r	b	nx
+7	284	168	0	312	188	-1	39
+7	728	290	0	758	318	-1	40
+7	1344	220	0	1396	252	1	41
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

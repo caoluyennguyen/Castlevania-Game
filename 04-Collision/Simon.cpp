@@ -35,8 +35,8 @@ Simon* Simon::GetInstance()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	// DebugOut(L"dt: %d\n", dt);
-	// if (dt > 16) dt = 16;
+	//DebugOut(L"dt: %d\n", dt);
+	if (dt > 16) dt = 16;
 
 	if (playerHP < 1) {
 		if (nx > 1) {
@@ -109,7 +109,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			
 			if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 			{
-				if (this->isStepOnStair || this->isStandOnElevator)
+				if (this->isStepOnStair)
 				{
 					if (e->nx != 0) x += dx;
 					if (e->ny != 0) y += dy;
@@ -145,7 +145,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				switch (e->obj->GetState())
 				{
 				case ITEM_DAGGER:
-					this->weapon = 0;
+					this->weapon = 1;
 					break;
 				case ITEM_AXE:
 					this->weapon = 2;
@@ -180,10 +180,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				
 				//HeadUpDisplay::GetInstance()->AddScore(100);
 				e->obj->enable = false;
-				/*if (e->nx != 0 || e->ny != 0) {
-					x += dx;
-					dy = 0;
-				}*/
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) {
+					y -= 5;
+				}
 			}
 			if (dynamic_cast<CPortal*>(e->obj))
 			{
@@ -212,6 +212,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<Boss*>(e->obj)) {
 					Boss* p = dynamic_cast<Boss*>(e->obj);
 					if (p->GetState() == BOSS_STATE_EGG) {
+						y -= 5;
 						p->enable = false;
 						HeadUpDisplay::GetInstance()->AddScore(1000);
 						return;
@@ -229,13 +230,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->SetState(SIMON_STATE_INJURED_RIGHT);
 					}
 					if (e->ny != 0) {
-						// y += dy;
-						vy = 0;
+						y += dy;
+						//vy = 0;
 						if (nx > 0) this->SetState(SIMON_STATE_INJURED_LEFT);
 						else this->SetState(SIMON_STATE_INJURED_RIGHT);
 					}
 				}
-				else if (!e->obj->isActive) x += dx;
+				else if (!e->obj->isActive) {
+					x += dx;
+					if (e->ny != 0) y += dy;
+				}
 			}
 			if (dynamic_cast<Elevator*>(e->obj))
 			{
@@ -248,9 +252,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isStandOnElevator = true;
 					isStepOnStair = false;
 				}
+				else if (nx != 0) {
+					this->x += dx;
+					dy = 0;
+				}
 				else
-				{
-					//y += dy;
+				{	
+					vy = 0;
 					isOnGround = false;
 				}
 			}
@@ -262,6 +270,90 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (int i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
+
+		if (obj->isEnemy) {
+			if (dynamic_cast<VampireBat*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					VampireBat* p = dynamic_cast<VampireBat*>(obj);
+					p->SetAbleToFly();
+				}
+			}
+			if (dynamic_cast<Ghost*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Ghost* p = dynamic_cast<Ghost*>(obj);
+					p->SetState(GHOST_STATE_FLY_LEFT);
+					p->isActive = true;
+				}
+			}
+			if (dynamic_cast<Fleaman*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Fleaman* p = dynamic_cast<Fleaman*>(obj);
+					if (p->GetState() == FLEAMAN_STATE_IDLE_RIGHT) p->SetState(FLEAMAN_STATE_JUMP_RIGHT);
+				}
+			}
+			if (dynamic_cast<Raven*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Raven* p = dynamic_cast<Raven*>(obj);
+					p->SetState(RAVEN_STATE_FLY_LEFT);
+				}
+			}
+			if (dynamic_cast<Skeleton*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Skeleton* p = dynamic_cast<Skeleton*>(obj);
+					p->isAbleToThrowBone = true;
+				}
+			}
+			if (dynamic_cast<Zombie*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					Zombie* p = dynamic_cast<Zombie*>(obj);
+					//p->SetState(ZOMBIE_STATE_DIE);
+					p->isActive = true;
+				}
+			}
+			if (dynamic_cast<Boss*>(obj))
+			{
+				float left, top, right, bottom;
+				obj->GetActiveBoundingBox(left, top, right, bottom);
+
+				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
+				{
+					this->isFightingBoss = true;
+					Boss* p = dynamic_cast<Boss*>(obj);
+					p->SetState(BOSS_STATE_FLY);
+					//p->isActive = true;
+				}
+			}
+		}
 
 		if (dynamic_cast<UpStair*>(obj))
 		{
@@ -364,7 +456,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				
-				//break;
+				break;
 			}
 			else {
 				this->isAbleToMoveToStair = false;
@@ -487,89 +579,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 
-		if (obj->isEnemy) {
-			if (dynamic_cast<VampireBat*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					VampireBat* p = dynamic_cast<VampireBat*>(obj);
-					p->SetAbleToFly();
-				}
-			}
-			if (dynamic_cast<Ghost*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					Ghost* p = dynamic_cast<Ghost*>(obj);
-					p->SetState(GHOST_STATE_FLY_LEFT);
-					p->isActive = true;
-				}
-			}
-			if (dynamic_cast<Fleaman*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					Fleaman* p = dynamic_cast<Fleaman*>(obj);
-					if (p->GetState() == FLEAMAN_STATE_IDLE_RIGHT) p->SetState(FLEAMAN_STATE_JUMP_RIGHT);
-				}
-			}
-			if (dynamic_cast<Raven*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					Raven* p = dynamic_cast<Raven*>(obj);
-					p->SetState(RAVEN_STATE_FLY_LEFT);
-				}
-			}
-			if (dynamic_cast<Skeleton*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					Skeleton* p = dynamic_cast<Skeleton*>(obj);
-					p->isAbleToThrowBone = true;
-				}
-			}
-			if (dynamic_cast<Zombie*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					Zombie* p = dynamic_cast<Zombie*>(obj);
-					//p->SetState(ZOMBIE_STATE_DIE);
-					p->isActive = true;
-				}
-			}
-			if (dynamic_cast<Boss*>(obj))
-			{
-				float left, top, right, bottom;
-				obj->GetActiveBoundingBox(left, top, right, bottom);
-
-				if (this->CheckCollision(left, top, right, bottom) && obj->isEnable())
-				{
-					this->isFightingBoss = true;
-					Boss* p = dynamic_cast<Boss*>(obj);
-					p->SetState(BOSS_STATE_FLY);
-					//p->isActive = true;
-				}
-			}
-		}
 	}
 
 	isTouchUpStair = isTouchDownStair = false;

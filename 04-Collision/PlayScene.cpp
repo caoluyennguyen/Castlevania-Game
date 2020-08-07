@@ -528,6 +528,10 @@ void CPlayScene::Render()
 	{
 		if (coObjects[i]->enable)
 		{
+			if (coObjects[i]->isEnemy && !coObjects[i]->isActive) {
+				coObjects[i]->RenderActiveBoundingBox();
+				continue;
+			}
 			coObjects[i]->Render();
 		}
 	}

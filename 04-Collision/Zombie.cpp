@@ -1,12 +1,14 @@
 #include "Zombie.h"
 #include "Ground.h"
 #include "SmallCandle.h"
+#include "UpStair.h"
+#include "DownStair.h"
 
 Zombie::Zombie(int state) : CGameObject()
 {
 	isActive = false;
 	this->isEnemy = true;
-	//this->isActive = true;
+	this->nx = -1;
 	SetState(state);
 }
 
@@ -27,9 +29,11 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += 0.01f;
 
 		if (isActive) {
-			if (state == ZOMBIE_STATE_WALK_LEFT) vx = -0.1f;
-			else vx = 0.1f;
+			if (state == ZOMBIE_STATE_WALK_LEFT) nx = -1;
+			else nx = 1;
 		}
+
+		vx = nx * 0.1f;
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -58,10 +62,22 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
 				{
 					if (e->ny != 0) vy = 0;
+					if (e->nx != 0) {
+						if (this->state == ZOMBIE_STATE_WALK_LEFT) {
+							x += 10;
+							this->SetState(ZOMBIE_STATE_WALK_RIGHT);
+						}
+						else {
+							x -= 10;
+							this->SetState(ZOMBIE_STATE_WALK_LEFT);
+						}
+					}
 				}
-				else if (dynamic_cast<SmallCandle*>(e->obj)) // if e->obj is Ground
+				else if (dynamic_cast<Zombie*>(e->obj) || dynamic_cast<SmallCandle*>(e->obj) ||
+					dynamic_cast<UpStair*>(e->obj) || dynamic_cast<DownStair*>(e->obj)) // if e->obj is Ground
 				{
 					x += dx;
+					dy = 0;
 				}
 				else {
 					x += dx;
@@ -111,8 +127,8 @@ void Zombie::SetState(int state)
 
 void Zombie::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 200;
-	top = y - 100;
+	left = x - 250;
+	top = y - 150;
 	right = left + 10;
-	bottom = top + 200;
+	bottom = top + 250;
 }
