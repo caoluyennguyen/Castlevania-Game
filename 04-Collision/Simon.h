@@ -22,7 +22,8 @@ public:
 	Whip* whip = NULL;
 	int whip_level; // 0: normal, 2: chain, 4: long chain
 	int untouchable;
-	int distance = 0;
+	int distanceDown = 0;
+	int distanceUp = 0;
 	bool isStand = true;
 	bool isStandOnElevator = false;
 	bool isThrowWeapon = false;

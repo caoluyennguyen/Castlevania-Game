@@ -104,7 +104,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy
 	CGameObject::Update(dt, coObjects);
 
-	//if (GetTickCount() - timeDisappear > 1500 && this->enable) this->enable = false;
+	if (GetTickCount() - timeDisappear > 2000 && this->enable) this->enable = false;
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -230,7 +230,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Item::Render()
 {
 	alpha = 255;
-	if (GetTickCount() - timeDisappear > 1000) alpha = 128;
+	if (GetTickCount() - timeDisappear > 1500) alpha = 128;
 
 	animation_set->at(this->state)->Render(x, y, alpha);
 

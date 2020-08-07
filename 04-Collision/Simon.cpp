@@ -165,6 +165,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->whip_level += 2;
 					break;
 				case ITEM_HEART:
+					this->heart += 5;
+					break;
+				case ITEM_SMALLHEART:
 					this->heart += 1;
 					break;
 				case ITEM_MONEY:
@@ -177,8 +180,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				
 				//HeadUpDisplay::GetInstance()->AddScore(100);
 				e->obj->enable = false;
-				if (e->nx != 0) x += dx;
-				if (!isOnGround) y += dy;
+				/*if (e->nx != 0 || e->ny != 0) {
+					x += dx;
+					dy = 0;
+				}*/
 			}
 			if (dynamic_cast<CPortal*>(e->obj))
 			{
@@ -202,21 +207,35 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				break;
 			}
-			if (e->obj->isEnemy && this->untouchable == 0 && e->obj->isActive)
+			if (e->obj->isEnemy)
 			{
-				if (e->nx > 0) {
-					x += dx;
-					this->SetState(SIMON_STATE_INJURED_LEFT);
+				if (dynamic_cast<Boss*>(e->obj)) {
+					Boss* p = dynamic_cast<Boss*>(e->obj);
+					if (p->GetState() == BOSS_STATE_EGG) {
+						p->enable = false;
+						HeadUpDisplay::GetInstance()->AddScore(1000);
+						return;
+					}
 				}
-				else {
-					x += dx;
-					this->SetState(SIMON_STATE_INJURED_RIGHT);
+
+				if (this->untouchable == 0 && e->obj->isActive)
+				{
+					if (e->nx > 0) {
+						x += dx;
+						this->SetState(SIMON_STATE_INJURED_LEFT);
+					}
+					else {
+						x += dx;
+						this->SetState(SIMON_STATE_INJURED_RIGHT);
+					}
+					if (e->ny != 0) {
+						// y += dy;
+						vy = 0;
+						if (nx > 0) this->SetState(SIMON_STATE_INJURED_LEFT);
+						else this->SetState(SIMON_STATE_INJURED_RIGHT);
+					}
 				}
-				if (e->ny != 0) {
-					y += dy;
-					if (nx > 0) this->SetState(SIMON_STATE_INJURED_LEFT);
-					else this->SetState(SIMON_STATE_INJURED_RIGHT);
-				}
+				else if (!e->obj->isActive) x += dx;
 			}
 			if (dynamic_cast<Elevator*>(e->obj))
 			{
@@ -255,7 +274,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (this->CheckCollision(left, top, right, bottom))
 			{
 				isTouchUpStair = true;
-				if (this->isOnGround) {
+				if (this->isOnGround && !this->isMoveToStairUp) {
 					this->isAbleToStepDownStair = true;
 					this->nxUpStair = obj->nx;
 					this->nxDownStair = -obj->nx;
@@ -263,22 +282,22 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->nxUpStair == 1) {
 					if (!(this->isStepOnStair))
 					{
-						distance = int(left - this->x);
+						distanceUp = int(left - this->x);
 						if (isOnGround) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
 
 					if (this->isMoveToStairDown) {
-						if (distance != 0) {
-							if (abs(distance) > dx) this->x += dx;
-							else this->x += distance;
-							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+						if (distanceUp != 0) {
+							if (abs(distanceUp) > dx) this->x += dx;
+							else this->x += distanceUp;
+							if (distanceUp > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							auto_start = GetTickCount();
 							//return;
 						}
 						else {
-							distance = 0;
+							distanceUp = 0;
 							if (GetTickCount() - auto_start < 290)
 							{
 								this->SetState(SIMON_GO_DOWNSTAIR_RIGHT);
@@ -305,22 +324,22 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else {
 					if (!(this->isStepOnStair))
 					{
-						distance = int(right - this->x - SIMON_BBOX_WIDTH);
+						distanceUp = int(right - this->x - SIMON_BBOX_WIDTH);
 						if (isOnGround) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
 
 					if (this->isMoveToStairDown) {
-						if (distance != 0) {
-							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+						if (distanceUp != 0) {
+							if (distanceUp > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
-							if (abs(distance) > dx) this->x += dx;
-							else this->x += distance;
+							if (abs(distanceUp) > dx) this->x += dx;
+							else this->x += distanceUp;
 							auto_start = GetTickCount();
 							//return;
 						}
 						else {
-							distance = 0;
+							distanceUp = 0;
 							if (GetTickCount() - auto_start < 290)
 							{
 								this->SetState(SIMON_GO_DOWNSTAIR_LEFT);
@@ -364,7 +383,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isTouchDownStair = true;
 
-				if (this->isOnGround) {
+				if (this->isOnGround && !this->isMoveToStairDown) {
 					this->nxDownStair = obj->nx;
 					this->nxUpStair = -obj->nx;
 					this->isAbleToStepUpStair = true;
@@ -373,22 +392,22 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (!(this->isStepOnStair))
 					{
-						distance = int(left - this->x);
+						distanceDown = int(left - this->x);
 						if (isOnGround) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
 
 					if (this->isMoveToStairUp) {
-						if (distance != 0) {
-							if (abs(distance) > dx) this->x += dx;
-							else this->x += distance;
-							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+						if (distanceDown != 0) {
+							if (abs(distanceDown) > dx) this->x += dx;
+							else this->x += distanceDown;
+							if (distanceDown > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
 							auto_start = GetTickCount(); // problem when distance = 0 simon do not move correctly
 							//return;
 						}
 						else {
-							distance = 0;
+							distanceDown = 0;
 							if (GetTickCount() - auto_start < 200)
 							{
 								this->SetState(SIMON_GO_UPSTAIR_RIGHT);
@@ -400,7 +419,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 						}
 						
-						break;
+						//break;
 					}
 					else {
 						/*this->nxDownStair = obj->nx;
@@ -417,22 +436,22 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else {
 					if (!(this->isStepOnStair))
 					{
-						distance = int(right - this->x - SIMON_BBOX_WIDTH);
+						distanceDown = int(right - this->x - SIMON_BBOX_WIDTH);
 						if (isStand) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
 
 					if (this->isMoveToStairUp) {
-						if (distance != 0) {
-							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
+						if (distanceDown != 0) {
+							if (distanceDown > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
-							if (abs(distance) > dx) this->x += dx;
-							else this->x += distance;
+							if (abs(distanceDown) > dx) this->x += dx;
+							else this->x += distanceDown;
 							auto_start = GetTickCount();
 							//return;
 						}
 						else {
-							distance = 0;
+							distanceDown = 0;
 							if (GetTickCount() - auto_start < 200)
 							{
 								this->SetState(SIMON_GO_UPSTAIR_LEFT);
@@ -459,7 +478,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 
-				//break;
+				break;
 			}
 			else {
 				this->isAbleToMoveToStair = false;
@@ -489,6 +508,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					Ghost* p = dynamic_cast<Ghost*>(obj);
 					p->SetState(GHOST_STATE_FLY_LEFT);
+					p->isActive = true;
 				}
 			}
 			if (dynamic_cast<Fleaman*>(obj))
@@ -589,11 +609,13 @@ void Simon::SetState(int state)
 	case SIMON_STATE_IDLE_LEFT:
 		if (!isStandOnElevator) vx = 0;
 		nx = -1;
+		isStepOnStair = false;
 		//isStand = true;
 		break;
 	case SIMON_STATE_IDLE_RIGHT:
 		if (!isStandOnElevator) vx = 0;
 		nx = 1;
+		isStepOnStair = false;
 		//isStand = true;
 		break;
 	case SIMON_STATE_WALKING_RIGHT:
@@ -723,24 +745,32 @@ void Simon::SetState(int state)
 		vx = vy = 0;
 		nx = 1;
 		isStepOnStair = true;
+		isStandUpStair = true;
+		isStandDownStair = false;
 		animation_set->at(SIMON_GO_UPSTAIR_RIGHT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_UPSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
 		isStepOnStair = true;
+		isStandUpStair = true;
+		isStandDownStair = false;
 		animation_set->at(SIMON_GO_UPSTAIR_LEFT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_RIGHT:
 		vx = vy = 0;
 		nx = 1;
 		isStepOnStair = true;
+		isStandUpStair = false;
+		isStandDownStair = true;
 		animation_set->at(SIMON_GO_DOWNSTAIR_RIGHT)->resetAnimation();
 		break;
 	case SIMON_STAND_ON_DOWNSTAIR_LEFT:
 		vx = vy = 0;
 		nx = -1;
 		isStepOnStair = true;
+		isStandUpStair = false;
+		isStandDownStair = true;
 		animation_set->at(SIMON_GO_DOWNSTAIR_LEFT)->resetAnimation();
 		break;
 	case SIMON_STATE_INJURED_RIGHT:

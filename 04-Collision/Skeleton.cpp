@@ -47,7 +47,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (this->state == SKELETON_STATE_WALK)
 		{
-			vx += move * 0.025f;
+			vx += move * 0.02f;
 			if (vx > 0.2f) move = -1;
 			else if (vx < -0.2f)  move = 1;
 		}

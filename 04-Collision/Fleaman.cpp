@@ -33,7 +33,7 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	vy += FLEAMAN_GRAVITY * dt;
 
-	if (this->GetState() == FLEAMAN_STATE_DIE && animation_set->at(FLEAMAN_STATE_DIE)->isOver(600))
+	if (this->GetState() == FLEAMAN_STATE_DIE && animation_set->at(FLEAMAN_STATE_DIE)->isOver(200))
 	{
 		this->enable = false;
 	}
@@ -124,6 +124,7 @@ void Fleaman::SetState(int state)
 		break;
 	case FLEAMAN_STATE_DIE:
 		vx = vy = 0;
+		//this->isActive = false;
 		animation_set->at(FLEAMAN_STATE_DIE)->resetAnimation();
 		animation_set->at(FLEAMAN_STATE_DIE)->setStartFrameTime(GetTickCount());
 		break;

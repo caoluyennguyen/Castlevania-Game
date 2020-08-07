@@ -243,7 +243,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			//player->Reset();
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
-			//id = atoi(tokens[4].c_str());
+			if (atoi(tokens[4].c_str()) != -1) player->SetState(atoi(tokens[4].c_str()));
 			break;
 		case OBJECT_TYPE_CANDLE:
 		{
@@ -831,7 +831,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		if (simon->isAbleToMoveToStair && simon->isAbleToStepDownStair) simon->isMoveToStairDown = true;
 		else simon->isMoveToStairDown = false;
 
-		if (simon->distance == 0) simon->auto_start = GetTickCount();
+		//if (simon->distanceUp == 0) simon->auto_start = GetTickCount();
 
 		if (simon->isStepOnStair)
 		{
@@ -859,7 +859,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		if (simon->isAbleToMoveToStair && simon->isAbleToStepUpStair) simon->isMoveToStairUp = true;
 		else simon->isMoveToStairUp = false;
 
-		if (simon->distance == 0) simon->auto_start = GetTickCount();
+		//if (simon->distanceDown == 0) simon->auto_start = GetTickCount();
 
 		if (simon->isStepOnStair)
 		{
@@ -867,11 +867,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			simon->isStandUpStair = true;
 			simon->isStandDownStair = false;
 
-			if (simon->GetNxDownStair() == 1)
+			if (simon->GetNxDownStair() == -1)
 			{
-				simon->SetState(SIMON_GO_UPSTAIR_RIGHT);
+				simon->SetState(SIMON_GO_UPSTAIR_LEFT);
 			}
-			else simon->SetState(SIMON_GO_UPSTAIR_LEFT);
+			else simon->SetState(SIMON_GO_UPSTAIR_RIGHT);
 		}
 	}
 	else {
@@ -888,18 +888,18 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			else {
 				if (simon->isStandUpStair)
 				{
-					if (simon->GetNxDownStair() == 1)
+					if (simon->GetNxDownStair() == -1)
 					{
-						simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
+						simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
 					}
-					else simon->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
+					else simon->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
 				}
 				else {
-					if (simon->GetNxDownStair() == 1)
+					if (simon->GetNxDownStair() == -1)
 					{
-						simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
+						simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
 					}
-					else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
+					else simon->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
 				}
 			}
 		}

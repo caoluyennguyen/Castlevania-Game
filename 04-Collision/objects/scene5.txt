@@ -20,7 +20,7 @@
 104	textures\item\HP.png	255	0	255
 105	textures\item\Rect.png	255	0	255
 106	textures\bat-zombie-enemies-left.png	255	0	255
-107	textures\bat-zombie-ememies-right.png	255	0	255
+107	textures\bat-zombie-ememies-right-fix.png	255	0	255
 108	textures\Boss.png	255	0	255
 109	textures\BreakWall.png	255	0	255
 110	textures\item\SmallHeart.png	255	0	255
@@ -31,6 +31,7 @@
 115	textures\item\InvisibilityPotion.png	255	0	255
 116	textures\item\Crown.png	255	0	255
 117	textures\item\DoubleShot.png	255	0	255
+118	textures\Egg.png	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -213,6 +214,8 @@
 3001	0	0	96	46	108
 3002	96	0	192	46	108
 3003	192	0	288	46	108
+3004	0	0	28	32	118
+3005	28	0	56	32	118
 
 #BREAKABLEWALL
 4001	0	0	32	32	109
@@ -337,6 +340,7 @@
 2000	3002	100	3003	100
 2001	3001	100
 2002	3002	100
+2003	3004	100	3005	100
 
 # BREAKABLE WALL
 3000	4002	100
@@ -359,7 +363,7 @@
 # ZOMBIE
 6	1000	400
 # BOSS
-7	2001	2002	401	2000
+7	2001	2002	401	2000	2003
 # BREAKABLE WALL
 8	3000	3001
 
@@ -384,8 +388,8 @@
 10	1464	192	2	11
 
 # SIMON
-0	29	52	1
-# 0	1229	52	1
+# 0	29	52	1	8
+0	1229	100	1	8
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id

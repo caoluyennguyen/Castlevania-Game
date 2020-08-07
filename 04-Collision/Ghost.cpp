@@ -4,7 +4,7 @@ Ghost::Ghost() : CGameObject()
 {
 	this->fly = 1;
 	this->isEnemy = true;
-	this->isActive = true;
+	this->isActive = false;
 	SetState(GHOST_STATE_IDLE);
 }
 
@@ -33,7 +33,7 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	else {
-		if (animation_set->at(GHOST_STATE_DIE)->isOver(300))
+		if (animation_set->at(GHOST_STATE_DIE)->isOver(200))
 		{
 			this->enable = false;
 		}
@@ -65,6 +65,7 @@ void Ghost::SetState(int state)
 		break;
 	case GHOST_STATE_DIE:
 		vx = vy = 0;
+		//this->isActive = false;
 		animation_set->at(GHOST_STATE_DIE)->resetAnimation();
 		animation_set->at(GHOST_STATE_DIE)->setStartFrameTime(GetTickCount());
 		break;

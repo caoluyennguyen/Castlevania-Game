@@ -72,7 +72,7 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<Candle*>(e->obj) || dynamic_cast<SmallCandle*>(e->obj)) // if e->obj is Candle
 			{
-				if (this->isEnable())
+				if (this->isEnable() && this->state != BONE)
 				{
 					e->obj->SetState(CANDLE_STATE_DESTROYED);
 					this->enable = false;

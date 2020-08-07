@@ -2,16 +2,20 @@
 #include "GameObject.h"
 #include "Simon.h"
 
-#define BOSS_BBOX_WIDTH 96
-#define BOSS_BBOX_HEIGHT 46
-#define BOSS_BBOX_FLY_WIDTH 100
-#define BOSS_BBOX_FLY_HEIGHT 150
-#define BOSS_TIME_WAITING 1500
+#define BOSS_BBOX_WIDTH			96
+#define BOSS_BBOX_HEIGHT		46
+#define EGG_BBOX_WIDTH			28
+#define EGG_BBOX_HEIGHT			32
+#define BOSS_BBOX_FLY_WIDTH		100
+#define BOSS_BBOX_FLY_HEIGHT	150
+#define BOSS_TIME_WAITING		1500
+#define BOSS_GRAVITY			0.001f
 
 #define BOSS_STATE_IDLE		0
 #define BOSS_STATE_ATTACK	1
 #define BOSS_STATE_DIE		2
 #define BOSS_STATE_FLY		3
+#define BOSS_STATE_EGG		4
 
 class Boss : public CGameObject
 {

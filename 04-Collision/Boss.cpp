@@ -1,4 +1,5 @@
 #include "Boss.h"
+#include "Simon.h"
 #include "Whip.h"
 #include "HeadUpDisplay.h"
 
@@ -15,10 +16,19 @@ Boss::Boss() : CGameObject()
 
 void Boss::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + BOSS_BBOX_WIDTH;
-	bottom = y + BOSS_BBOX_HEIGHT;
+	if (this->state != BOSS_STATE_EGG)
+	{
+		left = x;
+		top = y;
+		right = x + BOSS_BBOX_WIDTH;
+		bottom = y + BOSS_BBOX_HEIGHT;
+	}
+	else {
+		left = x;
+		top = y;
+		right = x + EGG_BBOX_WIDTH;
+		bottom = y + EGG_BBOX_HEIGHT;
+	}
 }
 
 void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -27,9 +37,69 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		waiting = GetTickCount();
 		return;
 	}
+
+	if (hp < 1) {
+		this->SetState(BOSS_STATE_DIE);
+		hp = 0;
+	}
+
 	HeadUpDisplay::GetInstance()->SetBossHP(hp);
 
-	CGameObject::Update(dt);
+	if (this->state == BOSS_STATE_EGG) {
+		vy += BOSS_GRAVITY * dt;
+		CGameObject::Update(dt);
+
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+
+		coEvents.clear();
+
+		CalcPotentialCollisions(coObjects, coEvents);
+
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			x += min_tx * dx + nx * 0.4f;	// nx*0.4f : need to push out a bit to avoid overlapping next frame
+			y += min_ty * dy + ny * 0.4f;
+
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+
+				if (dynamic_cast<Ground*>(e->obj)) // if e->obj is Ground
+				{
+					if (ny != 0) {
+						dx = dy = 0;
+					}
+				}
+				if (dynamic_cast<Simon*>(e->obj)) // if e->obj is Ground
+				{
+					if (this->state == BOSS_STATE_EGG) {
+						this->enable = false;
+						HeadUpDisplay::GetInstance()->AddScore(1000);
+					}
+				}
+				else {
+					x += dx;
+					y += dy;
+				}
+			}
+		}
+
+		// clean up collision events
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+		return;
+	}
 	/*for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
@@ -43,19 +113,11 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}*/
 
-	if (hp == 0) this->SetState(BOSS_STATE_DIE);
-
-	if (this->GetState() != BOSS_STATE_DIE)
-	{
-		// Calculate dx, dy 
-		CGameObject::Update(dt);
-		x += dx;
-		y += dy;
-	}
-	else {
+	if (this->state == BOSS_STATE_DIE) {
 		if (animation_set->at(BOSS_STATE_DIE)->isOver(300))
 		{
-			this->enable = false;
+			// this->enable = false;
+			this->SetState(BOSS_STATE_EGG);
 		}
 	}
 
@@ -63,6 +125,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (GetTickCount() - waiting > BOSS_TIME_WAITING)
 		{
+			vx = vy = 0;
 			isWaiting = false;
 		}
 		else return;
@@ -115,6 +178,11 @@ void Boss::SetState(int state)
 		animation_set->at(BOSS_STATE_DIE)->resetAnimation();
 		animation_set->at(BOSS_STATE_DIE)->setStartFrameTime(GetTickCount());
 		break;
+	case BOSS_STATE_EGG:
+		vx = 0;
+		animation_set->at(BOSS_STATE_DIE)->resetAnimation();
+		animation_set->at(BOSS_STATE_DIE)->setStartFrameTime(GetTickCount());
+		break;
 	default:
 		break;
 	}
@@ -134,7 +202,7 @@ D3DXVECTOR2 Boss::GetRandomPoint()
 
 	//float left = this->x - BOSS_BBOX_FLY_WIDTH;
 	float left = 1129;
-	float top = 32;
+	float top = 80;
 
 	float distance = 0;
 
@@ -154,37 +222,38 @@ D3DXVECTOR2 Boss::GetRandomPoint()
 
 void Boss::CalculateVelocity()
 {
-	float dx = abs(x - point.x);
-	float dy = abs(y - point.y);
+	float dx = abs(this->x - point.x);
+	float dy = abs(this->y - point.y);
 
 	int nx, ny;
 
 	if (x < point.x) nx = 1;
 	else nx = -1;
 
-	if (y < point.y) ny = 1;
+	if (y < point.y) ny = 1;	
 	else ny = -1;
 
 	if (isFlyToSimon == true)
 	{
-		vx = nx * 0.05f;
-		vy = ny * 0.05f;
+		vx = nx * dx / 750;
+		vy = ny * dy / 750;
 	}
 	else
 	{
-		vx = nx * 0.02f;
-		vy = ny * 0.02f;
+		vx = nx * dx / 1000;
+		vy = ny * dy / 1000;
 	}
 }
 
 void Boss::FlyToPoint(DWORD dt)
 {
-	x += dx;
-	y += dy;
+	x += vx * dt;
+	y += vy * dt;
 
 	if (abs(x - point.x) <= 1.0f)
 	{
 		isFlyToPoint = false;
+		this->SetPosition(point.x, point.y);
 
 		count = (count + 1) % 3;
 

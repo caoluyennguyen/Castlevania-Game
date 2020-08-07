@@ -100,7 +100,7 @@ void HeadUpDisplay::Render()
 	{
 		bossHP[i]->Draw(x + i * 9, y + 15, 255, 0);
 	}
-	for (int i = bossHp; i < 16; i++)
+	for (int i = 0; i < 16 - bossHp; i++)
 	{
 		loseHP[i]->Draw(x + (15 - i) * 9, y + 15, 255, 0);
 	}

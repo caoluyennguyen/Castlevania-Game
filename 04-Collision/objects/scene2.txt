@@ -346,7 +346,7 @@
 10	150	32	2	6
 
 # SIMON
-0	740	320	1
+0	740	320	1	24
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b
