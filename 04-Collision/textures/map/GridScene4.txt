@@ -4,7 +4,7 @@
 [OBJECTS]
 #index_col	index_row	object_id
 0	0	10	12
-0	1	0	11	30	35
+0	1	0	11	26	30	35
 1	0	
 1	1	9	13	27
 2	0

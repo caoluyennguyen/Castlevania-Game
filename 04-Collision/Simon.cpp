@@ -267,7 +267,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (isOnGround) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
-					if (this->isMoveToStair) {
+
+					if (this->isMoveToStairDown) {
 						if (distance != 0) {
 							if (abs(distance) > dx) this->x += dx;
 							else this->x += distance;
@@ -284,14 +285,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else {
 								this->SetState(SIMON_STAND_ON_DOWNSTAIR_RIGHT);
-								this->isMoveToStair = false;
+								this->isMoveToStairDown = false;
 								this->isAbleToMoveToStair = false;
 							}
 						}
-						//break;
+						
+						break;
 					}
 					else {
-						// Xu ly khi di xuong thang va chan cham dat
+						// Xu ly khi di len thang va chan cham dat
 						if (y + SIMON_BBOX_HEIGHT < bottom) {
 							this->isAbleToStepUpStair = false;
 							this->isStepOnStair = false;
@@ -307,7 +309,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (isOnGround) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
-					if (this->isMoveToStair) {
+
+					if (this->isMoveToStairDown) {
 						if (distance != 0) {
 							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
@@ -324,13 +327,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else {
 								this->SetState(SIMON_STAND_ON_DOWNSTAIR_LEFT);
-								this->isMoveToStair = false;
+								this->isMoveToStairDown = false;
 								this->isAbleToMoveToStair = false;
 							}
 						}
+						
+						break;
 					}
 					else {
-						// Xu ly khi di xuong thang va chan cham dat
+						// Xu ly khi di len thang va chan cham dat
 						if (y + SIMON_BBOX_HEIGHT < bottom) {
 							this->isAbleToStepUpStair = false;
 							this->isStepOnStair = false;
@@ -340,7 +345,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				
-				break;
+				//break;
 			}
 			else {
 				this->isAbleToMoveToStair = false;
@@ -373,7 +378,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						else this->isAbleToMoveToStair = false;
 					}
 
-					if (this->isMoveToStair) {
+					if (this->isMoveToStairUp) {
 						if (distance != 0) {
 							if (abs(distance) > dx) this->x += dx;
 							else this->x += distance;
@@ -390,18 +395,19 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else {
 								this->SetState(SIMON_STAND_ON_UPSTAIR_RIGHT);
-								this->isMoveToStair = false;
+								this->isMoveToStairUp = false;
 								this->isAbleToMoveToStair = false;
 							}
 						}
-						//break;
+						
+						break;
 					}
 					else {
 						/*this->nxDownStair = obj->nx;
 						this->nxUpStair = -obj->nx;*/
 
 						// Xu ly khi di xuong thang va chan cham dat
-						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStair)) {
+						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStairUp)) {
 							this->isStepOnStair = false;
 							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
 							else this->SetState(SIMON_STATE_IDLE_LEFT);
@@ -415,7 +421,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (isStand) this->isAbleToMoveToStair = true;
 						else this->isAbleToMoveToStair = false;
 					}
-					if (this->isMoveToStair) {
+
+					if (this->isMoveToStairUp) {
 						if (distance != 0) {
 							if (distance > 0) this->SetState(SIMON_STATE_WALKING_RIGHT);
 							else this->SetState(SIMON_STATE_WALKING_LEFT);
@@ -432,17 +439,19 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else {
 								this->SetState(SIMON_STAND_ON_UPSTAIR_LEFT);
-								this->isMoveToStair = false;
+								this->isMoveToStairUp = false;
 								this->isAbleToMoveToStair = false;
 							}
 						}
+
+						break;
 					}
 					else {
 						this->nxDownStair = obj->nx;
 						this->nxUpStair = -obj->nx;
 
 						// Xu ly khi di xuong thang va chan cham dat
-						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStair)) {
+						if (y + SIMON_BBOX_HEIGHT > bottom && this->isStepOnStair && !(this->isMoveToStairUp)) {
 							this->isStepOnStair = false;
 							if (this->nx == 1) this->SetState(SIMON_STATE_IDLE_RIGHT);
 							else this->SetState(SIMON_STATE_IDLE_LEFT);
@@ -450,7 +459,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 
-				break;
+				//break;
 			}
 			else {
 				this->isAbleToMoveToStair = false;
@@ -588,12 +597,12 @@ void Simon::SetState(int state)
 		//isStand = true;
 		break;
 	case SIMON_STATE_WALKING_RIGHT:
-		if (!this->isMoveToStair) vx = SIMON_WALKING_SPEED;
+		if (!this->isMoveToStairUp && !this->isMoveToStairDown) vx = SIMON_WALKING_SPEED;
 		else vx = 0.05f;
 		nx = 1;
 		break;
 	case SIMON_STATE_WALKING_LEFT:
-		if (!this->isMoveToStair) vx = -SIMON_WALKING_SPEED;
+		if (!this->isMoveToStairUp && !this->isMoveToStairDown) vx = -SIMON_WALKING_SPEED;
 		else vx = -0.05f;
 		nx = -1;
 		break;

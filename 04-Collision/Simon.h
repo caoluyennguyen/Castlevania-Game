@@ -34,6 +34,8 @@ public:
 	bool isStandDownStair = false;
 	bool isAbleToMoveToStair = false;
 	bool isMoveToStair = false;
+	bool isMoveToStairUp = false;
+	bool isMoveToStairDown = false;
 	DWORD auto_start;
 
 	static Simon* GetInstance();

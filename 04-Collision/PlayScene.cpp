@@ -826,8 +826,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else if (game->IsKeyDown(DIK_DOWN)) {
-		if (simon->isAbleToMoveToStair && simon->isAbleToStepDownStair) simon->isMoveToStair = true;
-		else simon->isMoveToStair = false;
+		/*if (simon->isAbleToMoveToStair && simon->isAbleToStepDownStair) simon->isMoveToStair = true;
+		else simon->isMoveToStair = false;*/
+		if (simon->isAbleToMoveToStair && simon->isAbleToStepDownStair) simon->isMoveToStairDown = true;
+		else simon->isMoveToStairDown = false;
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
@@ -852,8 +854,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else if (game->IsKeyDown(DIK_UP)) {
-		if (simon->isAbleToMoveToStair && simon->isAbleToStepUpStair) simon->isMoveToStair = true;
-		else simon->isMoveToStair = false;
+		/*if (simon->isAbleToMoveToStair && simon->isAbleToStepUpStair) simon->isMoveToStair = true;
+		else simon->isMoveToStair = false;*/
+		if (simon->isAbleToMoveToStair && simon->isAbleToStepUpStair) simon->isMoveToStairUp = true;
+		else simon->isMoveToStairUp = false;
 
 		if (simon->distance == 0) simon->auto_start = GetTickCount();
 
@@ -871,7 +875,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else {
-		if (!simon->isMoveToStair)
+		if (!simon->isMoveToStairUp && !simon->isMoveToStairDown)
 		{
 			if (!simon->isStepOnStair)
 			{
