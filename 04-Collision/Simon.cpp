@@ -288,6 +288,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								this->isAbleToMoveToStair = false;
 							}
 						}
+						//break;
 					}
 					else {
 						// Xu ly khi di xuong thang va chan cham dat
@@ -393,6 +394,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								this->isAbleToMoveToStair = false;
 							}
 						}
+						//break;
 					}
 					else {
 						/*this->nxDownStair = obj->nx;

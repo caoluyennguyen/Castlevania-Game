@@ -131,6 +131,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="DownStair.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Elevator.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fleaman.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DownStair.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Elevator.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fleaman.cpp" />
