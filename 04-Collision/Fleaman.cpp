@@ -2,6 +2,7 @@
 #include "Ground.h"
 #include "Simon.h"
 #include "Ghost.h"
+#include "SmallCandle.h"
 
 Fleaman::Fleaman() : CGameObject()
 {
@@ -32,6 +33,9 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	vy += FLEAMAN_GRAVITY * dt;
+
+	/*if (nx < 0) this->SetState(FLEAMAN_STATE_JUMP_LEFT);
+	else this->SetState(FLEAMAN_STATE_JUMP_RIGHT);*/
 
 	if (this->GetState() == FLEAMAN_STATE_DIE && animation_set->at(FLEAMAN_STATE_DIE)->isOver(200))
 	{
@@ -92,7 +96,12 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (dynamic_cast<Simon*>(e->obj) || dynamic_cast<Ghost*>(e->obj)) // if e->obj is Ground
 			{
 				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
+				if (e->ny != 0) dy = 0;
+			}
+			else if (dynamic_cast<SmallCandle*>(e->obj)) // if e->obj is Ground
+			{
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) dy = 0;
 			}
 			else {
 				x += dx;
@@ -109,8 +118,8 @@ void Fleaman::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
-	RenderActiveBoundingBox();
+	//RenderBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Fleaman::SetState(int state)
@@ -129,6 +138,12 @@ void Fleaman::SetState(int state)
 		animation_set->at(FLEAMAN_STATE_DIE)->setStartFrameTime(GetTickCount());
 		break;
 	case FLEAMAN_STATE_JUMP_RIGHT:
+	{
+		vx = nx * 0.2f;
+		vy = -0.2f;
+		break;
+	}
+	case FLEAMAN_STATE_JUMP_LEFT:
 	{
 		vx = nx * 0.2f;
 		vy = -0.2f;

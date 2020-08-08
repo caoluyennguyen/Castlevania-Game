@@ -42,7 +42,7 @@ public:
 	static Simon* GetInstance();
 	Simon() : CGameObject()
 	{
-		playerHP = 2;
+		playerHP = 16;
 		heart = 16;
 		score = 0;
 		weapon = -1;

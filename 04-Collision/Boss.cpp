@@ -38,10 +38,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-	if (hp < 1) {
-		this->SetState(BOSS_STATE_DIE);
-		hp = 0;
-	}
+	if (hp < 1) hp = 0;
 
 	HeadUpDisplay::GetInstance()->SetBossHP(hp);
 
@@ -160,8 +157,8 @@ void Boss::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
-	RenderActiveBoundingBox();
+	//RenderBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Boss::SetState(int state)

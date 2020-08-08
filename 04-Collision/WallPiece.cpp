@@ -29,8 +29,8 @@ WallPieces::WallPieces(float x, float y)
 		piece = new WallPiece();
 		piece->SetPosition(x, y);
 
-		float vx = (float)(-100 + rand() % 200) / 1000;
-		float vy = (float)(-100 + rand() % 200) / 1000;
+		float vx = (float)(rand() % 200 - 100) / 1000; // rand from -0.1 to 0.2
+		float vy = (float)(rand() % 200 - 100) / 1000;
 		piece->SetSpeed(vx, vy);
 
 		pieces.push_back(piece);

@@ -61,6 +61,7 @@ public:
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
+	int GetIdCurrentScene() { return current_scene; }
 
 	static void SweptAABB(
 		float ml,			// move left 

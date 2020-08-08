@@ -403,5 +403,8 @@
 # type	l	t	ani_set_id	r	b	scene_id
 50	1472	158	0	1536	256	6	43
 
+# RAVEN
+14	830	192	6
+
 [GRID]
 textures\map\GridScene4.txt

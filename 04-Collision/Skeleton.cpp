@@ -109,8 +109,8 @@ void Skeleton::Render()
 		weapon->Render();
 	}
 
-	RenderBoundingBox();
-	RenderActiveBoundingBox();
+	//RenderBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Skeleton::SetState(int state)

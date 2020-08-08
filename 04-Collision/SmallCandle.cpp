@@ -27,7 +27,7 @@ void SmallCandle::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void SmallCandle::SetState(int state)

@@ -157,7 +157,7 @@ void Whip::Render()
 	/*if (this->nx == -1) animation_set->at(state)->Render(x, y);
 	else animation_set->at(state + 1)->Render(x, y);*/
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(int simonX, int simonY, bool isStand)

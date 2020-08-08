@@ -29,7 +29,7 @@ void Candle::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Candle::SetState(int state)

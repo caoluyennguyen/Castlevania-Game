@@ -36,7 +36,7 @@ Simon* Simon::GetInstance()
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOut(L"dt: %d\n", dt);
-	if (dt > 16) dt = 16;
+	//if (dt > 16) dt = 16;
 
 	if (playerHP < 1) {
 		if (nx > 1) {
@@ -174,6 +174,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->AddScore(1000);
 					HeadUpDisplay::GetInstance()->AddScore(1000);
 					break;
+				case ITEM_TRIPPLESHOT:
+					//this->weapon_count = 3;
+					break;
 				default:
 					break;
 				}
@@ -218,6 +221,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						return;
 					}
 				}
+
+				/*if (dynamic_cast<Raven*>(e->obj)) {
+					Raven* p = dynamic_cast<Raven*>(e->obj);
+					p->SetState(RAVEN_STATE_DIE);
+				}*/
 
 				if (this->untouchable == 0 && e->obj->isActive)
 				{
@@ -591,7 +599,7 @@ void Simon::Render()
 	alpha = 255;
 	if (untouchable) alpha = rand() % 255;
 	animation_set->at(state)->Render(x, y, alpha);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	// Render whip
 	if (this->GetState() == SIMON_STATE_HIT_SIT || this->GetState() == SIMON_STATE_HIT_STAND

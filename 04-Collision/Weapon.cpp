@@ -156,8 +156,27 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				Boss* boss = dynamic_cast<Boss*>(e->obj);
 				boss->LostHp(2);
-				//boss->SetHp(0);
-				boss->SetState(BOSS_STATE_DIE);
+				if (boss->GetHp() < 1) {
+					boss->SetState(BOSS_STATE_DIE);
+					boss->SetHp(0);
+				}				//boss->SetHp(0);
+				//boss->SetState(BOSS_STATE_DIE);
+			}
+			else if (dynamic_cast<Simon*>(e->obj)) {
+				if (this->state == BONE) {
+					if (e->nx < 0) {
+						e->obj->SetState(SIMON_STATE_INJURED_LEFT);
+					}
+					else {
+						e->obj->SetState(SIMON_STATE_INJURED_RIGHT);
+					}
+					if (e->ny != 0) {
+						//vy = 0;
+						if (e->obj->nx > 0) e->obj->SetState(SIMON_STATE_INJURED_LEFT);
+						else e->obj->SetState(SIMON_STATE_INJURED_RIGHT);
+					}
+					this->enable = false;
+				}
 			}
 			else
 			{
@@ -204,7 +223,7 @@ void Weapon::Render()
 	}
 	else animation_set->at(state)->Render(x, y);
 
-	RenderBoundingBox();
+	//();
 }	
 
 void Weapon::GetBoundingBox(float& left, float& top, float& right, float& bottom)

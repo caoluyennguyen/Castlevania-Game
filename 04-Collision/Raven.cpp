@@ -19,12 +19,15 @@ void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
-	x += dx;
-	y += dy;
+	/*x += dx;
+	y += dy;*/
 
-	if (state == RAVEN_STATE_DIE && animation_set->at(RAVEN_STATE_DIE)->isOver(300))
-	{
-		this->enable = false;
+	if (state == RAVEN_STATE_DIE) {
+		if (animation_set->at(RAVEN_STATE_DIE)->isOver(300))
+		{
+			this->enable = false;
+		}
+		return;
 	}
 
 	if (isActive) {
@@ -46,6 +49,47 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				return;
 			}
 		}
+
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+
+		coEvents.clear();
+
+		CalcPotentialCollisions(coObjects, coEvents);
+
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			x += min_tx * dx + nx * 0.4f;	// nx*0.4f : need to push out a bit to avoid overlapping next frame
+			y += min_ty * dy + ny * 0.4f;
+
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+
+				if (dynamic_cast<Simon*>(e->obj)) // if e->obj is Ground
+				{
+					this->SetState(RAVEN_STATE_DIE);
+					return;
+				}
+				else {
+					x += dx;
+					y += dy;
+				}
+			}
+		}
+
+		// clean up collision events
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
 
 	CalculateVelocity();
@@ -55,8 +99,8 @@ void Raven::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
-	RenderActiveBoundingBox();
+	//RenderBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Raven::SetState(int state)

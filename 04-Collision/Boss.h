@@ -39,6 +39,7 @@ public:
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetState(int state);
 
+	int GetHp() { return hp; }
 	void SetHp(int hp) { hp = 0; }
 	void LostHp(int hp) { this->hp -= hp; }
 	void StartWaiting() { this->isWaiting = true; this->waiting = GetTickCount(); }

@@ -50,7 +50,7 @@ void BlackKnight::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void BlackKnight::SetState(int state)

@@ -14,7 +14,7 @@ HeadUpDisplay* HeadUpDisplay::GetInstance()
 HeadUpDisplay::HeadUpDisplay()
 {
 	score = 0;
-	time = 0;
+	time = 300;
 	bossHp = 0;
 	x = 105;
 	y = -38;
@@ -112,7 +112,7 @@ void HeadUpDisplay::Render()
 	str_score = to_string(score);
 	while (str_score.length() < 6) str_score = "0" + str_score;
 
-	str_time = to_string(time/1000);
+	str_time = to_string(TIME_PLAY - time/1000);
 	while (str_time.length() < 4) str_time = "0" + str_time;
 
 	str_scene = to_string(scene);

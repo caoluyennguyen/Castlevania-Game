@@ -234,7 +234,7 @@ void Item::Render()
 
 	animation_set->at(this->state)->Render(x, y, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 bool Item::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)

@@ -44,8 +44,8 @@ void Ghost::Render()
 {
 	animation_set->at(this->GetState())->Render(x, y);
 
-	RenderBoundingBox();
-	RenderActiveBoundingBox();
+	//RenderBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Ghost::SetState(int state)

@@ -392,8 +392,8 @@
 10	1464	192	2	11
 
 # SIMON
-# 0	29	52	1	8
-0	1229	100	1	8
+0	29	52	1	8
+# 0	1229	100	1	8
 
 # GROUND
 # type	l	t	ani_set_id	r	b	scene_id

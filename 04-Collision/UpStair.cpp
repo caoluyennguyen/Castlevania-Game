@@ -29,7 +29,7 @@ void UpStair::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void UpStair::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void UpStair::GetBoundingBox(float& l, float& t, float& r, float& b)

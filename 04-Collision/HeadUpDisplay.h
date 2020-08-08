@@ -7,7 +7,7 @@
 #include "PlayScene.h"
 
 #define FILEPATH_FONT L"Font\\prstart.ttf"
-#define TIME_PLAY 1000
+#define TIME_PLAY 300
 
 class HeadUpDisplay
 {
