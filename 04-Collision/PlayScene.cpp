@@ -115,8 +115,6 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int texID = atoi(tokens[5].c_str());
 
 	LPDIRECT3DTEXTURE9 tex = CTextures::GetInstance()->Get(texID);
-	/*LPDIRECT3DTEXTURE9 texSimon = CTextures::GetInstance()->Get(ID_TEX_SIMON);
-	LPDIRECT3DTEXTURE9 texMisc = CTextures::GetInstance()->Get(ID_TEX_MISC);*/
 
 	if (tex == NULL)
 	{
@@ -125,19 +123,6 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
-
-	//CSprites::GetInstance()->Add(10001, 0, 0, 60, 64, texSimon); // stand
-	//
-	//CSprites::GetInstance()->Add(10011, 0, 0, 60, 64, texSimon); // walk
-	//CSprites::GetInstance()->Add(10012, 60, 0, 120, 64, texSimon);
-	//CSprites::GetInstance()->Add(10013, 120, 0, 180, 64, texSimon);
-	//CSprites::GetInstance()->Add(10014, 180, 0, 240, 64, texSimon);
-	//
-	//CSprites::GetInstance()->Add(10021, 300, 198, 360, 262, texSimon); // sit
-	//
-	//CSprites::GetInstance()->Add(10031, 240, 0, 300, 64, texSimon); // jump
-
-	//CSprites::GetInstance()->Add(20001, 512, 96, 544, 128, texMisc);
 }
 
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
@@ -159,29 +144,6 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	}
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
-
-	//CAnimations* animations = CAnimations::GetInstance();
-	//LPANIMATION ani;
-	//ani = new CAnimation(); // Simon idle
-	//ani->Add(10001);
-	//animations->Add(401, ani);
-	//
-	//ani = new CAnimation(); // Simon walk
-	//ani->Add(10011);
-	//ani->Add(10012);
-	//ani->Add(10013);
-	//ani->Add(10014);
-	//animations->Add(402, ani);
-	//
-	//ani = new CAnimation(); // Simon sit
-	//ani->Add(10021);
-	//animations->Add(403, ani);
-	//
-	//ani = new CAnimation(); // Simon jump
-	//ani->Add(10031);
-	//animations->Add(404, ani);
-	
-
 }
 
 void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
@@ -235,15 +197,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_SIMON:
 			if (player != NULL)
 			{
-				DebugOut(L"[ERROR] MARIO object was created before! ");
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
 			}
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
-			//player->Reset();
 			weapon = new Weapon();
 			weapon->SetState(DAGGER_LEFT);
 			if (atoi(tokens[4].c_str()) != -1) player->SetState(atoi(tokens[4].c_str()));
+			DebugOut(L"[INFO] Player object created!\n");
 			break;
 		case OBJECT_TYPE_CANDLE:
 		{
@@ -463,7 +425,6 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
-
 	CGame* game = CGame::GetInstance();
 
 	if (cy > game->GetScreenHeight() + 200) CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetIdCurrentScene());
@@ -480,18 +441,13 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	coObjects.clear();
-	/*for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (objects[i]->enable)
-		{
-			coObjects.push_back(objects[i]);
-		}
-	}*/
 
 	// Load object from grid
 	grid->GetListObject(&coObjects);
+
 	// Add player to grid
 	coObjects.push_back(player);
+
 	// Add enemy to grid
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -504,6 +460,8 @@ void CPlayScene::Update(DWORD dt)
 		if (objects[i]->isEnemy && !objects[i]->isActive) continue;
 		objects[i]->Update(dt, &coObjects);
 	}
+
+	if (player == NULL) return;
 
 	if ((weapon->x > cx + SCREEN_WIDTH || weapon->x < cx || weapon->y > cy + SCREEN_HEIGHT) && weapon->isEnable())
 	{
@@ -565,15 +523,16 @@ void CPlayScene::Unload()
 
 	if (grid != NULL) grid->Unload();
 	grid = NULL;
+
+	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	Simon* simon = ((CPlayScene*)scence)->player;
-	//Whip* whip = ((CPlayScene*)scence)->whip;
-	Weapon* weapon = ((CPlayScene*)scence)->weapon;
+	Simon* simon = ((CPlayScene*)scence)->GetPlayer();
+	Weapon* weapon = ((CPlayScene*)scence)->GetWeapon();
 
 	switch (KeyCode)
 	{
@@ -596,9 +555,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_A: // reset
-		simon->SetState(SIMON_STATE_IDLE_RIGHT);
-		simon->SetPosition(100.0f, 0.0f);
-		simon->SetSpeed(0, 0);
+		simon->Reset();
 		break;
 	case DIK_Z:
 		simon->whip->enable = true;
@@ -760,7 +717,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
-	Simon* simon = ((CPlayScene*)scence)->player;
+	Simon* simon = ((CPlayScene*)scence)->GetPlayer();
 
 	if ((simon->GetState() == SIMON_STATE_JUMP || simon->GetState() == SIMON_STATE_JUMP_RIGHT) && !simon->CheckStandGround())
 	{

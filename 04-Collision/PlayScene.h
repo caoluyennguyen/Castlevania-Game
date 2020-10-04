@@ -38,7 +38,8 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	friend class CPlayScenceKeyHandler;
+	Simon * GetPlayer() { return player; }
+	Weapon * GetWeapon() { return weapon; }
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

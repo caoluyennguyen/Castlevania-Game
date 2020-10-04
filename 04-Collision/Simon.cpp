@@ -847,6 +847,8 @@ bool Simon::CheckCollision(float obj_left, float obj_top, float obj_right, float
 void Simon::Reset()
 {
 	this->SetState(SIMON_STATE_IDLE_RIGHT);
+	this->SetSpeed(0, 0); 
+	this->SetPosition(900.0f, 0.0f);
 	playerHP = 16;
 	heart = 16;
 	score = 0;

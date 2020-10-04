@@ -13,20 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Objects">
-      <UniqueIdentifier>{279e92d5-c0d9-47ba-8345-d4bb68378038}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Enemies">
-      <UniqueIdentifier>{cbce5d7f-0560-46e3-9ae9-bd630bd13bad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\SpacePartitioning">
       <UniqueIdentifier>{87009565-d362-411c-9186-bdf8446f4a9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\BreakableWall">
-      <UniqueIdentifier>{fe29f759-2b69-4185-9b4d-69362cd33018}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\TileMap">
       <UniqueIdentifier>{d9c978a0-f960-4735-9018-7ad71fdc7e44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Old Objects">
+      <UniqueIdentifier>{279e92d5-c0d9-47ba-8345-d4bb68378038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Old Objects\Enemies">
+      <UniqueIdentifier>{cbce5d7f-0560-46e3-9ae9-bd630bd13bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Old Objects\BreakableWall">
+      <UniqueIdentifier>{fe29f759-2b69-4185-9b4d-69362cd33018}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,67 +67,67 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Candle.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Simon.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Portal.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Ground.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Whip.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Goomba.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="HeadUpDisplay.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="DownStair.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="UpStair.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="BlackKnight.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="VampireBat.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="SmallCandle.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Elevator.h">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClInclude>
     <ClInclude Include="Ghost.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Fleaman.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Raven.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Skeleton.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Header Files\SpacePartitioning</Filter>
@@ -136,16 +136,16 @@
       <Filter>Header Files\SpacePartitioning</Filter>
     </ClInclude>
     <ClInclude Include="BreakableWall.h">
-      <Filter>Objects\BreakableWall</Filter>
+      <Filter>Old Objects\BreakableWall</Filter>
     </ClInclude>
     <ClInclude Include="WallPiece.h">
-      <Filter>Objects\BreakableWall</Filter>
+      <Filter>Old Objects\BreakableWall</Filter>
     </ClInclude>
     <ClInclude Include="Tilemap.h">
       <Filter>Header Files\TileMap</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Header Files</Filter>
@@ -186,67 +186,67 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Candle.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Portal.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Simon.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Ground.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Whip.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Goomba.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="HeadUpDisplay.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="DownStair.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="UpStair.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="BlackKnight.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="VampireBat.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="SmallCandle.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Elevator.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Old Objects</Filter>
     </ClCompile>
     <ClCompile Include="Ghost.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Fleaman.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Raven.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Skeleton.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Zombie.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Boss.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Cell.cpp">
       <Filter>Header Files\SpacePartitioning</Filter>
@@ -255,16 +255,16 @@
       <Filter>Header Files\SpacePartitioning</Filter>
     </ClCompile>
     <ClCompile Include="BreakableWall.cpp">
-      <Filter>Objects\BreakableWall</Filter>
+      <Filter>Old Objects\BreakableWall</Filter>
     </ClCompile>
     <ClCompile Include="WallPiece.cpp">
-      <Filter>Objects\BreakableWall</Filter>
+      <Filter>Old Objects\BreakableWall</Filter>
     </ClCompile>
     <ClCompile Include="Tilemap.cpp">
       <Filter>Header Files\TileMap</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Objects\Enemies</Filter>
+      <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files</Filter>
