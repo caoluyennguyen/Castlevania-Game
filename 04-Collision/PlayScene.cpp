@@ -427,7 +427,7 @@ void CPlayScene::Update(DWORD dt)
 
 	CGame* game = CGame::GetInstance();
 
-	if (cy > game->GetScreenHeight() + 200) CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetIdCurrentScene());
+	if (cy > game->GetScreenHeight() + 500) CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetIdCurrentScene());
 
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -435,7 +435,7 @@ void CPlayScene::Update(DWORD dt)
 	// Lock camera when fighting boss
 	if (cx < 0) cx = 0;
 	else if (cx > mapWidth - game->GetScreenWidth()) cx = mapWidth - game->GetScreenWidth();
-	if (!player->IsFightingBoss()) CGame::GetInstance()->SetCamPos(int(cx), int(-70.0f) /*cy*/);
+	if (!player->IsFightingBoss()) CGame::GetInstance()->SetCamPos(int(cx), cy);
 
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 

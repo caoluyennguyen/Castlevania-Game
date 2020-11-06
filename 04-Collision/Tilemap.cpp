@@ -74,7 +74,7 @@ void Tilemap::LoadMap()
 
 		for (int i = 0; i < tokens.size(); i++)	// why i+=2 ?  sprite_id | frame_time  
 		{
-			lineOfCell.push_back(atoi(tokens[i].c_str()));
+			if (atoi(tokens[i].c_str())) lineOfCell.push_back(atoi(tokens[i].c_str()));
 		}
 		cellId.push_back(lineOfCell);
 	}

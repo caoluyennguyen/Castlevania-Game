@@ -28,42 +28,18 @@
     <Filter Include="Old Objects\BreakableWall">
       <UniqueIdentifier>{fe29f759-2b69-4185-9b4d-69362cd33018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objetcs">
+      <UniqueIdentifier>{f4eaa052-8120-4d2a-9f6b-dedc6dc181c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DirectX9">
+      <UniqueIdentifier>{1b0f8004-9dd0-4575-aa8f-1f177817569c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Define.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyEventHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Animations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Candle.h">
@@ -147,42 +123,48 @@
     <ClInclude Include="Enemy.h">
       <Filter>Old Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>Old Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>Objetcs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Candle.cpp">
@@ -266,8 +248,38 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Old Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
     <ClCompile Include="Effect.cpp">
+      <Filter>Old Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Header Files\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>Objetcs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

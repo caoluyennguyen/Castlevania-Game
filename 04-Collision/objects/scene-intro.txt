@@ -1,6 +1,6 @@
 #pixel	img_path			file_path	numCol	numRow	numColToRead	numRowToRead	idCell	mapWidth
 [TILEMAP]
-32	textures\\map\\SceneIntro.png	textures\\map\\SceneIntro.txt	48	10	17	4	1	1536
+16	textures\\map\\test.png	textures\\map\\1.txt	126	26	20	13	0	2816
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
@@ -271,7 +271,7 @@
 
 # --- GROUND ----
 # type	l	t	ani_set_id	r	b	scene_id
-1	0	288	0	1536	320	1	1
+1	0	588	0	1536	620	1	1
 
 # CANDLE
 # type	x	y	ani_set_id
